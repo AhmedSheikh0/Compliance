@@ -1,42 +1,3 @@
-/**
- * ══════════════════════════════════════════════════════════════════════════════
- * منصة الامتثال التنظيمي - Compliance Platform
- * منصة البصيري™ - Golden Thread Architecture
- * ══════════════════════════════════════════════════════════════════════════════
- * 
- * @version 5.19.1
- * @date 2025-02-03
- * @changelog
- *   - v5.8.0: Modal الالتزامات العالمي - 7 تبويبات شاملة
- *   - v5.8.0: Tab 1: المعلومات الأساسية (العنوان، الوصف، الجهة، الإطار)
- *   - v5.8.0: Tab 2: التصنيف والنطاق (التصنيف، النوع، النطاق، قابلية التطبيق)
- *   - v5.8.0: Tab 3: الأولوية والمخاطر (الأهمية، التأثير، تقييم المخاطر)
- *   - v5.8.0: Tab 4: التواريخ والدورية (السريان، الاستحقاق، الدورية، التذكيرات)
- *   - v5.8.0: Tab 5: المسؤوليات (المالك، المراجع، المعتمد، الإدارات)
- *   - v5.8.0: Tab 6: الروابط والأدلة (الأدلة المطلوبة، الكائنات المرتبطة)
- *   - v5.8.0: Tab 7: سجل التدقيق (التتبع، سجل التغييرات)
- *   - v5.7.0: Module 4.9 التواصل مع الجهات الرقابية - Regulatory Communications
- *   - v5.7.0: Case Management (إنشاء/تعديل/حذف/تصعيد القضايا)
- *   - v5.7.0: Communication Thread (إنشاء/تعديل/حذف/إرسال الرسائل)
- *   - v5.7.0: Golden Thread Linking (ربط/تعديل/إلغاء ربط الكائنات)
- *   - v5.7.0: Response Pack Builder (إنشاء/إضافة أدلة/اعتماد/تقديم/حذف)
- *   - v5.7.0: Command Center Dashboard مع 10 KPIs
- *   - v5.7.0: Calendar View (متأخر/هذا الأسبوع/هذا الشهر/مكتمل)
- *   - v5.7.0: Audit Trail لجميع العمليات
- *   - v5.6.0: Module 4.8 إدارة التغييرات التنظيمية
- *   - v5.5.0: Module 4.7 إدارة المخالفات
- *   - v5.0.0: إعادة بناء Module 4.2 كـ Enterprise Policy Operating System
- * 
- * ══════════════════════════════════════════════════════════════════════════════
- * المبادئ التصميمية:
- * - فصل التعريف عن التشغيل (Definition vs Operation)
- * - Golden Thread: ربط المتطلب → الالتزام → الضابط → الدليل
- * - Many-to-Many: التزام واحد يغطي عدة متطلبات والعكس
- * - Workflow: Draft → UnderReview → Approved → Active → Retired
- * - SoD: فصل المهام (Owner ≠ Reviewer ≠ Approver)
- * ══════════════════════════════════════════════════════════════════════════════
- */
-
 import React, { useState, useMemo, useEffect } from 'react';
 import {
   Shield, FileText, Link2, ClipboardCheck, AlertTriangle,
@@ -53,7 +14,7 @@ import {
   FileWarning, FilePlus, FileSearch, Table, LayoutList, Network, MapPin,
   Play, Inbox, LayoutDashboard, Mail, Link, MinusCircle, FolderPlus,
   ClipboardList, Lock, FileQuestion, HelpCircle, ArrowDownCircle, ArrowUpCircle,
-  Package, Paperclip, PhoneCall, Minimize2, Maximize2, Square, ListChecks
+  Package, Paperclip, PhoneCall, Minimize2, Maximize2, Square, ListChecks, DollarSign, Award
 } from 'lucide-react';
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -2561,8 +2522,8 @@ const ObligationsRegistry = () => {
 
             {/* ═══════════════ HEADER ═══════════════ */}
             <div className={`px-6 py-4 text-white ${modalMode === 'create' ? 'bg-gradient-to-l from-indigo-600 via-purple-600 to-violet-700' :
-                modalMode === 'edit' ? 'bg-gradient-to-l from-amber-500 via-orange-500 to-red-500' :
-                  'bg-gradient-to-l from-blue-600 via-indigo-600 to-purple-700'
+              modalMode === 'edit' ? 'bg-gradient-to-l from-amber-500 via-orange-500 to-red-500' :
+                'bg-gradient-to-l from-blue-600 via-indigo-600 to-purple-700'
               }`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -2577,8 +2538,8 @@ const ObligationsRegistry = () => {
                       <span className="px-2 py-0.5 bg-white/20 rounded-lg text-xs font-bold">{formData.code}</span>
                       {formData.status && (
                         <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${formData.status === 'Active' ? 'bg-emerald-400/30' :
-                            formData.status === 'Draft' ? 'bg-slate-400/30' :
-                              'bg-amber-400/30'
+                          formData.status === 'Draft' ? 'bg-slate-400/30' :
+                            'bg-amber-400/30'
                           }`}>
                           {formData.status === 'Active' ? 'نشط' : formData.status === 'Draft' ? 'مسودة' : formData.status}
                         </span>
@@ -2636,14 +2597,14 @@ const ObligationsRegistry = () => {
                   return (
                     <button key={tab.id} onClick={() => setModalTab(tab.id)}
                       className={`flex items-center gap-2 px-4 py-3.5 font-bold whitespace-nowrap border-b-3 transition-all ${isActive
-                          ? `text-${tab.color}-700 border-${tab.color}-500 bg-white shadow-sm`
-                          : isPassed
-                            ? `text-${tab.color}-600 border-transparent bg-${tab.color}-50/50`
-                            : 'text-slate-500 border-transparent hover:text-slate-700 hover:bg-white/70'
+                        ? `text-${tab.color}-700 border-${tab.color}-500 bg-white shadow-sm`
+                        : isPassed
+                          ? `text-${tab.color}-600 border-transparent bg-${tab.color}-50/50`
+                          : 'text-slate-500 border-transparent hover:text-slate-700 hover:bg-white/70'
                         }`}>
                       <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black ${isActive ? `bg-${tab.color}-500 text-white` :
-                          isPassed ? `bg-${tab.color}-400 text-white` :
-                            'bg-slate-300 text-slate-600'
+                        isPassed ? `bg-${tab.color}-400 text-white` :
+                          'bg-slate-300 text-slate-600'
                         }`}>{tab.num}</span>
                       <span className="text-sm">{tab.label}</span>
                       {isPassed && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
@@ -2777,8 +2738,8 @@ const ObligationsRegistry = () => {
                             <button key={auth.id} type="button" disabled={modalMode === 'view'}
                               onClick={() => setFormData({ ...formData, authorityId: auth.id, authorityCode: auth.code, frameworkId: '' })}
                               className={`p-4 rounded-xl border-2 text-center transition-all transform hover:scale-[1.02] ${isSelected
-                                  ? `bg-${auth.color}-50 border-${auth.color}-400 shadow-lg`
-                                  : 'bg-white border-slate-200 hover:border-slate-300'
+                                ? `bg-${auth.color}-50 border-${auth.color}-400 shadow-lg`
+                                : 'bg-white border-slate-200 hover:border-slate-300'
                                 }`}>
                               <span className="text-3xl block mb-2">{auth.icon}</span>
                               <p className={`font-bold text-sm ${isSelected ? `text-${auth.color}-700` : 'text-slate-700'}`}>{auth.code}</p>
@@ -2819,8 +2780,8 @@ const ObligationsRegistry = () => {
                               <button key={framework.id} type="button" disabled={modalMode === 'view'}
                                 onClick={() => setFormData({ ...formData, frameworkId: framework.id, frameworkCode: framework.code })}
                                 className={`p-4 rounded-xl border-2 text-right transition-all ${isSelected
-                                    ? 'bg-violet-50 border-violet-400 shadow-md'
-                                    : 'bg-white border-slate-200 hover:border-violet-300'
+                                  ? 'bg-violet-50 border-violet-400 shadow-md'
+                                  : 'bg-white border-slate-200 hover:border-violet-300'
                                   }`}>
                                 <div className="flex items-start justify-between">
                                   <span className={`px-2 py-1 rounded-lg text-xs font-bold ${isSelected ? 'bg-violet-500 text-white' : 'bg-slate-100 text-slate-600'
@@ -3064,8 +3025,8 @@ const ObligationsRegistry = () => {
                             <button key={prog.id} type="button" disabled={modalMode === 'view'}
                               onClick={() => setFormData({ ...formData, programId: prog.id, programName: prog.name })}
                               className={`p-4 rounded-xl border-2 text-right transition-all transform hover:scale-[1.02] ${isSelected
-                                  ? `bg-${prog.color}-50 border-${prog.color}-400 shadow-lg`
-                                  : 'bg-white border-slate-200 hover:border-slate-300'
+                                ? `bg-${prog.color}-50 border-${prog.color}-400 shadow-lg`
+                                : 'bg-white border-slate-200 hover:border-slate-300'
                                 }`}>
                               <div className="flex items-center gap-3">
                                 <span className="text-2xl">{prog.icon}</span>
@@ -3308,7 +3269,7 @@ const ObligationsRegistry = () => {
                         </div>
                       </div>
                       <div className={`px-4 py-2 rounded-xl ${formData.applicability === 'applicable' || !formData.applicability ? 'bg-emerald-500' :
-                          formData.applicability === 'partial' ? 'bg-amber-600' : 'bg-red-500'
+                        formData.applicability === 'partial' ? 'bg-amber-600' : 'bg-red-500'
                         }`}>
                         <p className="text-xs opacity-80">الحالة الحالية</p>
                         <p className="font-bold">
@@ -3333,11 +3294,11 @@ const ObligationsRegistry = () => {
                         <button type="button" disabled={modalMode === 'view'}
                           onClick={() => setFormData({ ...formData, applicability: 'applicable' })}
                           className={`p-6 rounded-2xl border-3 transition-all transform hover:scale-[1.02] ${formData.applicability === 'applicable' || !formData.applicability
-                              ? 'bg-gradient-to-br from-emerald-50 to-green-50 border-emerald-400 shadow-lg shadow-emerald-500/20'
-                              : 'bg-white border-slate-200 hover:border-emerald-300'
+                            ? 'bg-gradient-to-br from-emerald-50 to-green-50 border-emerald-400 shadow-lg shadow-emerald-500/20'
+                            : 'bg-white border-slate-200 hover:border-emerald-300'
                             }`}>
                           <div className={`w-20 h-20 mx-auto rounded-2xl flex items-center justify-center mb-4 ${formData.applicability === 'applicable' || !formData.applicability
-                              ? 'bg-emerald-500 shadow-lg shadow-emerald-500/50' : 'bg-slate-100'
+                            ? 'bg-emerald-500 shadow-lg shadow-emerald-500/50' : 'bg-slate-100'
                             }`}>
                             <CheckCircle2 className={`w-10 h-10 ${formData.applicability === 'applicable' || !formData.applicability ? 'text-white' : 'text-slate-400'
                               }`} />
@@ -3357,11 +3318,11 @@ const ObligationsRegistry = () => {
                         <button type="button" disabled={modalMode === 'view'}
                           onClick={() => setFormData({ ...formData, applicability: 'partial' })}
                           className={`p-6 rounded-2xl border-3 transition-all transform hover:scale-[1.02] ${formData.applicability === 'partial'
-                              ? 'bg-gradient-to-br from-amber-50 to-orange-50 border-amber-400 shadow-lg shadow-amber-500/20'
-                              : 'bg-white border-slate-200 hover:border-amber-300'
+                            ? 'bg-gradient-to-br from-amber-50 to-orange-50 border-amber-400 shadow-lg shadow-amber-500/20'
+                            : 'bg-white border-slate-200 hover:border-amber-300'
                             }`}>
                           <div className={`w-20 h-20 mx-auto rounded-2xl flex items-center justify-center mb-4 ${formData.applicability === 'partial'
-                              ? 'bg-amber-500 shadow-lg shadow-amber-500/50' : 'bg-slate-100'
+                            ? 'bg-amber-500 shadow-lg shadow-amber-500/50' : 'bg-slate-100'
                             }`}>
                             <AlertTriangle className={`w-10 h-10 ${formData.applicability === 'partial' ? 'text-white' : 'text-slate-400'
                               }`} />
@@ -3381,11 +3342,11 @@ const ObligationsRegistry = () => {
                         <button type="button" disabled={modalMode === 'view'}
                           onClick={() => setFormData({ ...formData, applicability: 'not_applicable' })}
                           className={`p-6 rounded-2xl border-3 transition-all transform hover:scale-[1.02] ${formData.applicability === 'not_applicable'
-                              ? 'bg-gradient-to-br from-red-50 to-rose-50 border-red-400 shadow-lg shadow-red-500/20'
-                              : 'bg-white border-slate-200 hover:border-red-300'
+                            ? 'bg-gradient-to-br from-red-50 to-rose-50 border-red-400 shadow-lg shadow-red-500/20'
+                            : 'bg-white border-slate-200 hover:border-red-300'
                             }`}>
                           <div className={`w-20 h-20 mx-auto rounded-2xl flex items-center justify-center mb-4 ${formData.applicability === 'not_applicable'
-                              ? 'bg-red-500 shadow-lg shadow-red-500/50' : 'bg-slate-100'
+                            ? 'bg-red-500 shadow-lg shadow-red-500/50' : 'bg-slate-100'
                             }`}>
                             <XCircle className={`w-10 h-10 ${formData.applicability === 'not_applicable' ? 'text-white' : 'text-slate-400'
                               }`} />
@@ -3531,8 +3492,8 @@ const ObligationsRegistry = () => {
                                 <button key={risk.value} type="button" disabled={modalMode === 'view'}
                                   onClick={() => setFormData({ ...formData, residualRisk: risk.value })}
                                   className={`flex-1 py-3 rounded-xl border-2 font-bold text-sm transition-all ${formData.residualRisk === risk.value
-                                      ? `bg-${risk.color}-100 border-${risk.color}-400 text-${risk.color}-700`
-                                      : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
+                                    ? `bg-${risk.color}-100 border-${risk.color}-400 text-${risk.color}-700`
+                                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
                                     }`}>
                                   {risk.label}
                                 </button>
@@ -3591,9 +3552,9 @@ const ObligationsRegistry = () => {
                             onChange={(e) => setFormData({ ...formData, exceptionStatus: e.target.value })}
                             disabled={modalMode === 'view'}
                             className={`px-4 py-2.5 rounded-xl font-bold border-2 ${formData.exceptionStatus === 'approved' ? 'bg-green-100 border-green-400 text-green-700' :
-                                formData.exceptionStatus === 'rejected' ? 'bg-red-100 border-red-400 text-red-700' :
-                                  formData.exceptionStatus === 'under_review' ? 'bg-blue-100 border-blue-400 text-blue-700' :
-                                    'bg-amber-100 border-amber-400 text-amber-700'
+                              formData.exceptionStatus === 'rejected' ? 'bg-red-100 border-red-400 text-red-700' :
+                                formData.exceptionStatus === 'under_review' ? 'bg-blue-100 border-blue-400 text-blue-700' :
+                                  'bg-amber-100 border-amber-400 text-amber-700'
                               }`}>
                             <option value="pending">⏳ قيد الانتظار</option>
                             <option value="under_review">🔍 قيد المراجعة</option>
@@ -3614,7 +3575,7 @@ const ObligationsRegistry = () => {
                     <div className="grid grid-cols-4 gap-4">
                       <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur">
                         <p className={`text-4xl mb-2 ${formData.applicability === 'applicable' || !formData.applicability ? '' :
-                            formData.applicability === 'partial' ? '' : ''
+                          formData.applicability === 'partial' ? '' : ''
                           }`}>
                           {formData.applicability === 'applicable' || !formData.applicability ? '✅' :
                             formData.applicability === 'partial' ? '⚠️' : '❌'}
@@ -3885,9 +3846,9 @@ const ObligationsRegistry = () => {
                                 <div key={file.id || idx} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-teal-300 transition-all">
                                   <div className="flex items-center gap-4">
                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${file.type === 'PDF' ? 'bg-red-100 text-red-600' :
-                                        file.type === 'DOC' || file.type === 'DOCX' ? 'bg-blue-100 text-blue-600' :
-                                          file.type === 'XLS' || file.type === 'XLSX' ? 'bg-green-100 text-green-600' :
-                                            'bg-slate-100 text-slate-600'
+                                      file.type === 'DOC' || file.type === 'DOCX' ? 'bg-blue-100 text-blue-600' :
+                                        file.type === 'XLS' || file.type === 'XLSX' ? 'bg-green-100 text-green-600' :
+                                          'bg-slate-100 text-slate-600'
                                       }`}>
                                       <FileText className="w-6 h-6" />
                                     </div>
@@ -3904,8 +3865,8 @@ const ObligationsRegistry = () => {
                                   </div>
                                   <div className="flex items-center gap-2">
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${file.status === 'approved' ? 'bg-green-100 text-green-700' :
-                                        file.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                                          'bg-amber-100 text-amber-700'
+                                      file.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                                        'bg-amber-100 text-amber-700'
                                       }`}>
                                       {file.status === 'approved' ? '✅ معتمد' : file.status === 'rejected' ? '❌ مرفوض' : '⏳ قيد المراجعة'}
                                     </span>
@@ -3971,7 +3932,7 @@ const ObligationsRegistry = () => {
                           </div>
                           <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur">
                             <p className={`text-3xl font-black ${formData.evidenceLevel === 'mandatory' ? 'text-red-400' :
-                                formData.evidenceLevel === 'recommended' ? 'text-amber-400' : 'text-green-400'
+                              formData.evidenceLevel === 'recommended' ? 'text-amber-400' : 'text-green-400'
                               }`}>
                               {formData.evidenceLevel === 'mandatory' ? '⚠️' : formData.evidenceLevel === 'recommended' ? '📌' : '✓'}
                             </p>
@@ -4033,8 +3994,8 @@ const ObligationsRegistry = () => {
                             <button key={freq.code} type="button" disabled={modalMode === 'view'}
                               onClick={() => setFormData({ ...formData, frequency: freq.code })}
                               className={`p-4 rounded-xl border-2 text-center transition-all transform hover:scale-[1.03] ${isSelected
-                                  ? `bg-${freq.color}-50 border-${freq.color}-400 shadow-lg`
-                                  : 'bg-white border-slate-200 hover:border-slate-300'
+                                ? `bg-${freq.color}-50 border-${freq.color}-400 shadow-lg`
+                                : 'bg-white border-slate-200 hover:border-slate-300'
                                 }`}>
                               <span className="text-2xl block mb-2">{freq.icon}</span>
                               <p className={`font-bold text-sm ${isSelected ? `text-${freq.color}-700` : 'text-slate-700'}`}>{freq.name}</p>
@@ -4458,8 +4419,8 @@ const ObligationsRegistry = () => {
                                 <button key={test.value} type="button" disabled={modalMode === 'view'}
                                   onClick={() => setFormData({ ...formData, testType: test.value })}
                                   className={`p-4 rounded-xl border-2 text-center transition-all transform hover:scale-[1.02] ${isSelected
-                                      ? `bg-${test.color}-50 border-${test.color}-400 shadow-lg`
-                                      : 'bg-white border-slate-200 hover:border-slate-300'
+                                    ? `bg-${test.color}-50 border-${test.color}-400 shadow-lg`
+                                    : 'bg-white border-slate-200 hover:border-slate-300'
                                     }`}>
                                   <span className="text-3xl block mb-2">{test.icon}</span>
                                   <p className={`font-bold text-sm ${isSelected ? `text-${test.color}-700` : 'text-slate-700'}`}>{test.label}</p>
@@ -4703,7 +4664,7 @@ const ObligationsRegistry = () => {
                                   disabled={modalMode === 'view'}
                                   className="flex-1 h-2 bg-emerald-200 rounded-lg appearance-none cursor-pointer" />
                                 <span className={`w-16 text-center text-xl font-black ${(formData.passThreshold || 80) >= 90 ? 'text-emerald-600' :
-                                    (formData.passThreshold || 80) >= 70 ? 'text-amber-600' : 'text-red-600'
+                                  (formData.passThreshold || 80) >= 70 ? 'text-amber-600' : 'text-red-600'
                                   }`}>{formData.passThreshold || 80}%</span>
                               </div>
                             </div>
@@ -5216,10 +5177,10 @@ const ObligationsRegistry = () => {
                               <button key={level} type="button" disabled={modalMode === 'view'}
                                 onClick={() => setFormData({ ...formData, impactLevel: level })}
                                 className={`w-16 h-16 rounded-2xl font-black text-xl transition-all transform hover:scale-110 ${(formData.impactLevel || 3) === level
-                                    ? level >= 4 ? 'bg-red-500 text-white shadow-lg shadow-red-500/50 scale-110' :
-                                      level >= 3 ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/50 scale-110' :
-                                        'bg-emerald-500 text-white shadow-lg shadow-emerald-500/50 scale-110'
-                                    : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+                                  ? level >= 4 ? 'bg-red-500 text-white shadow-lg shadow-red-500/50 scale-110' :
+                                    level >= 3 ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/50 scale-110' :
+                                      'bg-emerald-500 text-white shadow-lg shadow-emerald-500/50 scale-110'
+                                  : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
                                   }`}>
                                 {level}
                               </button>
@@ -5235,23 +5196,23 @@ const ObligationsRegistry = () => {
                           {/* Progress Bar */}
                           <div className="mt-4 h-3 bg-slate-200 rounded-full overflow-hidden">
                             <div className={`h-full transition-all duration-500 rounded-full ${(formData.impactLevel || 3) >= 4 ? 'bg-gradient-to-r from-orange-500 to-red-500' :
-                                (formData.impactLevel || 3) >= 3 ? 'bg-gradient-to-r from-amber-400 to-amber-500' :
-                                  'bg-gradient-to-r from-emerald-400 to-emerald-500'
+                              (formData.impactLevel || 3) >= 3 ? 'bg-gradient-to-r from-amber-400 to-amber-500' :
+                                'bg-gradient-to-r from-emerald-400 to-emerald-500'
                               }`} style={{ width: `${((formData.impactLevel || 3) / 5) * 100}%` }} />
                           </div>
                         </div>
 
                         {/* Impact Summary Card */}
                         <div className={`w-48 p-4 rounded-2xl text-center transition-all ${(formData.impactLevel || 3) >= 4 ? 'bg-red-50 border-2 border-red-300' :
-                            (formData.impactLevel || 3) >= 3 ? 'bg-amber-50 border-2 border-amber-300' :
-                              'bg-emerald-50 border-2 border-emerald-300'
+                          (formData.impactLevel || 3) >= 3 ? 'bg-amber-50 border-2 border-amber-300' :
+                            'bg-emerald-50 border-2 border-emerald-300'
                           }`}>
                           <div className={`text-5xl mb-2 ${(formData.impactLevel || 3) >= 4 ? 'animate-pulse' : ''
                             }`}>
                             {(formData.impactLevel || 3) >= 4 ? '🚨' : (formData.impactLevel || 3) >= 3 ? '⚠️' : '✅'}
                           </div>
                           <p className={`text-lg font-black ${(formData.impactLevel || 3) >= 4 ? 'text-red-700' :
-                              (formData.impactLevel || 3) >= 3 ? 'text-amber-700' : 'text-emerald-700'
+                            (formData.impactLevel || 3) >= 3 ? 'text-amber-700' : 'text-emerald-700'
                             }`}>
                             {(formData.impactLevel || 3) >= 4 ? 'تأثير حرج' :
                               (formData.impactLevel || 3) >= 3 ? 'تأثير متوسط' : 'تأثير منخفض'}
@@ -5297,8 +5258,8 @@ const ObligationsRegistry = () => {
                                 }
                               }}
                               className={`p-4 rounded-2xl border-2 text-right transition-all transform hover:scale-[1.02] ${isSelected
-                                  ? `bg-${exp.color}-50 border-${exp.color}-400 shadow-lg`
-                                  : 'bg-white border-slate-200 hover:border-slate-300'
+                                ? `bg-${exp.color}-50 border-${exp.color}-400 shadow-lg`
+                                : 'bg-white border-slate-200 hover:border-slate-300'
                                 }`}>
                               <div className="flex items-start gap-3">
                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${isSelected ? `bg-${exp.color}-100` : 'bg-slate-100'
@@ -5417,7 +5378,7 @@ const ObligationsRegistry = () => {
                     <div className="grid grid-cols-4 gap-4">
                       <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur">
                         <p className={`text-4xl font-black ${(formData.impactLevel || 3) >= 4 ? 'text-red-400' :
-                            (formData.impactLevel || 3) >= 3 ? 'text-amber-400' : 'text-emerald-400'
+                          (formData.impactLevel || 3) >= 3 ? 'text-amber-400' : 'text-emerald-400'
                           }`}>{formData.impactLevel || 3}/5</p>
                         <p className="text-slate-300 text-sm mt-1">مستوى التأثير</p>
                       </div>
@@ -5433,7 +5394,7 @@ const ObligationsRegistry = () => {
                       </div>
                       <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur">
                         <p className={`text-4xl font-black ${((formData.impactLevel || 3) * 2 + (formData.exposureTypes || []).length * 1.5) >= 10 ? 'text-red-400' :
-                            ((formData.impactLevel || 3) * 2 + (formData.exposureTypes || []).length * 1.5) >= 6 ? 'text-amber-400' : 'text-emerald-400'
+                          ((formData.impactLevel || 3) * 2 + (formData.exposureTypes || []).length * 1.5) >= 6 ? 'text-amber-400' : 'text-emerald-400'
                           }`}>
                           {(((formData.impactLevel || 3) * 2 + (formData.exposureTypes || []).length * 1.5)).toFixed(1)}
                         </p>
@@ -5459,8 +5420,8 @@ const ObligationsRegistry = () => {
                             <button key={cat.code} type="button" onClick={() => modalMode !== 'view' && setFormData({ ...formData, category: cat.code })}
                               disabled={modalMode === 'view'}
                               className={`p-3 rounded-xl border-2 text-sm font-bold transition-all ${formData.category === cat.code
-                                  ? 'border-purple-500 bg-purple-100 text-purple-700'
-                                  : 'border-slate-200 bg-white hover:border-purple-300 text-slate-600'
+                                ? 'border-purple-500 bg-purple-100 text-purple-700'
+                                : 'border-slate-200 bg-white hover:border-purple-300 text-slate-600'
                                 } disabled:opacity-50`}>
                               {cat.nameAr}
                             </button>
@@ -5480,8 +5441,8 @@ const ObligationsRegistry = () => {
                               <button key={type.value} type="button" onClick={() => modalMode !== 'view' && setFormData({ ...formData, obligationType: type.value })}
                                 disabled={modalMode === 'view'}
                                 className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${formData.obligationType === type.value
-                                    ? `border-${type.color}-500 bg-${type.color}-50`
-                                    : 'border-slate-200 bg-white hover:border-slate-300'
+                                  ? `border-${type.color}-500 bg-${type.color}-50`
+                                  : 'border-slate-200 bg-white hover:border-slate-300'
                                   } disabled:opacity-50`}>
                                 <TypeIcon className={`w-5 h-5 text-${type.color}-500`} />
                                 <span className="font-bold">{type.label}</span>
@@ -5509,8 +5470,8 @@ const ObligationsRegistry = () => {
                             <button key={scope.value} type="button" onClick={() => modalMode !== 'view' && setFormData({ ...formData, scopeLevel: scope.value })}
                               disabled={modalMode === 'view'}
                               className={`w-full text-right p-4 rounded-xl border-2 transition-all ${formData.scopeLevel === scope.value
-                                  ? 'border-emerald-500 bg-emerald-50'
-                                  : 'border-slate-200 bg-white hover:border-emerald-300'
+                                ? 'border-emerald-500 bg-emerald-50'
+                                : 'border-slate-200 bg-white hover:border-emerald-300'
                                 } disabled:opacity-50`}>
                               <span className="font-bold block">{scope.label}</span>
                               <span className="text-sm text-slate-500">{scope.desc}</span>
@@ -5529,8 +5490,8 @@ const ObligationsRegistry = () => {
                             <button key={app.value} type="button" onClick={() => modalMode !== 'view' && setFormData({ ...formData, applicability: app.value })}
                               disabled={modalMode === 'view'}
                               className={`w-full p-3 rounded-xl border-2 font-bold transition-all ${formData.applicability === app.value
-                                  ? `border-${app.color}-500 bg-${app.color}-50 text-${app.color}-700`
-                                  : 'border-slate-200 bg-white hover:border-slate-300 text-slate-600'
+                                ? `border-${app.color}-500 bg-${app.color}-50 text-${app.color}-700`
+                                : 'border-slate-200 bg-white hover:border-slate-300 text-slate-600'
                                 } disabled:opacity-50`}>
                               {app.label}
                             </button>
@@ -5572,8 +5533,8 @@ const ObligationsRegistry = () => {
                           <button key={crit.value} type="button" onClick={() => modalMode !== 'view' && setFormData({ ...formData, criticality: crit.value })}
                             disabled={modalMode === 'view'}
                             className={`p-4 rounded-2xl border-2 transition-all text-center ${isSelected
-                                ? `border-${crit.color}-500 bg-${crit.color}-100 shadow-lg`
-                                : 'border-slate-200 bg-white hover:border-slate-300'
+                              ? `border-${crit.color}-500 bg-${crit.color}-100 shadow-lg`
+                              : 'border-slate-200 bg-white hover:border-slate-300'
                               } disabled:opacity-50`}>
                             <div className={`w-12 h-12 mx-auto rounded-xl flex items-center justify-center mb-2 ${isSelected ? `bg-${crit.color}-500 text-white` : 'bg-slate-100 text-slate-500'
                               }`}>
@@ -5632,11 +5593,11 @@ const ObligationsRegistry = () => {
                               <button key={level} type="button" onClick={() => modalMode !== 'view' && setFormData({ ...formData, riskLikelihood: level })}
                                 disabled={modalMode === 'view'}
                                 className={`flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all ${formData.riskLikelihood === level
-                                    ? level === 'Low' ? 'bg-emerald-500 text-white' :
-                                      level === 'Medium' ? 'bg-amber-500 text-white' :
-                                        level === 'High' ? 'bg-orange-500 text-white' :
-                                          'bg-red-500 text-white'
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                  ? level === 'Low' ? 'bg-emerald-500 text-white' :
+                                    level === 'Medium' ? 'bg-amber-500 text-white' :
+                                      level === 'High' ? 'bg-orange-500 text-white' :
+                                        'bg-red-500 text-white'
+                                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                   } disabled:opacity-50`}>
                                 {level === 'Low' ? 'منخفض' : level === 'Medium' ? 'متوسط' : level === 'High' ? 'عالي' : 'عالي جداً'}
                               </button>
@@ -5650,11 +5611,11 @@ const ObligationsRegistry = () => {
                               <button key={level} type="button" onClick={() => modalMode !== 'view' && setFormData({ ...formData, riskImpact: level })}
                                 disabled={modalMode === 'view'}
                                 className={`flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all ${formData.riskImpact === level
-                                    ? level === 'Low' ? 'bg-emerald-500 text-white' :
-                                      level === 'Medium' ? 'bg-amber-500 text-white' :
-                                        level === 'High' ? 'bg-orange-500 text-white' :
-                                          'bg-red-500 text-white'
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                  ? level === 'Low' ? 'bg-emerald-500 text-white' :
+                                    level === 'Medium' ? 'bg-amber-500 text-white' :
+                                      level === 'High' ? 'bg-orange-500 text-white' :
+                                        'bg-red-500 text-white'
+                                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                   } disabled:opacity-50`}>
                                 {level === 'Low' ? 'منخفض' : level === 'Medium' ? 'متوسط' : level === 'High' ? 'عالي' : 'عالي جداً'}
                               </button>
@@ -5663,9 +5624,9 @@ const ObligationsRegistry = () => {
                         </div>
                         {formData.riskLikelihood && formData.riskImpact && (
                           <div className={`p-4 rounded-xl text-center ${(formData.riskLikelihood === 'VeryHigh' || formData.riskImpact === 'VeryHigh') ? 'bg-red-100 border-2 border-red-300' :
-                              (formData.riskLikelihood === 'High' || formData.riskImpact === 'High') ? 'bg-orange-100 border-2 border-orange-300' :
-                                (formData.riskLikelihood === 'Medium' || formData.riskImpact === 'Medium') ? 'bg-amber-100 border-2 border-amber-300' :
-                                  'bg-emerald-100 border-2 border-emerald-300'
+                            (formData.riskLikelihood === 'High' || formData.riskImpact === 'High') ? 'bg-orange-100 border-2 border-orange-300' :
+                              (formData.riskLikelihood === 'Medium' || formData.riskImpact === 'Medium') ? 'bg-amber-100 border-2 border-amber-300' :
+                                'bg-emerald-100 border-2 border-emerald-300'
                             }`}>
                             <span className="text-sm font-bold">مستوى المخاطر الكلي: </span>
                             <span className="text-lg font-bold">
@@ -5721,8 +5682,8 @@ const ObligationsRegistry = () => {
                           <button key={freq.code} type="button" onClick={() => modalMode !== 'view' && setFormData({ ...formData, frequency: freq.code })}
                             disabled={modalMode === 'view'}
                             className={`p-3 rounded-xl border-2 text-sm font-bold transition-all ${formData.frequency === freq.code
-                                ? 'border-blue-500 bg-blue-100 text-blue-700'
-                                : 'border-slate-200 bg-white hover:border-blue-300 text-slate-600'
+                              ? 'border-blue-500 bg-blue-100 text-blue-700'
+                              : 'border-slate-200 bg-white hover:border-blue-300 text-slate-600'
                               } disabled:opacity-50`}>
                             {freq.nameAr}
                           </button>
@@ -5844,8 +5805,8 @@ const ObligationsRegistry = () => {
                         }}
                           disabled={modalMode === 'view'}
                           className={`px-4 py-2 rounded-xl font-bold transition-all ${formData.departments?.includes(dept)
-                              ? 'bg-purple-500 text-white'
-                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                            ? 'bg-purple-500 text-white'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                             } disabled:opacity-50`}>
                           {dept}
                         </button>
@@ -6685,8 +6646,8 @@ const PoliciesStandards = () => {
                 {tab.icon && <span>{tab.icon}</span>}
                 {tab.label}
                 <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${tab.badge === 'amber' ? 'bg-amber-100 text-amber-700' :
-                    tab.badge === 'red' ? 'bg-red-100 text-red-700' :
-                      activeTab === tab.id ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
+                  tab.badge === 'red' ? 'bg-red-100 text-red-700' :
+                    activeTab === tab.id ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
                   }`}>{tab.count}</span>
               </button>
             ))}
@@ -6763,16 +6724,16 @@ const PoliciesStandards = () => {
                       <td className="px-4 py-4 text-center"><span className="font-mono text-sm font-bold text-blue-600">v{p.currentVersion}</span></td>
                       <td className="px-4 py-4 text-center">
                         <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${p.impactLevel === 'Critical' ? 'bg-red-100 text-red-700' :
-                            p.impactLevel === 'High' ? 'bg-orange-100 text-orange-700' :
-                              p.impactLevel === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'
+                          p.impactLevel === 'High' ? 'bg-orange-100 text-orange-700' :
+                            p.impactLevel === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'
                           }`}>
                           {p.impactLevel === 'Critical' ? 'حرج' : p.impactLevel === 'High' ? 'عالي' : p.impactLevel === 'Medium' ? 'متوسط' : 'منخفض'}
                         </span>
                       </td>
                       <td className="px-4 py-4 text-center">
                         <span className={`px-3 py-1.5 rounded-xl text-xs font-bold ${p.status === 'Active' ? 'bg-emerald-100 text-emerald-700' :
-                            p.status === 'Draft' ? 'bg-slate-100 text-slate-600' :
-                              p.status === 'UnderReview' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+                          p.status === 'Draft' ? 'bg-slate-100 text-slate-600' :
+                            p.status === 'UnderReview' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
                           }`}>
                           {p.status === 'Active' ? '● نشط' : p.status === 'Draft' ? '○ مسودة' : p.status === 'UnderReview' ? '◐ قيد المراجعة' : p.status}
                         </span>
@@ -6881,7 +6842,7 @@ const PoliciesStandards = () => {
               return (
                 <div key={p.id} className="bg-white rounded-2xl border-2 border-slate-200 hover:border-emerald-400 hover:shadow-xl cursor-pointer group overflow-hidden">
                   <div className={`px-5 py-3 flex items-center justify-between ${p.impactLevel === 'Critical' ? 'bg-red-50 border-b border-red-200' :
-                      p.impactLevel === 'High' ? 'bg-orange-50 border-b border-orange-200' : 'bg-slate-50 border-b border-slate-200'
+                    p.impactLevel === 'High' ? 'bg-orange-50 border-b border-orange-200' : 'bg-slate-50 border-b border-slate-200'
                     }`}>
                     <div className="flex items-center gap-2">
                       <span className="text-xl">{POLICY_TYPES.find(t => t.code === p.type)?.icon}</span>
@@ -7245,8 +7206,8 @@ const AttestationCampaignManager = ({ campaign, policy, onClose }) => {
       <div className="w-[850px] bg-white h-full flex flex-col shadow-2xl">
         {/* Header */}
         <div className={`px-6 py-5 text-white ${isReadOnly ? 'bg-gradient-to-l from-slate-500 to-slate-600' :
-            campaignData.status === 'Active' ? 'bg-gradient-to-l from-blue-500 to-indigo-600' :
-              'bg-gradient-to-l from-emerald-500 to-teal-600'
+          campaignData.status === 'Active' ? 'bg-gradient-to-l from-blue-500 to-indigo-600' :
+            'bg-gradient-to-l from-emerald-500 to-teal-600'
           }`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -7535,9 +7496,9 @@ const AttestationCampaignManager = ({ campaign, policy, onClose }) => {
                         <td className="px-4 py-3 text-slate-600 text-sm">{r.department}</td>
                         <td className="px-4 py-3 text-center">
                           <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${r.status === 'Acknowledged' ? 'bg-emerald-100 text-emerald-700' :
-                              r.status === 'Pending' ? 'bg-amber-100 text-amber-700' :
-                                r.status === 'Overdue' ? 'bg-red-100 text-red-700' :
-                                  r.status === 'Declined' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-600'
+                            r.status === 'Pending' ? 'bg-amber-100 text-amber-700' :
+                              r.status === 'Overdue' ? 'bg-red-100 text-red-700' :
+                                r.status === 'Declined' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-600'
                             }`}>
                             {r.status === 'Acknowledged' ? 'أقرّ' : r.status === 'Pending' ? 'معلق' : r.status === 'Overdue' ? 'متأخر' : r.status === 'Declined' ? 'رفض' : 'معفى'}
                           </span>
@@ -7712,8 +7673,8 @@ const PolicyWorkspace = ({ policyId, onClose }) => {
     <div className="min-h-screen bg-slate-50">
       {/* ═══════════════════ WORKSPACE HEADER ═══════════════════ */}
       <div className={`text-white px-8 py-6 ${policy.impactLevel === 'Critical' ? 'bg-gradient-to-l from-red-500 to-rose-600' :
-          policy.impactLevel === 'High' ? 'bg-gradient-to-l from-orange-500 to-amber-600' :
-            'bg-gradient-to-l from-emerald-500 to-teal-600'
+        policy.impactLevel === 'High' ? 'bg-gradient-to-l from-orange-500 to-amber-600' :
+          'bg-gradient-to-l from-emerald-500 to-teal-600'
         }`}>
         <div className="flex items-center justify-between mb-4">
           <button onClick={onClose} className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl">
@@ -7980,7 +7941,7 @@ const PolicyWorkspace = ({ policyId, onClose }) => {
                     <td className="px-4 py-4 text-slate-700">{req.statement}</td>
                     <td className="px-4 py-4 text-center">
                       <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${req.mandatoryLevel === 'Mandatory' ? 'bg-red-100 text-red-700' :
-                          req.mandatoryLevel === 'ShouldComply' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
+                        req.mandatoryLevel === 'ShouldComply' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
                         }`}>{MANDATORY_LEVELS.find(l => l.code === req.mandatoryLevel)?.nameAr}</span>
                     </td>
                     <td className="px-4 py-4 text-center">
@@ -8039,7 +8000,7 @@ const PolicyWorkspace = ({ policyId, onClose }) => {
                   <span className="font-mono text-sm font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg">{ctrl.code}</span>
                   <div className="flex-1"><p className="font-medium text-slate-800">{ctrl.title}</p></div>
                   <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${ctrl.type === 'Preventive' ? 'bg-emerald-100 text-emerald-700' :
-                      ctrl.type === 'Detective' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'
+                    ctrl.type === 'Detective' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'
                     }`}>{ctrl.type === 'Preventive' ? 'وقائي' : ctrl.type === 'Detective' ? 'كاشف' : 'تصحيحي'}</span>
                 </div>
               ))}
@@ -8071,7 +8032,7 @@ const PolicyWorkspace = ({ policyId, onClose }) => {
                         <p className="text-sm text-slate-500 mt-1">الموعد النهائي: {c.dueDate}</p>
                       </div>
                       <span className={`px-3 py-1.5 rounded-xl text-sm font-bold ${c.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' :
-                          c.status === 'Active' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600'
+                        c.status === 'Active' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600'
                         }`}>{c.status === 'Completed' ? 'مكتملة' : c.status === 'Active' ? 'نشطة' : 'مسودة'}</span>
                     </div>
 
@@ -8722,8 +8683,8 @@ const PolicyFormModal = ({ data, onClose, onUpdate, mode = 'create' }) => {
                 disabled={isReadOnly}
                 onClick={() => handleFieldChange('type', type.code)}
                 className={`p-4 rounded-xl border-2 text-center transition-all group relative ${isSelected
-                    ? `${getColorClasses(type.color, true)} shadow-md`
-                    : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow'
+                  ? `${getColorClasses(type.color, true)} shadow-md`
+                  : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow'
                   }`}>
                 <span className="text-3xl block mb-2">{type.icon}</span>
                 <span className={`text-sm font-bold block ${isSelected ? '' : 'text-slate-700'}`}>{type.nameAr}</span>
@@ -9195,7 +9156,7 @@ const PolicyFormModal = ({ data, onClose, onUpdate, mode = 'create' }) => {
             onChange={(e) => handleFieldChange('reviewerId', parseInt(e.target.value) || null)}
             disabled={isReadOnly}
             className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none bg-white ${data?.ownerId && data?.reviewerId && data.ownerId === data.reviewerId
-                ? 'border-red-400 bg-red-50' : 'border-slate-200 focus:border-purple-500'
+              ? 'border-red-400 bg-red-50' : 'border-slate-200 focus:border-purple-500'
               }`}>
             <option value="">اختر المراجع...</option>
             {USERS?.filter(u => u.id !== data?.ownerId).map(u => <option key={u.id} value={u.id}>{u.name} - {u.department}</option>)}
@@ -9623,8 +9584,8 @@ const PolicyFormModal = ({ data, onClose, onUpdate, mode = 'create' }) => {
           {LIFECYCLE_STATES.slice(0, 6).map((state, idx) => (
             <div key={state.code} className="flex items-center">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${data?.status === state.code
-                  ? `bg-${state.color}-500 text-white`
-                  : 'bg-slate-200 text-slate-500'
+                ? `bg-${state.color}-500 text-white`
+                : 'bg-slate-200 text-slate-500'
                 }`}>
                 {state.icon}
               </div>
@@ -10032,7 +9993,7 @@ const PolicyFormModal = ({ data, onClose, onUpdate, mode = 'create' }) => {
                 type="button"
                 onClick={() => setActiveTab(idx)}
                 className={`p-3 rounded-xl border-2 transition-all ${completion === 100 ? 'bg-green-50 border-green-300' :
-                    completion > 0 ? 'bg-amber-50 border-amber-300' : 'bg-slate-50 border-slate-200'
+                  completion > 0 ? 'bg-amber-50 border-amber-300' : 'bg-slate-50 border-slate-200'
                   }`}>
                 <Icon className={`w-5 h-5 mx-auto mb-1 ${completion === 100 ? 'text-green-600' : 'text-slate-400'
                   }`} />
@@ -10136,13 +10097,13 @@ const PolicyFormModal = ({ data, onClose, onUpdate, mode = 'create' }) => {
                 key={tab.id}
                 onClick={() => setActiveTab(idx)}
                 className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 whitespace-nowrap transition-all ${isActive
-                    ? 'border-emerald-500 text-emerald-700 bg-white -mb-px rounded-t-xl shadow-sm'
-                    : isPassed
-                      ? 'border-transparent text-emerald-600'
-                      : 'border-transparent text-slate-500 hover:text-slate-700'
+                  ? 'border-emerald-500 text-emerald-700 bg-white -mb-px rounded-t-xl shadow-sm'
+                  : isPassed
+                    ? 'border-transparent text-emerald-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-700'
                   }`}>
                 <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${isActive ? 'bg-emerald-500 text-white' :
-                    isPassed ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200 text-slate-500'
+                  isPassed ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200 text-slate-500'
                   }`}>
                   {isPassed ? '✓' : idx + 1}
                 </span>
@@ -10197,8 +10158,8 @@ const PolicyFormModal = ({ data, onClose, onUpdate, mode = 'create' }) => {
                 onClick={() => handleSave(false)}
                 disabled={progressPct < 50 || !sodValidation.isValid}
                 className={`flex items-center gap-2 px-8 py-3 text-white rounded-xl font-bold shadow-lg transition-all ${progressPct >= 50 && sodValidation.isValid
-                    ? `bg-gradient-to-r ${documentTypeInfo.gradientCreate} hover:opacity-90 shadow-${documentTypeInfo.color}-500/30`
-                    : 'bg-slate-300 cursor-not-allowed'
+                  ? `bg-gradient-to-r ${documentTypeInfo.gradientCreate} hover:opacity-90 shadow-${documentTypeInfo.color}-500/30`
+                  : 'bg-slate-300 cursor-not-allowed'
                   }`}>
                 {isEditMode ? <Save className="w-5 h-5" /> : <Send className="w-5 h-5" />}
                 {isEditMode ? `حفظ تعديلات ${documentTypeInfo.nameAr}` : `إنشاء ${documentTypeInfo.nameAr}`}
@@ -10232,11 +10193,13 @@ const ObligationsMapping = () => {
     riskId: null,
     policyId: null,
     coverageLevel: 'Full',
-    notes: ''
+    effectiveness: 'Effective',
+    notes: '',
+    activeGoldenTab: 0
   });
 
   const resetFormData = () => setFormData({
-    id: null, obligationId: null, controlId: null, riskId: null, policyId: null, coverageLevel: 'Full', notes: ''
+    id: null, obligationId: null, controlId: null, riskId: null, policyId: null, coverageLevel: 'Full', effectiveness: 'Effective', notes: '', activeGoldenTab: 0
   });
 
   // Handlers - موحدة
@@ -10710,276 +10673,488 @@ const ObligationsMapping = () => {
         </div>
       </div>
 
-      {/* ═══════════════════ WORLD-CLASS GOLDEN THREAD LINKING MODAL ═══════════════════ */}
+      {/* ═══════════════════ WORLD-CLASS GOLDEN THREAD LINKING MODAL v2.0 ═══════════════════ */}
       {showFormModal && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-hidden flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden flex flex-col">
             {/* ═══════════════ HEADER ═══════════════ */}
-            <div className={`px-6 py-4 text-white ${formMode === 'edit' ? 'bg-gradient-to-l from-blue-600 via-indigo-600 to-purple-700' : 'bg-gradient-to-l from-emerald-600 via-teal-600 to-cyan-700'}`}>
+            <div className={`px-8 py-5 text-white ${formMode === 'edit' ? 'bg-gradient-to-l from-blue-600 via-indigo-600 to-purple-700' : 'bg-gradient-to-l from-emerald-600 via-teal-600 to-cyan-700'}`}>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                    {formMode === 'edit' ? <Edit className="w-6 h-6" /> : <Link2 className="w-6 h-6" />}
+                  <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    {formMode === 'edit' ? <Edit className="w-8 h-8" /> : <Link2 className="w-8 h-8" />}
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold">{formMode === 'edit' ? 'تعديل الربط' : 'إنشاء ربط جديد'}</h2>
-                    <p className="text-white/80 text-sm">Golden Thread: الالتزام ← الضابط ← المخاطر ← السياسة</p>
+                    <h2 className="text-2xl font-black">{formMode === 'edit' ? 'تعديل الربط' : 'إنشاء ربط جديد'}</h2>
+                    <p className="text-white/80 text-sm">Golden Thread: الالتزام ← الضابط ← المخاطر ← السياسة ← الأدلة</p>
                   </div>
                 </div>
-                <button onClick={handleCloseForm} className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl transition-all">
-                  <X className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-3">
+                  {/* Completion Indicator */}
+                  <div className="text-center px-4 py-2 bg-white/10 backdrop-blur rounded-xl">
+                    <p className="text-white/80 text-xs">الروابط</p>
+                    <p className="text-2xl font-black">
+                      {[selectedObligation || formData.obligationId, formData.controlId, formData.riskId, formData.policyId].filter(Boolean).length}/4
+                    </p>
+                  </div>
+                  <button onClick={handleCloseForm} className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl transition-all">
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
               </div>
 
-              {/* Visual Golden Thread */}
-              <div className="flex items-center justify-center gap-1 py-2 bg-white/10 rounded-xl">
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/30 rounded-lg">
-                  <FileText className="w-4 h-4" />
-                  <span className="text-xs font-bold">الالتزام</span>
-                  {(selectedObligation || formData.obligationId) && <CheckCircle2 className="w-3.5 h-3.5" />}
-                </div>
-                <ChevronLeft className="w-4 h-4 text-white/50" />
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/30 rounded-lg">
-                  <Shield className="w-4 h-4" />
-                  <span className="text-xs font-bold">الضابط</span>
-                  {formData.controlId && <CheckCircle2 className="w-3.5 h-3.5" />}
-                </div>
-                <ChevronLeft className="w-4 h-4 text-white/50" />
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/30 rounded-lg">
-                  <AlertTriangle className="w-4 h-4" />
-                  <span className="text-xs font-bold">المخاطر</span>
-                  {formData.riskId && <CheckCircle2 className="w-3.5 h-3.5" />}
-                </div>
-                <ChevronLeft className="w-4 h-4 text-white/50" />
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/30 rounded-lg">
-                  <BookOpen className="w-4 h-4" />
-                  <span className="text-xs font-bold">السياسة</span>
-                  {formData.policyId && <CheckCircle2 className="w-3.5 h-3.5" />}
-                </div>
+              {/* Visual Golden Thread - Enhanced */}
+              <div className="flex items-center justify-between py-3 px-4 bg-white/10 rounded-2xl">
+                {[
+                  { id: 'obligation', label: 'الالتزام', labelEn: 'Obligation', icon: FileText, color: 'emerald', isComplete: selectedObligation || formData.obligationId },
+                  { id: 'control', label: 'الضابط', labelEn: 'Control', icon: Shield, color: 'blue', isComplete: formData.controlId },
+                  { id: 'risk', label: 'المخاطر', labelEn: 'Risk', icon: AlertTriangle, color: 'amber', isComplete: formData.riskId },
+                  { id: 'policy', label: 'السياسة', labelEn: 'Policy', icon: BookOpen, color: 'purple', isComplete: formData.policyId },
+                ].map((item, idx, arr) => (
+                  <React.Fragment key={item.id}>
+                    <div className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-xl transition-all ${item.isComplete ? 'bg-white/20' : 'bg-white/5'}`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.isComplete ? 'bg-white/30' : 'bg-white/10'}`}>
+                        {item.isComplete ? <CheckCircle2 className="w-5 h-5" /> : <item.icon className="w-5 h-5 opacity-60" />}
+                      </div>
+                      <span className="text-sm font-bold">{item.label}</span>
+                      <span className="text-xs opacity-70">{item.labelEn}</span>
+                    </div>
+                    {idx < arr.length - 1 && (
+                      <div className="flex items-center">
+                        <div className={`w-8 h-1 rounded ${item.isComplete ? 'bg-white/50' : 'bg-white/20'}`}></div>
+                        <ChevronLeft className={`w-5 h-5 ${item.isComplete ? 'text-white' : 'text-white/30'}`} />
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
+            </div>
+
+            {/* ═══════════════ TABS ═══════════════ */}
+            <div className="flex border-b border-slate-200 px-4 bg-slate-50">
+              {[
+                { id: 'obligation', label: 'الالتزام', icon: FileText, color: 'emerald', isComplete: selectedObligation || formData.obligationId },
+                { id: 'control', label: 'الضابط', icon: Shield, color: 'blue', isComplete: formData.controlId, required: true },
+                { id: 'risk', label: 'المخاطر', icon: AlertTriangle, color: 'amber', isComplete: formData.riskId },
+                { id: 'policy', label: 'السياسة', icon: BookOpen, color: 'purple', isComplete: formData.policyId },
+                { id: 'settings', label: 'الإعدادات', icon: Settings, color: 'slate', isComplete: formData.coverageLevel },
+              ].map((tab, idx) => {
+                const isActive = (formData.activeGoldenTab || 0) === idx;
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setFormData({ ...formData, activeGoldenTab: idx })}
+                    className={`flex items-center gap-2 px-5 py-3 font-medium border-b-2 transition-all ${isActive
+                      ? `border-${tab.color}-500 text-${tab.color}-700 bg-white -mb-px rounded-t-xl`
+                      : 'border-transparent text-slate-500 hover:text-slate-700'
+                      }`}>
+                    <span className={`w-7 h-7 rounded-lg flex items-center justify-center ${isActive ? `bg-${tab.color}-500 text-white` :
+                      tab.isComplete ? `bg-${tab.color}-100 text-${tab.color}-600` : 'bg-slate-200 text-slate-500'
+                      }`}>
+                      {tab.isComplete ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
+                    </span>
+                    <span className="text-sm">{tab.label}</span>
+                    {tab.required && !tab.isComplete && <span className="text-red-500 text-lg">*</span>}
+                  </button>
+                );
+              })}
             </div>
 
             {/* ═══════════════ CONTENT ═══════════════ */}
             <div className="flex-1 overflow-y-auto p-6">
-              {/* Selected Obligation Preview */}
-              {(selectedObligation || formData.obligationId) && (
-                <div className="mb-5 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl border-2 border-emerald-200">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center flex-shrink-0">
-                        <FileText className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-mono text-sm font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded">{selectedObligation?.code}</span>
-                          <span className="px-2 py-0.5 bg-slate-200 rounded text-xs font-bold text-slate-600">{getAuthority(selectedObligation?.authorityId)?.code}</span>
-                          <span className={`px-2 py-0.5 rounded text-xs font-bold ${selectedObligation?.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
-                            {selectedObligation?.status === 'Active' ? 'نشط' : selectedObligation?.status}
-                          </span>
-                        </div>
-                        <p className="font-bold text-slate-800 text-sm">{selectedObligation?.title}</p>
-                      </div>
-                    </div>
-                    {formMode === 'create' && (
-                      <button onClick={() => { setSelectedObligation(null); setFormData({ ...formData, obligationId: null }); }}
-                        className="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-50 rounded-lg transition-all">
-                        <X className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
 
-              {/* Obligation Selection - when not selected */}
-              {!selectedObligation && formMode === 'create' && (
-                <div className="mb-5">
-                  <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                    <span className="w-6 h-6 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">1</span>
-                    اختر الالتزام التنظيمي *
-                  </label>
-                  <div className="relative mb-3">
-                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <input type="text" placeholder="ابحث في الالتزامات..."
-                      className="w-full pr-10 pl-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-emerald-400 focus:outline-none" />
-                  </div>
-                  <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto">
-                    {obligationsWithCoverage.slice(0, 8).map(obl => (
-                      <button key={obl.id} type="button" onClick={() => { setSelectedObligation(obl); setFormData({ ...formData, obligationId: obl.id }); }}
-                        className={`flex items-center gap-3 p-3 rounded-xl border-2 text-right transition-all hover:shadow-md ${obl.coverageStatus === 'None' ? 'border-red-200 bg-red-50/50 hover:border-red-400' : 'border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50'
-                          }`}>
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${obl.coverageStatus === 'None' ? 'bg-red-100' : 'bg-emerald-100'}`}>
-                          <FileText className={`w-4 h-4 ${obl.coverageStatus === 'None' ? 'text-red-600' : 'text-emerald-600'}`} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold text-emerald-600">{obl.code}</span>
-                            {obl.coverageStatus === 'None' && <span className="px-1.5 py-0.5 bg-red-500 text-white rounded text-xs">فجوة</span>}
+              {/* ═══════════════ TAB 1: OBLIGATION ═══════════════ */}
+              {(formData.activeGoldenTab || 0) === 0 && (
+                <div className="space-y-4">
+                  {/* Selected Obligation Preview */}
+                  {(selectedObligation || formData.obligationId) && (
+                    <div className="p-5 bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 rounded-2xl border-2 border-emerald-200">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-4">
+                          <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/30">
+                            <FileText className="w-7 h-7 text-white" />
                           </div>
-                          <p className="text-xs text-slate-700 truncate">{obl.title}</p>
-                        </div>
-                        <ChevronLeft className="w-4 h-4 text-slate-400" />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Golden Thread Connections - 2x2 Grid */}
-              {(selectedObligation || formData.obligationId) && (
-                <div className="grid grid-cols-2 gap-4">
-                  {/* ═══════════════ CONTROL SELECTION ═══════════════ */}
-                  <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-200">
-                    <label className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-lg bg-blue-500 text-white flex items-center justify-center text-xs font-bold">2</span>
-                        <Shield className="w-4 h-4 text-blue-600" />
-                        <span className="text-sm font-bold text-slate-700">الضابط الرقابي *</span>
-                      </div>
-                      {formData.controlId && (
-                        <span className="px-2 py-0.5 bg-blue-500 text-white rounded text-xs font-bold">تم الاختيار</span>
-                      )}
-                    </label>
-                    <div className="relative mb-2">
-                      <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                      <input type="text" placeholder="ابحث..."
-                        className="w-full pr-9 pl-3 py-2 border border-slate-200 rounded-lg text-xs focus:border-blue-400 focus:outline-none" />
-                    </div>
-                    <div className="space-y-1.5 max-h-36 overflow-y-auto">
-                      {CONTROLS.slice(0, 10).map(ctrl => (
-                        <button key={ctrl.id} type="button" onClick={() => setFormData({ ...formData, controlId: ctrl.id })}
-                          className={`w-full flex items-center gap-2 p-2.5 rounded-lg border transition-all text-right ${formData.controlId === ctrl.id ? 'border-blue-500 bg-blue-100' : 'border-slate-200 bg-white hover:border-blue-300'
-                            }`}>
-                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${formData.controlId === ctrl.id ? 'bg-blue-500 text-white' : 'bg-blue-100 text-blue-600'}`}>
-                            {formData.controlId === ctrl.id ? <CheckCircle2 className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <span className="font-mono text-xs font-bold text-blue-600">{ctrl.code}</span>
-                            <p className="text-xs text-slate-600 truncate">{ctrl.title}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* ═══════════════ RISK SELECTION ═══════════════ */}
-                  <div className="bg-amber-50/50 rounded-xl p-4 border border-amber-200">
-                    <label className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-lg bg-amber-500 text-white flex items-center justify-center text-xs font-bold">3</span>
-                        <AlertTriangle className="w-4 h-4 text-amber-600" />
-                        <span className="text-sm font-bold text-slate-700">المخاطر المرتبطة</span>
-                      </div>
-                      {formData.riskId && (
-                        <span className="px-2 py-0.5 bg-amber-500 text-white rounded text-xs font-bold">تم الاختيار</span>
-                      )}
-                    </label>
-                    <div className="relative mb-2">
-                      <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                      <input type="text" placeholder="ابحث..."
-                        className="w-full pr-9 pl-3 py-2 border border-slate-200 rounded-lg text-xs focus:border-amber-400 focus:outline-none" />
-                    </div>
-                    <div className="space-y-1.5 max-h-36 overflow-y-auto">
-                      {RISKS.slice(0, 10).map(risk => (
-                        <button key={risk.id} type="button" onClick={() => setFormData({ ...formData, riskId: formData.riskId === risk.id ? null : risk.id })}
-                          className={`w-full flex items-center gap-2 p-2.5 rounded-lg border transition-all text-right ${formData.riskId === risk.id ? 'border-amber-500 bg-amber-100' : 'border-slate-200 bg-white hover:border-amber-300'
-                            }`}>
-                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${formData.riskId === risk.id ? 'bg-amber-500 text-white' : 'bg-amber-100 text-amber-600'}`}>
-                            {formData.riskId === risk.id ? <CheckCircle2 className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <span className="font-mono text-xs font-bold text-amber-600">{risk.code}</span>
-                            <p className="text-xs text-slate-600 truncate">{risk.title}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* ═══════════════ POLICY SELECTION ═══════════════ */}
-                  <div className="bg-purple-50/50 rounded-xl p-4 border border-purple-200">
-                    <label className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-lg bg-purple-500 text-white flex items-center justify-center text-xs font-bold">4</span>
-                        <BookOpen className="w-4 h-4 text-purple-600" />
-                        <span className="text-sm font-bold text-slate-700">السياسة المرتبطة</span>
-                      </div>
-                      {formData.policyId && (
-                        <span className="px-2 py-0.5 bg-purple-500 text-white rounded text-xs font-bold">تم الاختيار</span>
-                      )}
-                    </label>
-                    <div className="relative mb-2">
-                      <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                      <input type="text" placeholder="ابحث..."
-                        className="w-full pr-9 pl-3 py-2 border border-slate-200 rounded-lg text-xs focus:border-purple-400 focus:outline-none" />
-                    </div>
-                    <div className="space-y-1.5 max-h-36 overflow-y-auto">
-                      {POLICIES.slice(0, 10).map(policy => (
-                        <button key={policy.id} type="button" onClick={() => setFormData({ ...formData, policyId: formData.policyId === policy.id ? null : policy.id })}
-                          className={`w-full flex items-center gap-2 p-2.5 rounded-lg border transition-all text-right ${formData.policyId === policy.id ? 'border-purple-500 bg-purple-100' : 'border-slate-200 bg-white hover:border-purple-300'
-                            }`}>
-                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${formData.policyId === policy.id ? 'bg-purple-500 text-white' : 'bg-purple-100 text-purple-600'}`}>
-                            {formData.policyId === policy.id ? <CheckCircle2 className="w-4 h-4" /> : <BookOpen className="w-4 h-4" />}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-1">
-                              <span className="font-mono text-xs font-bold text-purple-600">{policy.code}</span>
-                              <span className="text-xs px-1 py-0.5 bg-purple-200 text-purple-700 rounded">{policy.type === 'Standard' ? 'معيار' : policy.type === 'Procedure' ? 'إجراء' : 'سياسة'}</span>
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="font-mono text-lg font-black text-emerald-600 bg-emerald-100 px-3 py-1 rounded-lg">{selectedObligation?.code}</span>
+                              <span className="px-3 py-1 bg-slate-200 rounded-lg text-sm font-bold text-slate-600">{getAuthority(selectedObligation?.authorityId)?.code}</span>
+                              <span className={`px-3 py-1 rounded-lg text-sm font-bold ${selectedObligation?.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
+                                {selectedObligation?.status === 'Active' ? '✓ نشط' : selectedObligation?.status}
+                              </span>
                             </div>
-                            <p className="text-xs text-slate-600 truncate">{policy.title}</p>
+                            <p className="font-bold text-slate-800 text-lg mb-1">{selectedObligation?.title}</p>
+                            <p className="text-slate-500 text-sm">{selectedObligation?.description?.substring(0, 100)}...</p>
+                          </div>
+                        </div>
+                        {formMode === 'create' && (
+                          <button onClick={() => { setSelectedObligation(null); setFormData({ ...formData, obligationId: null }); }}
+                            className="text-slate-400 hover:text-red-500 p-2 hover:bg-red-50 rounded-xl transition-all">
+                            <X className="w-5 h-5" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Obligation Selection */}
+                  {!selectedObligation && formMode === 'create' && (
+                    <>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <span className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-lg font-black">1</span>
+                          <div>
+                            <h3 className="font-bold text-slate-800 text-lg">اختر الالتزام التنظيمي</h3>
+                            <p className="text-slate-500 text-sm">حدد الالتزام الذي تريد ربطه بالضوابط</p>
+                          </div>
+                        </div>
+                        <span className="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm font-bold">مطلوب *</span>
+                      </div>
+
+                      {/* Search & Filters */}
+                      <div className="flex gap-3 mb-4">
+                        <div className="flex-1 relative">
+                          <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                          <input type="text" placeholder="ابحث في الالتزامات بالكود أو العنوان..."
+                            className="w-full pr-12 pl-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-400 focus:outline-none" />
+                        </div>
+                        <select className="px-4 py-3 border-2 border-slate-200 rounded-xl bg-white focus:border-emerald-400 focus:outline-none">
+                          <option value="">كل الجهات</option>
+                          {REGULATORY_AUTHORITIES_DATA.map(auth => (
+                            <option key={auth.id} value={auth.id}>{auth.code}</option>
+                          ))}
+                        </select>
+                        <select className="px-4 py-3 border-2 border-slate-200 rounded-xl bg-white focus:border-emerald-400 focus:outline-none">
+                          <option value="">كل الحالات</option>
+                          <option value="gap">فجوات فقط</option>
+                          <option value="covered">مغطى</option>
+                        </select>
+                      </div>
+
+                      {/* Obligations List - Compact */}
+                      <div className="grid grid-cols-2 gap-2 max-h-[200px] overflow-y-auto pr-2">
+                        {obligationsWithCoverage.map(obl => {
+                          const auth = getAuthority(obl.authorityId);
+                          return (
+                            <button key={obl.id} type="button"
+                              onClick={() => { setSelectedObligation(obl); setFormData({ ...formData, obligationId: obl.id }); }}
+                              className={`flex items-center gap-2 p-2.5 rounded-xl border-2 text-right transition-all hover:shadow group ${obl.coverageStatus === 'None'
+                                ? 'border-red-200 bg-red-50/50 hover:border-red-400'
+                                : 'border-slate-200 bg-white hover:border-emerald-400'
+                                }`}>
+                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${obl.coverageStatus === 'None' ? 'bg-red-100' : 'bg-emerald-100'
+                                }`}>
+                                <FileText className={`w-4 h-4 ${obl.coverageStatus === 'None' ? 'text-red-600' : 'text-emerald-600'}`} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5 mb-0.5">
+                                  <span className="font-mono text-xs font-bold text-emerald-600">{obl.code}</span>
+                                  <span className="px-1.5 py-0.5 bg-slate-200 rounded text-xs font-bold text-slate-600">{auth?.code}</span>
+                                  {obl.coverageStatus === 'None' && (
+                                    <span className="px-1.5 py-0.5 bg-red-500 text-white rounded text-xs font-bold">فجوة</span>
+                                  )}
+                                </div>
+                                <p className="text-xs text-slate-700 truncate">{obl.title}</p>
+                              </div>
+                              <ChevronLeft className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 2: CONTROL ═══════════════ */}
+              {(formData.activeGoldenTab || 0) === 1 && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center text-lg font-black">2</span>
+                      <div>
+                        <h3 className="font-bold text-slate-800 text-lg">اختر الضابط الرقابي</h3>
+                        <p className="text-slate-500 text-sm">حدد الضابط الذي يغطي هذا الالتزام</p>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm font-bold">مطلوب *</span>
+                  </div>
+
+                  {/* Search */}
+                  <div className="flex gap-3 mb-4">
+                    <div className="flex-1 relative">
+                      <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <input type="text" placeholder="ابحث في الضوابط..."
+                        className="w-full pr-12 pl-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-400 focus:outline-none" />
+                    </div>
+                    <select className="px-4 py-3 border-2 border-slate-200 rounded-xl bg-white">
+                      <option value="">كل الأنواع</option>
+                      <option value="Preventive">وقائي</option>
+                      <option value="Detective">استكشافي</option>
+                      <option value="Corrective">تصحيحي</option>
+                    </select>
+                  </div>
+
+                  {/* Controls Grid - Compact */}
+                  <div className="grid grid-cols-3 gap-2 max-h-[200px] overflow-y-auto pr-2">
+                    {CONTROLS.map(ctrl => {
+                      const isSelected = formData.controlId === ctrl.id;
+                      return (
+                        <button key={ctrl.id} type="button"
+                          onClick={() => setFormData({ ...formData, controlId: ctrl.id })}
+                          className={`flex items-center gap-2 p-2.5 rounded-xl border-2 text-right transition-all ${isSelected
+                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                            : 'border-slate-200 bg-white hover:border-blue-300'
+                            }`}>
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${isSelected ? 'bg-blue-500 text-white' : 'bg-blue-100 text-blue-600'
+                            }`}>
+                            {isSelected ? <CheckCircle2 className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5 mb-0.5">
+                              <span className={`font-mono text-xs font-bold ${isSelected ? 'text-blue-700' : 'text-blue-600'}`}>{ctrl.code}</span>
+                              <span className={`px-1.5 py-0.5 rounded text-xs font-bold ${ctrl.type === 'Preventive' ? 'bg-emerald-100 text-emerald-700' :
+                                ctrl.type === 'Detective' ? 'bg-amber-100 text-amber-700' : 'bg-purple-100 text-purple-700'
+                                }`}>
+                                {ctrl.type === 'Preventive' ? 'وقائي' : ctrl.type === 'Detective' ? 'استكشافي' : 'تصحيحي'}
+                              </span>
+                            </div>
+                            <p className={`text-xs truncate ${isSelected ? 'text-blue-800 font-bold' : 'text-slate-600'}`}>{ctrl.title}</p>
                           </div>
                         </button>
-                      ))}
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 3: RISK ═══════════════ */}
+              {(formData.activeGoldenTab || 0) === 2 && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg font-black">3</span>
+                      <div>
+                        <h3 className="font-bold text-slate-800 text-lg">ربط المخاطر (اختياري)</h3>
+                        <p className="text-slate-500 text-sm">حدد المخاطر التي يعالجها هذا الضابط</p>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm font-bold">اختياري</span>
+                  </div>
+
+                  {/* Search */}
+                  <div className="relative mb-4">
+                    <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input type="text" placeholder="ابحث في المخاطر..."
+                      className="w-full pr-12 pl-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-400 focus:outline-none" />
+                  </div>
+
+                  {/* Risks Grid - Compact */}
+                  <div className="grid grid-cols-3 gap-2 max-h-[200px] overflow-y-auto pr-2">
+                    {RISKS.map(risk => {
+                      const isSelected = formData.riskId === risk.id;
+                      return (
+                        <button key={risk.id} type="button"
+                          onClick={() => setFormData({ ...formData, riskId: isSelected ? null : risk.id })}
+                          className={`flex items-center gap-2 p-2.5 rounded-xl border-2 text-right transition-all ${isSelected
+                            ? 'border-amber-500 bg-amber-50 shadow-md'
+                            : 'border-slate-200 bg-white hover:border-amber-300'
+                            }`}>
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${isSelected ? 'bg-amber-500 text-white' : 'bg-amber-100 text-amber-600'
+                            }`}>
+                            {isSelected ? <CheckCircle2 className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5 mb-0.5">
+                              <span className={`font-mono text-xs font-bold ${isSelected ? 'text-amber-700' : 'text-amber-600'}`}>{risk.code}</span>
+                              <span className={`px-1.5 py-0.5 rounded text-xs font-bold ${risk.level === 'Critical' ? 'bg-red-100 text-red-700' :
+                                risk.level === 'High' ? 'bg-orange-100 text-orange-700' :
+                                  risk.level === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'
+                                }`}>
+                                {risk.level === 'Critical' ? 'حرج' : risk.level === 'High' ? 'عالي' : risk.level === 'Medium' ? 'متوسط' : 'منخفض'}
+                              </span>
+                            </div>
+                            <p className={`text-xs truncate ${isSelected ? 'text-amber-800 font-bold' : 'text-slate-600'}`}>{risk.title}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 4: POLICY ═══════════════ */}
+              {(formData.activeGoldenTab || 0) === 3 && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="w-10 h-10 rounded-xl bg-purple-500 text-white flex items-center justify-center text-lg font-black">4</span>
+                      <div>
+                        <h3 className="font-bold text-slate-800 text-lg">ربط السياسة (اختياري)</h3>
+                        <p className="text-slate-500 text-sm">حدد السياسة أو المعيار المرتبط</p>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm font-bold">اختياري</span>
+                  </div>
+
+                  {/* Search & Filter */}
+                  <div className="flex gap-3 mb-4">
+                    <div className="flex-1 relative">
+                      <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <input type="text" placeholder="ابحث في السياسات والمعايير..."
+                        className="w-full pr-12 pl-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-400 focus:outline-none" />
+                    </div>
+                    <select className="px-4 py-3 border-2 border-slate-200 rounded-xl bg-white">
+                      <option value="">كل الأنواع</option>
+                      <option value="Policy">سياسة</option>
+                      <option value="Standard">معيار</option>
+                      <option value="Procedure">إجراء</option>
+                    </select>
+                  </div>
+
+                  {/* Policies Grid - Compact */}
+                  <div className="grid grid-cols-3 gap-2 max-h-[200px] overflow-y-auto pr-2">
+                    {POLICIES.map(policy => {
+                      const isSelected = formData.policyId === policy.id;
+                      const typeInfo = policy.type === 'Policy'
+                        ? { label: 'سياسة', color: 'emerald' }
+                        : policy.type === 'Standard'
+                          ? { label: 'معيار', color: 'blue' }
+                          : { label: 'إجراء', color: 'purple' };
+                      return (
+                        <button key={policy.id} type="button"
+                          onClick={() => setFormData({ ...formData, policyId: isSelected ? null : policy.id })}
+                          className={`flex items-center gap-2 p-2.5 rounded-xl border-2 text-right transition-all ${isSelected
+                            ? 'border-purple-500 bg-purple-50 shadow-md'
+                            : 'border-slate-200 bg-white hover:border-purple-300'
+                            }`}>
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${isSelected ? 'bg-purple-500 text-white' : 'bg-purple-100 text-purple-600'
+                            }`}>
+                            {isSelected ? <CheckCircle2 className="w-4 h-4" /> : <BookOpen className="w-4 h-4" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5 mb-0.5">
+                              <span className={`font-mono text-xs font-bold ${isSelected ? 'text-purple-700' : 'text-purple-600'}`}>{policy.code}</span>
+                              <span className={`px-1.5 py-0.5 rounded text-xs font-bold bg-${typeInfo.color}-100 text-${typeInfo.color}-700`}>
+                                {typeInfo.label}
+                              </span>
+                            </div>
+                            <p className={`text-xs truncate ${isSelected ? 'text-purple-800 font-bold' : 'text-slate-600'}`}>{policy.title}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 5: SETTINGS ═══════════════ */}
+              {(formData.activeGoldenTab || 0) === 4 && (
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="w-10 h-10 rounded-xl bg-slate-500 text-white flex items-center justify-center text-lg font-black">5</span>
+                    <div>
+                      <h3 className="font-bold text-slate-800 text-lg">إعدادات الربط والتقييم</h3>
+                      <p className="text-slate-500 text-sm">حدد مستوى التغطية وفعالية الضابط</p>
                     </div>
                   </div>
 
-                  {/* ═══════════════ COVERAGE & NOTES ═══════════════ */}
-                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
-                    <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                      <span className="w-6 h-6 rounded-lg bg-slate-500 text-white flex items-center justify-center text-xs font-bold">5</span>
-                      مستوى التغطية والملاحظات
-                    </label>
-
+                  <div className="grid grid-cols-2 gap-6">
                     {/* Coverage Level */}
-                    <div className="grid grid-cols-3 gap-2 mb-3">
-                      {[
-                        { value: 'Full', label: 'كاملة', icon: CheckCircle2, color: 'emerald', desc: '100%' },
-                        { value: 'Partial', label: 'جزئية', icon: Clock, color: 'amber', desc: '50%' },
-                        { value: 'None', label: 'بدون', icon: XCircle, color: 'red', desc: '0%' }
-                      ].map(opt => (
-                        <button key={opt.value} type="button" onClick={() => setFormData({ ...formData, coverageLevel: opt.value })}
-                          className={`flex flex-col items-center gap-1 p-2.5 rounded-xl border-2 transition-all ${formData.coverageLevel === opt.value
-                              ? `border-${opt.color}-500 bg-${opt.color}-100`
-                              : 'border-slate-200 bg-white hover:border-slate-300'
-                            }`}>
-                          <opt.icon className={`w-5 h-5 ${formData.coverageLevel === opt.value ? `text-${opt.color}-600` : 'text-slate-400'}`} />
-                          <span className={`text-xs font-bold ${formData.coverageLevel === opt.value ? `text-${opt.color}-700` : 'text-slate-500'}`}>{opt.label}</span>
-                          <span className={`text-xs ${formData.coverageLevel === opt.value ? `text-${opt.color}-600` : 'text-slate-400'}`}>{opt.desc}</span>
-                        </button>
-                      ))}
+                    <div className="p-5 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border-2 border-slate-200">
+                      <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <Target className="w-5 h-5 text-slate-600" />
+                        مستوى التغطية
+                      </h4>
+                      <div className="grid grid-cols-3 gap-3">
+                        {[
+                          { value: 'Full', label: 'كاملة', desc: '100%', icon: CheckCircle2, color: 'emerald' },
+                          { value: 'Partial', label: 'جزئية', desc: '50%', icon: Clock, color: 'amber' },
+                          { value: 'None', label: 'بدون تغطية', desc: '0%', icon: XCircle, color: 'red' }
+                        ].map(opt => {
+                          const isSelected = formData.coverageLevel === opt.value;
+                          return (
+                            <button key={opt.value} type="button"
+                              onClick={() => setFormData({ ...formData, coverageLevel: opt.value })}
+                              className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${isSelected
+                                ? `border-${opt.color}-500 bg-${opt.color}-50 shadow-lg`
+                                : 'border-slate-200 bg-white hover:border-slate-300'
+                                }`}>
+                              <opt.icon className={`w-8 h-8 ${isSelected ? `text-${opt.color}-600` : 'text-slate-400'}`} />
+                              <span className={`text-sm font-bold ${isSelected ? `text-${opt.color}-700` : 'text-slate-600'}`}>{opt.label}</span>
+                              <span className={`text-2xl font-black ${isSelected ? `text-${opt.color}-600` : 'text-slate-400'}`}>{opt.desc}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     {/* Effectiveness */}
-                    <div className="mb-3">
-                      <label className="block text-xs font-bold text-slate-600 mb-1.5">فعالية الضابط</label>
-                      <div className="flex gap-2">
-                        {['Effective', 'PartiallyEffective', 'Ineffective'].map(eff => (
-                          <button key={eff} type="button" onClick={() => setFormData({ ...formData, effectiveness: eff })}
-                            className={`flex-1 py-2 px-2 rounded-lg text-xs font-bold transition-all ${formData.effectiveness === eff
-                                ? eff === 'Effective' ? 'bg-emerald-500 text-white' : eff === 'PartiallyEffective' ? 'bg-amber-500 text-white' : 'bg-red-500 text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                              }`}>
-                            {eff === 'Effective' ? 'فعال' : eff === 'PartiallyEffective' ? 'جزئي' : 'غير فعال'}
-                          </button>
-                        ))}
+                    <div className="p-5 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border-2 border-slate-200">
+                      <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <Activity className="w-5 h-5 text-slate-600" />
+                        فعالية الضابط
+                      </h4>
+                      <div className="grid grid-cols-3 gap-3">
+                        {[
+                          { value: 'Effective', label: 'فعال', desc: 'يعمل بشكل صحيح', color: 'emerald' },
+                          { value: 'PartiallyEffective', label: 'فعال جزئياً', desc: 'يحتاج تحسين', color: 'amber' },
+                          { value: 'Ineffective', label: 'غير فعال', desc: 'يحتاج إعادة تصميم', color: 'red' }
+                        ].map(opt => {
+                          const isSelected = formData.effectiveness === opt.value;
+                          return (
+                            <button key={opt.value} type="button"
+                              onClick={() => setFormData({ ...formData, effectiveness: opt.value })}
+                              className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${isSelected
+                                ? `border-${opt.color}-500 bg-${opt.color}-50 shadow-lg`
+                                : 'border-slate-200 bg-white hover:border-slate-300'
+                                }`}>
+                              <div className={`w-4 h-4 rounded-full ${isSelected ? `bg-${opt.color}-500` : 'bg-slate-300'}`}></div>
+                              <span className={`text-sm font-bold ${isSelected ? `text-${opt.color}-700` : 'text-slate-600'}`}>{opt.label}</span>
+                              <span className="text-xs text-slate-500 text-center">{opt.desc}</span>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
+                  </div>
 
-                    {/* Notes */}
-                    <div>
-                      <label className="block text-xs font-bold text-slate-600 mb-1.5">ملاحظات</label>
-                      <textarea value={formData.notes || ''} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} rows={2}
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 resize-none text-xs"
-                        placeholder="أضف ملاحظات..." />
+                  {/* Notes */}
+                  <div className="p-5 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border-2 border-slate-200">
+                    <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                      <FileText className="w-5 h-5 text-slate-600" />
+                      ملاحظات وتعليقات
+                    </h4>
+                    <textarea
+                      value={formData.notes || ''}
+                      onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                      rows={4}
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 resize-none"
+                      placeholder="أضف ملاحظات حول هذا الربط، مثل: سبب الربط، ملاحظات التدقيق، خطة التحسين..."
+                    />
+                  </div>
+
+                  {/* Summary Preview */}
+                  <div className="p-5 bg-gradient-to-r from-emerald-50 via-blue-50 to-purple-50 rounded-2xl border-2 border-emerald-200">
+                    <h4 className="font-bold text-slate-800 mb-4">📊 ملخص الربط</h4>
+                    <div className="grid grid-cols-4 gap-4">
+                      {[
+                        { label: 'الالتزام', value: selectedObligation?.code, color: 'emerald', icon: FileText },
+                        { label: 'الضابط', value: CONTROLS.find(c => c.id === formData.controlId)?.code, color: 'blue', icon: Shield },
+                        { label: 'المخاطر', value: RISKS.find(r => r.id === formData.riskId)?.code || 'لم يحدد', color: 'amber', icon: AlertTriangle },
+                        { label: 'السياسة', value: POLICIES.find(p => p.id === formData.policyId)?.code || 'لم يحدد', color: 'purple', icon: BookOpen },
+                      ].map((item, idx) => {
+                        const Icon = item.icon;
+                        return (
+                          <div key={idx} className={`p-3 bg-white rounded-xl border-2 border-${item.color}-200`}>
+                            <div className="flex items-center gap-2 mb-1">
+                              <Icon className={`w-4 h-4 text-${item.color}-600`} />
+                              <span className="text-xs text-slate-500">{item.label}</span>
+                            </div>
+                            <p className={`font-mono font-bold text-${item.color}-700`}>{item.value || '-'}</p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -10987,32 +11162,74 @@ const ObligationsMapping = () => {
             </div>
 
             {/* ═══════════════ FOOTER ═══════════════ */}
-            <div className="border-t border-slate-200 px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <button onClick={handleCloseForm} className="px-5 py-2.5 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white transition-all text-sm">
+            <div className="border-t-2 border-slate-200 px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button onClick={handleCloseForm} className="px-5 py-2.5 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white transition-all">
                   إلغاء
                 </button>
-                {/* Quick Stats */}
-                <div className="flex items-center gap-2 text-xs text-slate-500">
-                  {(selectedObligation || formData.obligationId) && <span className="flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-lg"><FileText className="w-3.5 h-3.5" /> التزام</span>}
-                  {formData.controlId && <span className="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg"><Shield className="w-3.5 h-3.5" /> ضابط</span>}
-                  {formData.riskId && <span className="flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-700 rounded-lg"><AlertTriangle className="w-3.5 h-3.5" /> خطر</span>}
-                  {formData.policyId && <span className="flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-lg"><BookOpen className="w-3.5 h-3.5" /> سياسة</span>}
-                </div>
               </div>
-              <button
-                onClick={handleSaveForm}
-                disabled={!formData.controlId || (!selectedObligation && !formData.obligationId)}
-                className={`flex items-center gap-2 px-6 py-2.5 text-white rounded-xl font-bold shadow-lg transition-all text-sm ${!formData.controlId || (!selectedObligation && !formData.obligationId)
+
+              {/* Navigation - Center */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setFormData({ ...formData, activeGoldenTab: Math.max(0, (formData.activeGoldenTab || 0) - 1) })}
+                  disabled={(formData.activeGoldenTab || 0) === 0}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all ${(formData.activeGoldenTab || 0) === 0
+                    ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
+                    : 'bg-white border-2 border-slate-300 text-slate-700 hover:border-emerald-500 hover:text-emerald-700'
+                    }`}>
+                  <ChevronRight className="w-5 h-5" />
+                  <span>السابق</span>
+                </button>
+
+                <div className="flex items-center gap-1 px-4 py-2 bg-white border-2 border-slate-200 rounded-xl">
+                  {[0, 1, 2, 3, 4].map(idx => (
+                    <button
+                      key={idx}
+                      onClick={() => setFormData({ ...formData, activeGoldenTab: idx })}
+                      className={`w-8 h-8 rounded-lg font-bold text-sm transition-all ${(formData.activeGoldenTab || 0) === idx
+                        ? 'bg-emerald-500 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}>
+                      {idx + 1}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setFormData({ ...formData, activeGoldenTab: Math.min(4, (formData.activeGoldenTab || 0) + 1) })}
+                  disabled={(formData.activeGoldenTab || 0) === 4}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all ${(formData.activeGoldenTab || 0) === 4
+                    ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
+                    : 'bg-white border-2 border-slate-300 text-slate-700 hover:border-emerald-500 hover:text-emerald-700'
+                    }`}>
+                  <span>التالي</span>
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-3">
+                {/* Quick Stats */}
+                <div className="flex items-center gap-1.5 text-xs">
+                  {(selectedObligation || formData.obligationId) && <span className="flex items-center gap-1 px-2 py-1.5 bg-emerald-100 text-emerald-700 rounded-lg font-bold"><FileText className="w-3.5 h-3.5" /> التزام</span>}
+                  {formData.controlId && <span className="flex items-center gap-1 px-2 py-1.5 bg-blue-100 text-blue-700 rounded-lg font-bold"><Shield className="w-3.5 h-3.5" /> ضابط</span>}
+                  {formData.riskId && <span className="flex items-center gap-1 px-2 py-1.5 bg-amber-100 text-amber-700 rounded-lg font-bold"><AlertTriangle className="w-3.5 h-3.5" /> خطر</span>}
+                  {formData.policyId && <span className="flex items-center gap-1 px-2 py-1.5 bg-purple-100 text-purple-700 rounded-lg font-bold"><BookOpen className="w-3.5 h-3.5" /> سياسة</span>}
+                </div>
+
+                <button
+                  onClick={handleSaveForm}
+                  disabled={!formData.controlId || (!selectedObligation && !formData.obligationId)}
+                  className={`flex items-center gap-2 px-6 py-2.5 text-white rounded-xl font-bold shadow-lg transition-all ${!formData.controlId || (!selectedObligation && !formData.obligationId)
                     ? 'bg-slate-300 cursor-not-allowed'
                     : formMode === 'edit'
-                      ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-xl'
-                      : 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:shadow-xl'
-                  }`}>
-                <Save className="w-4 h-4" />
-                {formMode === 'edit' ? 'حفظ التعديلات' : 'إنشاء الربط'}
-                <ChevronLeft className="w-4 h-4" />
-              </button>
+                      ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-xl hover:scale-105'
+                      : 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:shadow-xl hover:scale-105'
+                    }`}>
+                  <Save className="w-5 h-5" />
+                  {formMode === 'edit' ? 'حفظ التعديلات' : 'إنشاء الربط'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -11972,8 +12189,8 @@ const ComplianceCalendar = () => {
           {tabs.map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-5 py-4 font-bold transition-all border-b-2 whitespace-nowrap ${activeTab === tab.id
-                  ? 'text-indigo-600 border-indigo-500 bg-indigo-50'
-                  : 'text-slate-500 border-transparent hover:bg-slate-50'
+                ? 'text-indigo-600 border-indigo-500 bg-indigo-50'
+                : 'text-slate-500 border-transparent hover:bg-slate-50'
                 }`}>
               <tab.icon className="w-5 h-5" />
               {tab.label}
@@ -12112,10 +12329,10 @@ const ComplianceCalendar = () => {
                             </div>
                             {daysUntil !== null && task.status !== 'Completed' && (
                               <span className={`inline-block px-2 py-1 rounded-lg text-xs font-bold mt-1 ${urgency === 'overdue' ? 'bg-red-500 text-white' :
-                                  urgency === 'critical' ? 'bg-red-100 text-red-700' :
-                                    urgency === 'urgent' ? 'bg-orange-100 text-orange-700' :
-                                      urgency === 'warning' ? 'bg-amber-100 text-amber-700' :
-                                        'bg-emerald-100 text-emerald-700'
+                                urgency === 'critical' ? 'bg-red-100 text-red-700' :
+                                  urgency === 'urgent' ? 'bg-orange-100 text-orange-700' :
+                                    urgency === 'warning' ? 'bg-amber-100 text-amber-700' :
+                                      'bg-emerald-100 text-emerald-700'
                                 }`}>
                                 {daysUntil < 0 ? `متأخر ${Math.abs(daysUntil)} يوم` : daysUntil === 0 ? 'اليوم!' : `${daysUntil} يوم متبقي`}
                               </span>
@@ -12273,11 +12490,11 @@ const ComplianceCalendar = () => {
         )}
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            TAB: GANTT (الجدول الزمني)
+            TAB: GANTT (الجدول الزمني) - INTERACTIVE
         ═══════════════════════════════════════════════════════════════════════ */}
         {activeTab === 'gantt' && (
           <div className="p-6">
-            {/* Gantt Header */}
+            {/* Gantt Header - Enhanced */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
                 <h2 className="text-lg font-bold text-slate-800">الجدول الزمني للمهام</h2>
@@ -12285,93 +12502,199 @@ const ComplianceCalendar = () => {
                   {filteredTasks.length} مهمة
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-slate-500">التكبير:</span>
-                <div className="flex items-center border-2 border-slate-200 rounded-xl overflow-hidden">
-                  {['day', 'week', 'month', 'quarter'].map(zoom => (
-                    <button key={zoom} onClick={() => setGanttZoom(zoom)}
-                      className={`px-3 py-1.5 text-xs font-bold ${ganttZoom === zoom ? 'bg-indigo-500 text-white' : 'text-slate-600 hover:bg-slate-50'}`}>
-                      {zoom === 'day' ? 'يوم' : zoom === 'week' ? 'أسبوع' : zoom === 'month' ? 'شهر' : 'ربع'}
-                    </button>
-                  ))}
+              <div className="flex items-center gap-3">
+                {/* Add Task Button */}
+                <button
+                  onClick={() => setShowScheduleSetup(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all">
+                  <Plus className="w-4 h-4" />
+                  إضافة مهمة
+                </button>
+
+                {/* Zoom Controls */}
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-slate-500">التكبير:</span>
+                  <div className="flex items-center border-2 border-slate-200 rounded-xl overflow-hidden">
+                    {['day', 'week', 'month', 'quarter'].map(zoom => (
+                      <button key={zoom} onClick={() => setGanttZoom(zoom)}
+                        className={`px-3 py-1.5 text-xs font-bold ${ganttZoom === zoom ? 'bg-indigo-500 text-white' : 'text-slate-600 hover:bg-slate-50'}`}>
+                        {zoom === 'day' ? 'يوم' : zoom === 'week' ? 'أسبوع' : zoom === 'month' ? 'شهر' : 'ربع'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Gantt Chart */}
-            <div className="border-2 border-slate-200 rounded-2xl overflow-hidden">
+            {/* Interactive Gantt Chart */}
+            <div className="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white">
               {/* Timeline Header */}
-              <div className="flex bg-slate-50 border-b-2 border-slate-200">
-                <div className="w-80 shrink-0 px-4 py-3 font-bold text-slate-700 border-l-2 border-slate-200">المهمة</div>
+              <div className="flex bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
+                <div className="w-72 shrink-0 px-4 py-3 font-bold text-slate-700 border-l-2 border-slate-200 flex items-center gap-2">
+                  <ClipboardList className="w-4 h-4" />
+                  المهمة
+                </div>
                 <div className="flex-1 flex">
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <div key={i} className="flex-1 px-2 py-3 text-center text-xs font-bold text-slate-600 border-l border-slate-200">
-                      {months[i].substring(0, 3)}
-                    </div>
-                  ))}
+                  {Array.from({ length: 12 }, (_, i) => {
+                    const currentMonth = new Date().getMonth();
+                    return (
+                      <div key={i} className={`flex-1 px-2 py-3 text-center text-xs font-bold border-l border-slate-200 ${i === currentMonth ? 'bg-indigo-100 text-indigo-700' : 'text-slate-600'
+                        }`}>
+                        {months[i].substring(0, 3)}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Tasks */}
-              <div className="max-h-[500px] overflow-y-auto">
-                {filteredTasks.map(task => {
-                  const authColor = AUTHORITY_COLORS[task.authorityCode] || { bg: 'bg-slate-500' };
-                  const dueDate = new Date(task.dueDate);
-                  const startMonth = 0; // Assuming start from January for demo
-                  const dueMonth = dueDate.getMonth();
-                  const progressWidth = ((dueMonth - startMonth + 1) / 12) * 100;
-                  const urgency = getTaskUrgency(task);
+              {/* Interactive Tasks */}
+              <div className="max-h-[450px] overflow-y-auto">
+                {filteredTasks.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Calendar className="w-16 h-16 mx-auto text-slate-300 mb-4" />
+                    <p className="text-slate-500 font-bold">لا توجد مهام</p>
+                    <p className="text-sm text-slate-400 mb-4">أضف مهمة جديدة للبدء</p>
+                    <button onClick={() => setShowScheduleSetup(true)}
+                      className="px-4 py-2 bg-indigo-500 text-white rounded-xl font-bold text-sm">
+                      <Plus className="w-4 h-4 inline ml-1" />إضافة مهمة
+                    </button>
+                  </div>
+                ) : (
+                  filteredTasks.map(task => {
+                    const authColor = AUTHORITY_COLORS[task.authorityCode] || { bg: 'bg-slate-500' };
+                    const dueDate = new Date(task.dueDate);
+                    const startMonth = 0;
+                    const dueMonth = dueDate.getMonth();
+                    const progressWidth = ((dueMonth - startMonth + 1) / 12) * 100;
+                    const urgency = getTaskUrgency(task);
+                    const dayOfMonth = dueDate.getDate();
 
-                  return (
-                    <div key={task.id} className="flex border-b border-slate-100 hover:bg-slate-50">
-                      <div className="w-80 shrink-0 px-4 py-3 border-l-2 border-slate-200">
-                        <div className="flex items-center gap-2">
-                          <span className={`w-8 h-8 rounded-lg ${authColor.bg} flex items-center justify-center text-white text-xs font-bold`}>
-                            {task.authorityCode?.substring(0, 2)}
-                          </span>
-                          <div className="min-w-0">
-                            <div className="font-mono text-[10px] text-indigo-600">{task.code}</div>
-                            <div className="text-sm font-medium text-slate-800 truncate">{task.title}</div>
+                    return (
+                      <div key={task.id}
+                        className="flex border-b border-slate-100 hover:bg-indigo-50/50 cursor-pointer transition-all group"
+                        onClick={() => { setSelectedTask(task); setShowTaskModal(true); }}>
+                        {/* Task Info */}
+                        <div className="w-72 shrink-0 px-4 py-3 border-l-2 border-slate-200">
+                          <div className="flex items-center gap-3">
+                            <span className={`w-9 h-9 rounded-lg ${authColor.bg} flex items-center justify-center text-white text-xs font-bold shadow-sm`}>
+                              {task.authorityCode?.substring(0, 2)}
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-xs text-indigo-600 bg-indigo-100 px-1.5 py-0.5 rounded">{task.code}</span>
+                                {urgency === 'overdue' && (
+                                  <span className="px-1.5 py-0.5 bg-red-500 text-white rounded text-[10px] font-bold">متأخر</span>
+                                )}
+                              </div>
+                              <div className="text-sm font-medium text-slate-800 truncate mt-0.5">{task.title}</div>
+                            </div>
+                            {/* Quick Actions */}
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                              <button onClick={(e) => { e.stopPropagation(); setSelectedTask(task); setShowTaskModal(true); }}
+                                className="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center hover:bg-indigo-200">
+                                <Eye className="w-4 h-4" />
+                              </button>
+                              <button onClick={(e) => { e.stopPropagation(); setSelectedTask(task); setShowDelegationModal(true); }}
+                                className="w-7 h-7 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-200">
+                                <Users className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Timeline Bar */}
+                        <div className="flex-1 relative py-3 px-2">
+                          {/* Month grid lines */}
+                          <div className="absolute inset-0 flex pointer-events-none">
+                            {Array.from({ length: 12 }, (_, i) => {
+                              const currentMonth = new Date().getMonth();
+                              return (
+                                <div key={i} className={`flex-1 border-l ${i === currentMonth ? 'border-indigo-300 bg-indigo-50/30' : 'border-slate-100'}`}></div>
+                              );
+                            })}
+                          </div>
+
+                          {/* Task Bar */}
+                          <div className="absolute inset-y-3 flex items-center" style={{ right: '0', width: `${progressWidth}%` }}>
+                            <div className={`h-8 rounded-lg w-full flex items-center justify-between px-2 shadow-sm border-2 border-white/50 transition-all group-hover:shadow-md group-hover:scale-[1.02] ${urgency === 'overdue' ? 'bg-gradient-to-l from-red-500 to-red-600' :
+                              task.status === 'Completed' ? 'bg-gradient-to-l from-emerald-500 to-emerald-600' :
+                                task.status === 'PendingReview' ? 'bg-gradient-to-l from-amber-500 to-amber-600' :
+                                  `${authColor.bg}`
+                              }`}>
+                              <span className="text-[10px] text-white/80 font-medium">
+                                {task.status === 'Completed' ? '✓' : task.status === 'PendingReview' ? '⏳' : ''}
+                              </span>
+                              <span className="text-[11px] text-white font-bold">{task.dueDate}</span>
+                            </div>
+                          </div>
+
+                          {/* Tooltip on Hover */}
+                          <div className="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
+                            <div className="bg-slate-800 text-white text-xs rounded-lg px-3 py-2 shadow-lg whitespace-nowrap">
+                              <p className="font-bold">{task.title}</p>
+                              <p className="text-slate-300">المسؤول: {task.ownerName}</p>
+                              <p className="text-slate-300">الاستحقاق: {task.dueDate}</p>
+                              <p className={urgency === 'overdue' ? 'text-red-400' : 'text-emerald-400'}>
+                                {urgency === 'overdue' ? `متأخر ${Math.abs(getDaysUntilDue(task.dueDate))} يوم` : `متبقي ${getDaysUntilDue(task.dueDate)} يوم`}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div className="flex-1 relative py-3 px-2">
-                        <div className="absolute inset-y-3 flex items-center" style={{ right: '0', width: `${progressWidth}%` }}>
-                          <div className={`h-6 rounded-lg w-full flex items-center justify-end px-2 ${urgency === 'overdue' ? 'bg-red-500' :
-                              task.status === 'Completed' ? 'bg-emerald-500' : authColor.bg
-                            }`}>
-                            <span className="text-[10px] text-white font-bold">{task.dueDate}</span>
-                          </div>
-                        </div>
-                        {/* Month grid lines */}
-                        <div className="absolute inset-0 flex pointer-events-none">
-                          {Array.from({ length: 12 }, (_, i) => (
-                            <div key={i} className="flex-1 border-l border-slate-100"></div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
 
-            {/* Gantt Legend */}
-            <div className="mt-6 flex items-center gap-6 justify-center">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-3 rounded bg-emerald-500"></div>
-                <span className="text-sm text-slate-600">مكتمل</span>
-              </div>
-              {Object.entries(AUTHORITY_COLORS).map(([code, colors]) => (
-                <div key={code} className="flex items-center gap-2">
-                  <div className={`w-6 h-3 rounded ${colors.bg}`}></div>
-                  <span className="text-sm text-slate-600">{code}</span>
+            {/* Interactive Legend & Quick Actions */}
+            <div className="mt-6 flex items-center justify-between">
+              {/* Legend */}
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-slate-500 font-bold">دليل الألوان:</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-3 rounded bg-emerald-500"></div>
+                  <span className="text-xs text-slate-600">مكتمل</span>
                 </div>
-              ))}
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-3 rounded bg-red-500"></div>
-                <span className="text-sm text-slate-600">متأخر</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-3 rounded bg-amber-500"></div>
+                  <span className="text-xs text-slate-600">قيد المراجعة</span>
+                </div>
+                {Object.entries(AUTHORITY_COLORS).slice(0, 4).map(([code, colors]) => (
+                  <div key={code} className="flex items-center gap-2">
+                    <div className={`w-5 h-3 rounded ${colors.bg}`}></div>
+                    <span className="text-xs text-slate-600">{code}</span>
+                  </div>
+                ))}
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-3 rounded bg-red-500"></div>
+                  <span className="text-xs text-slate-600">متأخر</span>
+                </div>
               </div>
+
+              {/* Quick Stats */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-bold">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                  {filteredTasks.filter(t => getTaskUrgency(t) === 'overdue').length} متأخر
+                </div>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-100 text-amber-700 rounded-lg text-xs font-bold">
+                  <Clock className="w-3.5 h-3.5" />
+                  {filteredTasks.filter(t => getDaysUntilDue(t.dueDate) <= 7 && getDaysUntilDue(t.dueDate) >= 0).length} قريب
+                </div>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-700 rounded-lg text-xs font-bold">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  {filteredTasks.filter(t => t.status === 'Completed').length} مكتمل
+                </div>
+              </div>
+            </div>
+
+            {/* Help Text */}
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl">
+              <p className="text-sm text-blue-700 flex items-center gap-2">
+                <Info className="w-4 h-4" />
+                <span><strong>تلميح:</strong> انقر على أي مهمة لعرض التفاصيل والتعديل، أو استخدم الأزرار السريعة عند التمرير فوق المهمة</span>
+              </p>
             </div>
           </div>
         )}
@@ -12753,166 +13076,415 @@ const ComplianceCalendar = () => {
           MODALS
       ═══════════════════════════════════════════════════════════════════════════ */}
 
-      {/* Task Detail Modal */}
+      {/* ═══════════════════ TASK DETAIL MODAL - With Edit Mode ═══════════════════ */}
       {showTaskModal && selectedTask && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden">
-            <div className={`px-6 py-5 text-white ${getTaskUrgency(selectedTask) === 'overdue' ? 'bg-gradient-to-l from-red-500 to-rose-600' :
-                selectedTask.status === 'Completed' ? 'bg-gradient-to-l from-emerald-500 to-teal-600' :
-                  'bg-gradient-to-l from-indigo-500 to-purple-600'
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col">
+            {/* ═══════════════ HEADER ═══════════════ */}
+            <div className={`px-6 py-4 text-white flex-shrink-0 ${getTaskUrgency(selectedTask) === 'overdue' ? 'bg-gradient-to-l from-red-600 to-rose-600' :
+              selectedTask.status === 'Completed' ? 'bg-gradient-to-l from-emerald-500 to-teal-600' :
+                selectedTask.status === 'PendingReview' ? 'bg-gradient-to-l from-amber-500 to-orange-500' :
+                  'bg-gradient-to-l from-indigo-600 to-purple-600'
               }`}>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
                     <ClipboardCheck className="w-6 h-6" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mb-1">
                       <span className="font-mono text-sm bg-white/20 px-2 py-0.5 rounded">{selectedTask.code}</span>
-                      {selectedTask.escalationLevel > 0 && (
-                        <span className="px-2 py-0.5 bg-orange-500 rounded text-xs font-bold">تصعيد {selectedTask.escalationLevel}</span>
-                      )}
+                      <span className={`px-2 py-0.5 rounded text-xs font-bold ${selectedTask.priority === 'Critical' ? 'bg-red-500' :
+                        selectedTask.priority === 'High' ? 'bg-orange-500' : 'bg-amber-500'
+                        }`}>{PRIORITY_CONFIG[selectedTask.priority]?.label}</span>
                     </div>
-                    <h2 className="text-xl font-bold mt-1">{selectedTask.title}</h2>
+                    <h2 className="text-lg font-bold">{selectedTask.title}</h2>
                   </div>
                 </div>
-                <button onClick={() => { setShowTaskModal(false); setSelectedTask(null); }}
-                  className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl">
-                  <X className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <div className="text-center px-3 py-1.5 bg-white/10 rounded-lg">
+                    <p className="text-xl font-black">
+                      {getDaysUntilDue(selectedTask.dueDate) >= 0 ? getDaysUntilDue(selectedTask.dueDate) : Math.abs(getDaysUntilDue(selectedTask.dueDate))}
+                    </p>
+                    <p className="text-xs">{getDaysUntilDue(selectedTask.dueDate) >= 0 ? 'يوم متبقي' : 'يوم متأخر'}</p>
+                  </div>
+                  {/* Edit Toggle Button */}
+                  {selectedTask.status !== 'Completed' && (
+                    <button
+                      onClick={() => setScheduleForm({ ...scheduleForm, editMode: !scheduleForm.editMode })}
+                      className={`w-10 h-10 flex items-center justify-center rounded-lg transition-all ${scheduleForm.editMode ? 'bg-white text-purple-600' : 'bg-white/10 hover:bg-white/20'
+                        }`}>
+                      <Edit className="w-5 h-5" />
+                    </button>
+                  )}
+                  <button onClick={() => { setShowTaskModal(false); setSelectedTask(null); setScheduleForm({ ...scheduleForm, editMode: false }); }}
+                    className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-lg">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="p-6 max-h-[60vh] overflow-y-auto space-y-5">
-              {/* Status Banner */}
-              <div className={`rounded-xl p-4 ${STATUS_CONFIG[selectedTask.status]?.bg}`}>
-                <div className="flex items-center gap-3">
-                  {(() => { const Icon = STATUS_CONFIG[selectedTask.status]?.icon || Clock; return <Icon className={`w-6 h-6 ${STATUS_CONFIG[selectedTask.status]?.text}`} />; })()}
-                  <div>
-                    <p className={`font-bold ${STATUS_CONFIG[selectedTask.status]?.text}`}>{STATUS_CONFIG[selectedTask.status]?.label}</p>
-                    {getDaysUntilDue(selectedTask.dueDate) < 0 && selectedTask.status !== 'Completed' && (
-                      <p className="text-sm text-red-600 font-bold">متأخر {Math.abs(getDaysUntilDue(selectedTask.dueDate))} يوم</p>
-                    )}
-                  </div>
+            {/* ═══════════════ EDIT MODE BANNER ═══════════════ */}
+            {scheduleForm.editMode && (
+              <div className="px-6 py-2 bg-amber-50 border-b border-amber-200 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-amber-700">
+                  <Edit className="w-4 h-4" />
+                  <span className="font-bold text-sm">وضع التحرير مفعّل</span>
+                  <span className="text-xs">- يمكنك تعديل البيانات أدناه</span>
                 </div>
+                <button onClick={() => setScheduleForm({ ...scheduleForm, editMode: false })}
+                  className="text-xs text-amber-600 hover:text-amber-800 font-bold">
+                  إلغاء التحرير
+                </button>
               </div>
+            )}
 
-              {/* Info Grid */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-slate-50 rounded-xl p-4">
-                  <p className="text-xs text-slate-500 mb-1">الجهة الرقابية</p>
-                  <p className="font-bold text-slate-800">{selectedTask.authorityCode}</p>
+            {/* ═══════════════ STATUS BAR ═══════════════ */}
+            <div className={`px-6 py-3 flex items-center justify-between border-b flex-shrink-0 ${getTaskUrgency(selectedTask) === 'overdue' ? 'bg-red-50 border-red-200' :
+              selectedTask.status === 'Completed' ? 'bg-emerald-50 border-emerald-200' :
+                'bg-indigo-50 border-indigo-200'
+              }`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getTaskUrgency(selectedTask) === 'overdue' ? 'bg-red-500 text-white' :
+                  selectedTask.status === 'Completed' ? 'bg-emerald-500 text-white' :
+                    'bg-indigo-500 text-white'
+                  }`}>
+                  {(() => { const Icon = STATUS_CONFIG[selectedTask.status]?.icon || Clock; return <Icon className="w-5 h-5" />; })()}
                 </div>
-                <div className="bg-slate-50 rounded-xl p-4">
-                  <p className="text-xs text-slate-500 mb-1">الإطار</p>
-                  <p className="font-bold text-slate-800">{selectedTask.frameworkCode}</p>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-4">
-                  <p className="text-xs text-slate-500 mb-1">الأولوية</p>
-                  <span className={`px-3 py-1 rounded-xl text-xs font-bold ${PRIORITY_CONFIG[selectedTask.priority]?.bg} ${PRIORITY_CONFIG[selectedTask.priority]?.text}`}>
-                    {PRIORITY_CONFIG[selectedTask.priority]?.label}
-                  </span>
-                </div>
-              </div>
-
-              {/* Dates */}
-              <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
-                <h4 className="font-bold text-blue-800 mb-3">المواعيد</h4>
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <p className="text-xs text-blue-600">تاريخ الاستحقاق</p>
-                    <p className="font-bold text-slate-800">{selectedTask.dueDate}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-blue-600">نهاية فترة السماح</p>
-                    <p className="font-bold text-slate-800">{selectedTask.gracePeriodEnd}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-blue-600">تاريخ المخالفة</p>
-                    <p className="font-bold text-red-600">{selectedTask.violationDate}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stakeholders */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-indigo-50 rounded-xl p-4 border border-indigo-200">
-                  <p className="text-xs text-indigo-600 mb-1">المسؤول (Owner)</p>
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-sm">
-                      {selectedTask.ownerName?.charAt(0)}
-                    </div>
-                    <span className="font-bold text-slate-800">{selectedTask.ownerName}</span>
-                  </div>
-                </div>
-                <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
-                  <p className="text-xs text-purple-600 mb-1">المراجع (Reviewer)</p>
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold text-sm">
-                      {selectedTask.reviewerName?.charAt(0)}
-                    </div>
-                    <span className="font-bold text-slate-800">{selectedTask.reviewerName}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Evidence */}
-              <div className={`rounded-xl p-4 border ${EVIDENCE_STATUS_CONFIG[selectedTask.evidenceStatus]?.bg
-                } ${EVIDENCE_STATUS_CONFIG[selectedTask.evidenceStatus]?.text?.replace('text-', 'border-')}`}>
-                <h4 className="font-bold mb-3 flex items-center gap-2">
-                  <FileText className="w-5 h-5" />حالة الدليل
-                </h4>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold ${EVIDENCE_STATUS_CONFIG[selectedTask.evidenceStatus]?.bg} ${EVIDENCE_STATUS_CONFIG[selectedTask.evidenceStatus]?.text}`}>
-                      {EVIDENCE_STATUS_CONFIG[selectedTask.evidenceStatus]?.label}
-                    </span>
-                    {selectedTask.evidenceFileName && (
-                      <p className="text-sm mt-2">{selectedTask.evidenceFileName}</p>
-                    )}
-                  </div>
-                  {!selectedTask.evidenceFileName && (
-                    <button onClick={() => handleUploadEvidence(selectedTask.id)}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-xl font-bold">
-                      <Upload className="w-5 h-5" />رفع دليل
-                    </button>
+                <div>
+                  {scheduleForm.editMode ? (
+                    <select className="font-bold bg-white border-2 border-indigo-300 rounded-lg px-2 py-1 text-sm"
+                      defaultValue={selectedTask.status}>
+                      <option value="Open">مفتوح</option>
+                      <option value="InProgress">قيد التنفيذ</option>
+                      <option value="PendingReview">قيد المراجعة</option>
+                      <option value="Completed">مكتمل</option>
+                    </select>
+                  ) : (
+                    <p className={`font-bold ${getTaskUrgency(selectedTask) === 'overdue' ? 'text-red-700' :
+                      selectedTask.status === 'Completed' ? 'text-emerald-700' : 'text-indigo-700'
+                      }`}>{STATUS_CONFIG[selectedTask.status]?.label}</p>
+                  )}
+                  {getDaysUntilDue(selectedTask.dueDate) < 0 && selectedTask.status !== 'Completed' && !scheduleForm.editMode && (
+                    <p className="text-xs text-red-600">متأخر {Math.abs(getDaysUntilDue(selectedTask.dueDate))} يوم</p>
                   )}
                 </div>
               </div>
-
-              {/* Description */}
-              {selectedTask.description && (
-                <div className="bg-slate-50 rounded-xl p-4">
-                  <h4 className="font-bold text-slate-700 mb-2">الوصف</h4>
-                  <p className="text-slate-600">{selectedTask.description}</p>
+              {/* Progress */}
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-bold text-slate-600">التقدم:</span>
+                <div className="w-32 h-2 bg-slate-200 rounded-full">
+                  <div className={`h-full rounded-full ${selectedTask.status === 'Completed' ? 'bg-emerald-500 w-full' :
+                    selectedTask.evidenceStatus === 'Uploaded' ? 'bg-blue-500 w-3/4' :
+                      selectedTask.status === 'InProgress' ? 'bg-indigo-500 w-1/2' : 'bg-slate-400 w-1/4'
+                    }`}></div>
                 </div>
-              )}
-
-              {/* Tags */}
-              {selectedTask.tags?.length > 0 && (
-                <div className="flex items-center gap-2 flex-wrap">
-                  {selectedTask.tags.map((tag, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm">{tag}</span>
-                  ))}
-                </div>
-              )}
+                <span className="text-sm font-bold text-slate-700">
+                  {selectedTask.status === 'Completed' ? '100%' :
+                    selectedTask.evidenceStatus === 'Uploaded' ? '75%' :
+                      selectedTask.status === 'InProgress' ? '50%' : '25%'}
+                </span>
+              </div>
             </div>
 
-            <div className="border-t-2 border-slate-200 px-6 py-4 bg-slate-50 flex items-center justify-between">
-              <button onClick={() => { setShowTaskModal(false); setSelectedTask(null); }}
-                className="px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white">
+            {/* ═══════════════ CONTENT ═══════════════ */}
+            <div className="flex-1 overflow-y-auto p-5">
+              <div className="grid grid-cols-2 gap-5">
+                {/* ═══════════════ LEFT COLUMN ═══════════════ */}
+                <div className="space-y-4">
+                  {/* Regulatory Info */}
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                    <h4 className="font-bold text-slate-700 mb-3 text-sm flex items-center gap-2">
+                      <Building2 className="w-4 h-4" />المعلومات التنظيمية
+                    </h4>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="text-center p-2 bg-white rounded-lg border">
+                        <p className="text-xs text-slate-500">الجهة</p>
+                        <p className="font-bold text-indigo-700">{selectedTask.authorityCode || 'SAMA'}</p>
+                      </div>
+                      <div className="text-center p-2 bg-white rounded-lg border">
+                        <p className="text-xs text-slate-500">الإطار</p>
+                        <p className="font-bold text-purple-700">{selectedTask.frameworkCode || 'SAMA-AML'}</p>
+                      </div>
+                      <div className="text-center p-2 bg-white rounded-lg border">
+                        <p className="text-xs text-slate-500">الدورية</p>
+                        {scheduleForm.editMode ? (
+                          <select className="font-bold text-amber-700 bg-transparent border-0 text-center w-full text-sm"
+                            defaultValue={selectedTask.periodType}>
+                            <option value="Monthly">شهري</option>
+                            <option value="Quarterly">ربع سنوي</option>
+                            <option value="Annual">سنوي</option>
+                          </select>
+                        ) : (
+                          <p className="font-bold text-amber-700">{selectedTask.periodType === 'Monthly' ? 'شهري' : selectedTask.periodType}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dates - EDITABLE */}
+                  <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                    <h4 className="font-bold text-blue-700 mb-3 text-sm flex items-center gap-2">
+                      <Calendar className="w-4 h-4" />المواعيد
+                      {scheduleForm.editMode && <span className="text-xs text-blue-500 mr-2">(قابل للتعديل)</span>}
+                    </h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between bg-white rounded-lg p-2 border">
+                        <span className="text-sm text-slate-600">الاستحقاق</span>
+                        {scheduleForm.editMode ? (
+                          <input type="date" defaultValue={selectedTask.dueDate}
+                            className="font-mono font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded px-2 py-1 text-sm" />
+                        ) : (
+                          <span className="font-mono font-bold text-emerald-600">{selectedTask.dueDate}</span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between bg-white rounded-lg p-2 border">
+                        <span className="text-sm text-slate-600">نهاية السماح</span>
+                        {scheduleForm.editMode ? (
+                          <input type="date" defaultValue={selectedTask.gracePeriodEnd || selectedTask.graceEndDate}
+                            className="font-mono font-bold text-amber-600 bg-amber-50 border border-amber-200 rounded px-2 py-1 text-sm" />
+                        ) : (
+                          <span className="font-mono font-bold text-amber-600">{selectedTask.gracePeriodEnd || selectedTask.graceEndDate}</span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between bg-white rounded-lg p-2 border">
+                        <span className="text-sm text-slate-600">المخالفة</span>
+                        {scheduleForm.editMode ? (
+                          <input type="date" defaultValue={selectedTask.violationDate || selectedTask.breachTriggerDate}
+                            className="font-mono font-bold text-red-600 bg-red-50 border border-red-200 rounded px-2 py-1 text-sm" />
+                        ) : (
+                          <span className="font-mono font-bold text-red-600">{selectedTask.violationDate || selectedTask.breachTriggerDate}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Description - EDITABLE */}
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                    <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-2">
+                      <FileText className="w-4 h-4" />الوصف
+                      {scheduleForm.editMode && <span className="text-xs text-slate-500 mr-2">(قابل للتعديل)</span>}
+                    </h4>
+                    {scheduleForm.editMode ? (
+                      <textarea
+                        defaultValue={selectedTask.description || 'إعداد وتقديم التقرير الشهري لمكافحة غسيل الأموال وتمويل الإرهاب'}
+                        className="w-full text-sm text-slate-600 bg-white border border-slate-200 rounded-lg p-2 min-h-[80px] resize-none"
+                        placeholder="أدخل وصف المهمة..."
+                      />
+                    ) : (
+                      <p className="text-sm text-slate-600">
+                        {selectedTask.description || 'إعداد وتقديم التقرير الشهري لمكافحة غسيل الأموال وتمويل الإرهاب'}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Priority - EDITABLE */}
+                  {scheduleForm.editMode && (
+                    <div className="bg-amber-50 rounded-xl p-4 border border-amber-200">
+                      <h4 className="font-bold text-amber-700 mb-3 text-sm flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4" />الأولوية
+                      </h4>
+                      <div className="grid grid-cols-4 gap-2">
+                        {[
+                          { value: 'Critical', label: 'حرج', color: 'red' },
+                          { value: 'High', label: 'عالي', color: 'orange' },
+                          { value: 'Medium', label: 'متوسط', color: 'amber' },
+                          { value: 'Low', label: 'منخفض', color: 'emerald' },
+                        ].map(pri => (
+                          <button key={pri.value} type="button"
+                            className={`p-2 rounded-lg text-xs font-bold border-2 ${selectedTask.priority === pri.value
+                              ? `bg-${pri.color}-500 text-white border-${pri.color}-500`
+                              : `bg-white text-${pri.color}-600 border-${pri.color}-200 hover:border-${pri.color}-400`
+                              }`}>
+                            {pri.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2">
+                    {(selectedTask.tags || [selectedTask.priority, selectedTask.periodType, 'AML']).map((tag, idx) => (
+                      <span key={idx} className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold">{tag}</span>
+                    ))}
+                    {scheduleForm.editMode && (
+                      <button className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold hover:bg-indigo-200">
+                        + إضافة تصنيف
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* ═══════════════ RIGHT COLUMN ═══════════════ */}
+                <div className="space-y-4">
+                  {/* Stakeholders - EDITABLE */}
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                    <h4 className="font-bold text-slate-700 mb-3 text-sm flex items-center gap-2">
+                      <Users className="w-4 h-4" />المسؤولون
+                      {scheduleForm.editMode && <span className="text-xs text-slate-500 mr-2">(قابل للتعديل)</span>}
+                    </h4>
+                    <div className="space-y-2">
+                      {/* Owner */}
+                      <div className="flex items-center gap-3 bg-indigo-50 rounded-lg p-3 border border-indigo-200">
+                        <div className="w-10 h-10 rounded-lg bg-indigo-500 text-white flex items-center justify-center font-bold">
+                          {selectedTask.ownerName?.charAt(0)}
+                        </div>
+                        <div className="flex-1">
+                          {scheduleForm.editMode ? (
+                            <select className="w-full font-bold text-slate-800 text-sm bg-white border border-indigo-200 rounded px-2 py-1"
+                              defaultValue={selectedTask.ownerId}>
+                              {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                            </select>
+                          ) : (
+                            <p className="font-bold text-slate-800 text-sm">{selectedTask.ownerName}</p>
+                          )}
+                          <p className="text-xs text-slate-500">المسؤول (Owner)</p>
+                        </div>
+                      </div>
+                      {/* Reviewer */}
+                      <div className="flex items-center gap-3 bg-purple-50 rounded-lg p-3 border border-purple-200">
+                        <div className="w-10 h-10 rounded-lg bg-purple-500 text-white flex items-center justify-center font-bold">
+                          {selectedTask.reviewerName?.charAt(0)}
+                        </div>
+                        <div className="flex-1">
+                          {scheduleForm.editMode ? (
+                            <select className="w-full font-bold text-slate-800 text-sm bg-white border border-purple-200 rounded px-2 py-1"
+                              defaultValue={selectedTask.reviewerId}>
+                              {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                            </select>
+                          ) : (
+                            <p className="font-bold text-slate-800 text-sm">{selectedTask.reviewerName}</p>
+                          )}
+                          <p className="text-xs text-slate-500">المراجع (Reviewer)</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Evidence Status */}
+                  <div className={`rounded-xl p-4 border-2 ${selectedTask.evidenceStatus === 'Uploaded' ? 'bg-emerald-50 border-emerald-200' :
+                    selectedTask.evidenceStatus === 'Approved' ? 'bg-blue-50 border-blue-200' : 'bg-amber-50 border-amber-200'
+                    }`}>
+                    <h4 className={`font-bold mb-3 text-sm flex items-center gap-2 ${selectedTask.evidenceStatus === 'Uploaded' ? 'text-emerald-700' :
+                      selectedTask.evidenceStatus === 'Approved' ? 'text-blue-700' : 'text-amber-700'
+                      }`}>
+                      <FileCheck className="w-4 h-4" />حالة الدليل
+                    </h4>
+                    <div className="text-center py-3">
+                      <div className={`w-12 h-12 rounded-xl mx-auto mb-2 flex items-center justify-center ${selectedTask.evidenceStatus === 'Uploaded' ? 'bg-emerald-500 text-white' :
+                        selectedTask.evidenceStatus === 'Approved' ? 'bg-blue-500 text-white' : 'bg-amber-500 text-white'
+                        }`}>
+                        {selectedTask.evidenceStatus === 'Uploaded' ? <FileCheck className="w-6 h-6" /> :
+                          selectedTask.evidenceStatus === 'Approved' ? <CheckCircle2 className="w-6 h-6" /> :
+                            <Upload className="w-6 h-6" />}
+                      </div>
+                      <p className="font-bold text-sm">{EVIDENCE_STATUS_CONFIG[selectedTask.evidenceStatus]?.label}</p>
+                      {selectedTask.evidenceFileName && (
+                        <p className="text-xs text-slate-600 mt-1 bg-white rounded px-2 py-1">{selectedTask.evidenceFileName}</p>
+                      )}
+                      {!selectedTask.evidenceFileName && selectedTask.status !== 'Completed' && (
+                        <button onClick={() => handleUploadEvidence(selectedTask.id)}
+                          className="mt-2 flex items-center gap-1 px-3 py-1.5 bg-indigo-500 text-white rounded-lg text-xs font-bold mx-auto hover:bg-indigo-600">
+                          <Upload className="w-3 h-3" />رفع دليل
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Activity Log */}
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                    <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-2">
+                      <Clock className="w-4 h-4" />آخر النشاطات
+                    </h4>
+                    <div className="space-y-2 max-h-24 overflow-y-auto">
+                      {[
+                        { action: 'تم إنشاء المهمة', time: '01-01' },
+                        { action: 'تم بدء العمل', time: '15-01' },
+                        selectedTask.evidenceStatus === 'Uploaded' && { action: 'تم رفع الدليل', time: '25-01' },
+                      ].filter(Boolean).map((log, idx) => (
+                        <div key={idx} className="flex items-center justify-between text-xs bg-white rounded px-2 py-1.5">
+                          <span className="text-slate-700">{log.action}</span>
+                          <span className="text-slate-500">{log.time}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Notes - New in Edit Mode */}
+                  {scheduleForm.editMode && (
+                    <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                      <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-2">
+                        <FileText className="w-4 h-4" />ملاحظات إضافية
+                      </h4>
+                      <textarea
+                        className="w-full text-sm text-slate-600 bg-white border border-slate-200 rounded-lg p-2 min-h-[60px] resize-none"
+                        placeholder="أضف ملاحظات..."
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* ═══════════════ FOOTER ═══════════════ */}
+            <div className="border-t-2 border-slate-200 px-6 py-3 bg-slate-50 flex items-center justify-between flex-shrink-0">
+              <button onClick={() => { setShowTaskModal(false); setSelectedTask(null); setScheduleForm({ ...scheduleForm, editMode: false }); }}
+                className="px-5 py-2.5 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white text-sm">
                 إغلاق
               </button>
-              <div className="flex items-center gap-3">
-                <button onClick={() => { setShowDelegationModal(true); }}
-                  className="flex items-center gap-2 px-5 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200">
-                  <Users className="w-5 h-5" />تفويض
-                </button>
-                {selectedTask.evidenceStatus === 'Uploaded' && (
-                  <button onClick={() => handleSubmitTask(selectedTask.id)}
-                    className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold">
-                    <Send className="w-5 h-5" />إرسال للمراجعة
-                  </button>
+
+              <div className="flex items-center gap-2">
+                {scheduleForm.editMode ? (
+                  <>
+                    <button onClick={() => setScheduleForm({ ...scheduleForm, editMode: false })}
+                      className="flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 text-sm">
+                      <X className="w-4 h-4" />إلغاء
+                    </button>
+                    <button onClick={() => {
+                      alert('تم حفظ التعديلات بنجاح! ✅');
+                      setScheduleForm({ ...scheduleForm, editMode: false });
+                    }}
+                      className="flex items-center gap-1.5 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-bold shadow-lg text-sm">
+                      <Save className="w-4 h-4" />حفظ التعديلات
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {selectedTask.status !== 'Completed' && (
+                      <>
+                        <button
+                          onClick={() => setScheduleForm({ ...scheduleForm, editMode: true })}
+                          className="flex items-center gap-1.5 px-4 py-2.5 bg-indigo-100 text-indigo-700 rounded-xl font-bold hover:bg-indigo-200 text-sm">
+                          <Edit className="w-4 h-4" />تعديل
+                        </button>
+                        <button className="flex items-center gap-1.5 px-4 py-2.5 bg-amber-100 text-amber-700 rounded-xl font-bold hover:bg-amber-200 text-sm">
+                          <Clock className="w-4 h-4" />تمديد
+                        </button>
+                      </>
+                    )}
+                    <button onClick={() => { setShowDelegationModal(true); }}
+                      className="flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 text-sm">
+                      <Users className="w-4 h-4" />تفويض
+                    </button>
+                    {selectedTask.evidenceStatus === 'Uploaded' && selectedTask.status !== 'Completed' && selectedTask.status !== 'PendingReview' && (
+                      <button onClick={() => handleSubmitTask(selectedTask.id)}
+                        className="flex items-center gap-1.5 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold shadow-lg text-sm">
+                        <Send className="w-4 h-4" />إرسال للمراجعة
+                      </button>
+                    )}
+                    {selectedTask.status === 'PendingReview' && (
+                      <>
+                        <button className="flex items-center gap-1.5 px-4 py-2.5 bg-red-100 text-red-700 rounded-xl font-bold text-sm">
+                          <X className="w-4 h-4" />رفض
+                        </button>
+                        <button className="flex items-center gap-1.5 px-5 py-2.5 bg-emerald-500 text-white rounded-xl font-bold shadow text-sm">
+                          <CheckCircle2 className="w-4 h-4" />اعتماد
+                        </button>
+                      </>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -13058,265 +13630,1163 @@ const ComplianceCalendar = () => {
         </div>
       )}
 
-      {/* ═══════════════════ SCHEDULE SETUP MODAL ═══════════════════ */}
+      {/* ═══════════════════ WORLD-CLASS SCHEDULE SETUP MODAL v2.0 ═══════════════════ */}
       {showScheduleSetup && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-            {/* Header */}
-            <div className="bg-gradient-to-l from-indigo-600 via-purple-600 to-violet-700 px-6 py-4 text-white">
-              <div className="flex items-center justify-between">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-7xl max-h-[95vh] overflow-hidden flex flex-col">
+            {/* ═══════════════ HEADER - Enterprise Grade ═══════════════ */}
+            <div className="bg-gradient-to-l from-indigo-600 via-purple-600 to-violet-700 px-8 py-5 text-white">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                    <Settings className="w-6 h-6" />
+                  <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <Settings className="w-8 h-8" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold">إعداد الجدولة الدورية</h2>
-                    <p className="text-white/80 text-sm">Schedule Setup - إنشاء جداول متكررة للالتزامات</p>
+                    <h2 className="text-2xl font-black">إعداد الجدولة الدورية المتقدمة</h2>
+                    <p className="text-white/80 text-sm">Advanced Schedule Setup - Enterprise Compliance Automation</p>
                   </div>
                 </div>
-                <button onClick={() => setShowScheduleSetup(false)} className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl">
-                  <X className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-4">
+                  {/* Schedule Status */}
+                  <div className="text-center px-4 py-2 bg-white/10 backdrop-blur rounded-xl">
+                    <p className="text-white/70 text-xs">حالة الجدولة</p>
+                    <p className="font-bold text-lg">{scheduleForm.obligationId ? '✓ جاهز' : '○ في انتظار'}</p>
+                  </div>
+                  <button onClick={() => setShowScheduleSetup(false)} className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl transition-all">
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Tab Navigation */}
+              <div className="flex gap-1 bg-white/10 rounded-xl p-1">
+                {[
+                  { id: 0, label: 'الإعدادات الأساسية', icon: Settings, desc: 'Basic Setup' },
+                  { id: 1, label: 'الجدولة المتقدمة', icon: Calendar, desc: 'Advanced Scheduling' },
+                  { id: 2, label: 'سلسلة المسؤولية', icon: Users, desc: 'RACI & Assignments' },
+                  { id: 3, label: 'التصعيد الذكي', icon: TrendingUp, desc: 'Smart Escalation' },
+                  { id: 4, label: 'الإشعارات', icon: Bell, desc: 'Multi-Channel Alerts' },
+                  { id: 5, label: 'المعاينة والتحليلات', icon: Eye, desc: 'Preview & Analytics' },
+                ].map(tab => (
+                  <button key={tab.id}
+                    onClick={() => setScheduleForm({ ...scheduleForm, activeTab: tab.id })}
+                    className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg font-bold transition-all ${(scheduleForm.activeTab || 0) === tab.id
+                      ? 'bg-white text-purple-700 shadow-lg'
+                      : 'text-white/80 hover:bg-white/10'
+                      }`}>
+                    <tab.icon className="w-4 h-4" />
+                    <span className="text-sm">{tab.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Content */}
+            {/* ═══════════════ CONTENT ═══════════════ */}
             <div className="flex-1 overflow-y-auto p-6">
-              <div className="grid grid-cols-2 gap-6">
-                {/* Left Column - Obligation & Schedule */}
-                <div className="space-y-5">
-                  {/* Select Obligation */}
-                  <div className="bg-indigo-50 rounded-xl p-4 border border-indigo-200">
-                    <label className="flex items-center gap-2 text-sm font-bold text-indigo-800 mb-3">
-                      <span className="w-6 h-6 rounded-lg bg-indigo-500 text-white flex items-center justify-center text-xs">1</span>
-                      اختر الالتزام التنظيمي *
-                    </label>
-                    <select value={scheduleForm.obligationId} onChange={(e) => setScheduleForm({ ...scheduleForm, obligationId: e.target.value })}
-                      className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-400 focus:outline-none bg-white">
-                      <option value="">اختر الالتزام...</option>
-                      {INITIAL_OBLIGATIONS.filter(o => o.status === 'Active').map(obl => (
-                        <option key={obl.id} value={obl.id}>{obl.code} - {obl.title}</option>
-                      ))}
-                    </select>
-                  </div>
 
-                  {/* Frequency */}
-                  <div className="bg-white rounded-xl p-4 border border-slate-200">
-                    <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                      <span className="w-6 h-6 rounded-lg bg-purple-500 text-white flex items-center justify-center text-xs">2</span>
-                      <RefreshCw className="w-4 h-4 text-purple-500" />
-                      دورية التكرار *
-                    </label>
-                    <div className="grid grid-cols-4 gap-2">
-                      {[
-                        { value: 'Daily', label: 'يومي' },
-                        { value: 'Weekly', label: 'أسبوعي' },
-                        { value: 'Monthly', label: 'شهري' },
-                        { value: 'Quarterly', label: 'ربع سنوي' },
-                        { value: 'SemiAnnual', label: 'نصف سنوي' },
-                        { value: 'Annual', label: 'سنوي' },
-                        { value: 'AdHoc', label: 'عند الطلب' },
-                        { value: 'EventBased', label: 'حسب الحدث' },
-                      ].map(freq => (
-                        <button key={freq.value} type="button" onClick={() => setScheduleForm({ ...scheduleForm, frequency: freq.value })}
-                          className={`p-2.5 rounded-xl text-xs font-bold transition-all ${scheduleForm.frequency === freq.value
-                              ? 'bg-purple-500 text-white'
-                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                            }`}>
-                          {freq.label}
-                        </button>
-                      ))}
+              {/* ═══════════════ TAB 1: BASIC SETUP ═══════════════ */}
+              {(scheduleForm.activeTab || 0) === 0 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Left Column */}
+                  <div className="space-y-5">
+                    {/* Select Obligation - Enhanced */}
+                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 border-2 border-indigo-200">
+                      <label className="flex items-center gap-3 font-bold text-indigo-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center text-sm font-black">1</span>
+                        <div>
+                          <span className="block">اختر الالتزام التنظيمي</span>
+                          <span className="text-xs font-normal text-indigo-600">Select Regulatory Obligation</span>
+                        </div>
+                        <span className="text-red-500 mr-auto">*</span>
+                      </label>
+                      <select value={scheduleForm.obligationId} onChange={(e) => setScheduleForm({ ...scheduleForm, obligationId: e.target.value })}
+                        className="w-full px-4 py-3.5 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:outline-none bg-white text-sm font-medium">
+                        <option value="">اختر الالتزام...</option>
+                        {INITIAL_OBLIGATIONS.filter(o => o.status === 'Active').map(obl => (
+                          <option key={obl.id} value={obl.id}>{obl.code} - {obl.title}</option>
+                        ))}
+                      </select>
+
+                      {/* Obligation Preview */}
+                      {scheduleForm.obligationId && (
+                        <div className="mt-4 p-4 bg-white rounded-xl border border-indigo-200">
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center text-white">
+                              <FileText className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-bold text-slate-800">{INITIAL_OBLIGATIONS.find(o => o.id === parseInt(scheduleForm.obligationId))?.title}</p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-bold">
+                                  {INITIAL_OBLIGATIONS.find(o => o.id === parseInt(scheduleForm.obligationId))?.code}
+                                </span>
+                                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-xs font-bold">نشط</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Frequency Selection - Visual Cards */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-purple-500 text-white flex items-center justify-center text-sm font-black">2</span>
+                        <RefreshCw className="w-5 h-5 text-purple-500" />
+                        <div>
+                          <span className="block">دورية التكرار</span>
+                          <span className="text-xs font-normal text-slate-500">Recurrence Frequency</span>
+                        </div>
+                        <span className="text-red-500 mr-auto">*</span>
+                      </label>
+                      <div className="grid grid-cols-4 gap-2">
+                        {[
+                          { value: 'Daily', label: 'يومي', labelEn: 'Daily', icon: '📅', tasks: '365', color: 'red' },
+                          { value: 'Weekly', label: 'أسبوعي', labelEn: 'Weekly', icon: '📆', tasks: '52', color: 'orange' },
+                          { value: 'Monthly', label: 'شهري', labelEn: 'Monthly', icon: '🗓️', tasks: '12', color: 'amber' },
+                          { value: 'Quarterly', label: 'ربع سنوي', labelEn: 'Quarterly', icon: '📊', tasks: '4', color: 'emerald' },
+                          { value: 'SemiAnnual', label: 'نصف سنوي', labelEn: 'Semi-Annual', icon: '📈', tasks: '2', color: 'blue' },
+                          { value: 'Annual', label: 'سنوي', labelEn: 'Annual', icon: '🎯', tasks: '1', color: 'indigo' },
+                          { value: 'AdHoc', label: 'عند الطلب', labelEn: 'Ad-Hoc', icon: '⚡', tasks: '-', color: 'purple' },
+                          { value: 'Custom', label: 'مخصص', labelEn: 'Custom', icon: '⚙️', tasks: '?', color: 'slate' },
+                        ].map(freq => {
+                          const isSelected = scheduleForm.frequency === freq.value;
+                          return (
+                            <button key={freq.value} type="button"
+                              onClick={() => setScheduleForm({ ...scheduleForm, frequency: freq.value })}
+                              className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all ${isSelected
+                                ? `border-${freq.color}-500 bg-${freq.color}-50 shadow-lg`
+                                : 'border-slate-200 bg-white hover:border-slate-300'
+                                }`}>
+                              <span className="text-2xl">{freq.icon}</span>
+                              <span className={`text-xs font-bold ${isSelected ? `text-${freq.color}-700` : 'text-slate-700'}`}>{freq.label}</span>
+                              <span className="text-xs text-slate-500">{freq.labelEn}</span>
+                              <span className={`text-xs font-bold mt-1 px-2 py-0.5 rounded ${isSelected ? `bg-${freq.color}-200 text-${freq.color}-800` : 'bg-slate-100 text-slate-600'}`}>
+                                {freq.tasks} مهمة/سنة
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Schedule Priority */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm font-black">3</span>
+                        <AlertTriangle className="w-5 h-5 text-amber-500" />
+                        <div>
+                          <span className="block">أولوية الجدولة</span>
+                          <span className="text-xs font-normal text-slate-500">Schedule Priority</span>
+                        </div>
+                      </label>
+                      <div className="grid grid-cols-4 gap-2">
+                        {[
+                          { value: 'Critical', label: 'حرج', color: 'red', icon: '🔴' },
+                          { value: 'High', label: 'عالي', color: 'orange', icon: '🟠' },
+                          { value: 'Medium', label: 'متوسط', color: 'amber', icon: '🟡' },
+                          { value: 'Low', label: 'منخفض', color: 'emerald', icon: '🟢' },
+                        ].map(pri => {
+                          const isSelected = (scheduleForm.priority || 'Medium') === pri.value;
+                          return (
+                            <button key={pri.value} type="button"
+                              onClick={() => setScheduleForm({ ...scheduleForm, priority: pri.value })}
+                              className={`flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${isSelected
+                                ? `border-${pri.color}-500 bg-${pri.color}-50`
+                                : 'border-slate-200 bg-white hover:border-slate-300'
+                                }`}>
+                              <span className="text-lg">{pri.icon}</span>
+                              <span className={`text-sm font-bold ${isSelected ? `text-${pri.color}-700` : 'text-slate-700'}`}>{pri.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Date Range */}
-                  <div className="bg-white rounded-xl p-4 border border-slate-200">
-                    <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                      <span className="w-6 h-6 rounded-lg bg-amber-500 text-white flex items-center justify-center text-xs">3</span>
-                      <Calendar className="w-4 h-4 text-amber-500" />
-                      نطاق التواريخ
-                    </label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs text-slate-500 mb-1">تاريخ البداية</label>
-                        <input type="date" value={scheduleForm.startDate} onChange={(e) => setScheduleForm({ ...scheduleForm, startDate: e.target.value })}
-                          className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-xl text-sm" />
+                  {/* Right Column */}
+                  <div className="space-y-5">
+                    {/* Date Range - Enhanced */}
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border-2 border-amber-200">
+                      <label className="flex items-center gap-3 font-bold text-amber-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm font-black">4</span>
+                        <Calendar className="w-5 h-5 text-amber-600" />
+                        <div>
+                          <span className="block">نطاق التواريخ</span>
+                          <span className="text-xs font-normal text-amber-600">Schedule Date Range</span>
+                        </div>
+                      </label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">تاريخ البداية *</label>
+                          <input type="date" value={scheduleForm.startDate}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, startDate: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-amber-200 rounded-xl focus:border-amber-500 focus:outline-none bg-white" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">تاريخ النهاية (اختياري)</label>
+                          <input type="date" value={scheduleForm.endDate}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, endDate: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-amber-200 rounded-xl focus:border-amber-500 focus:outline-none bg-white" />
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-xs text-slate-500 mb-1">تاريخ النهاية</label>
-                        <input type="date" value={scheduleForm.endDate} onChange={(e) => setScheduleForm({ ...scheduleForm, endDate: e.target.value })}
-                          className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-xl text-sm" />
+
+                      {/* Quick Date Presets */}
+                      <div className="flex gap-2 mt-4">
+                        <span className="text-xs text-slate-500 py-2">اختر سريع:</span>
+                        {[
+                          { label: 'سنة مالية', months: 12 },
+                          { label: 'سنتين', months: 24 },
+                          { label: '3 سنوات', months: 36 },
+                          { label: 'بدون نهاية', months: 0 },
+                        ].map(preset => (
+                          <button key={preset.label} type="button"
+                            onClick={() => {
+                              const start = new Date().toISOString().split('T')[0];
+                              const end = preset.months > 0
+                                ? new Date(Date.now() + preset.months * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+                                : '';
+                              setScheduleForm({ ...scheduleForm, startDate: start, endDate: end });
+                            }}
+                            className="px-3 py-1.5 bg-white border border-amber-200 rounded-lg text-xs font-bold text-amber-700 hover:bg-amber-100 transition-all">
+                            {preset.label}
+                          </button>
+                        ))}
                       </div>
                     </div>
-                  </div>
 
-                  {/* Responsibilities */}
-                  <div className="bg-white rounded-xl p-4 border border-slate-200">
-                    <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                      <span className="w-6 h-6 rounded-lg bg-blue-500 text-white flex items-center justify-center text-xs">4</span>
-                      <Users className="w-4 h-4 text-blue-500" />
-                      المسؤوليات
-                    </label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs text-slate-500 mb-1">المالك</label>
-                        <select value={scheduleForm.ownerId} onChange={(e) => setScheduleForm({ ...scheduleForm, ownerId: e.target.value })}
-                          className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-xl text-sm">
-                          <option value="">اختر المالك...</option>
-                          {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-                        </select>
+                    {/* Time Zone & Working Hours */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center text-sm font-black">5</span>
+                        <Clock className="w-5 h-5 text-blue-500" />
+                        <div>
+                          <span className="block">المنطقة الزمنية وساعات العمل</span>
+                          <span className="text-xs font-normal text-slate-500">Time Zone & Working Hours</span>
+                        </div>
+                      </label>
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">المنطقة الزمنية</label>
+                          <select value={scheduleForm.timezone || 'Asia/Riyadh'}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, timezone: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none">
+                            <option value="Asia/Riyadh">توقيت الرياض (GMT+3)</option>
+                            <option value="Asia/Dubai">توقيت دبي (GMT+4)</option>
+                            <option value="Europe/London">توقيت لندن (GMT+0)</option>
+                            <option value="America/New_York">توقيت نيويورك (GMT-5)</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">وقت التوليد</label>
+                          <input type="time" value={scheduleForm.generateTime || '08:00'}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, generateTime: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none" />
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-xs text-slate-500 mb-1">المراجع</label>
-                        <select value={scheduleForm.reviewerId} onChange={(e) => setScheduleForm({ ...scheduleForm, reviewerId: e.target.value })}
-                          className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-xl text-sm">
-                          <option value="">اختر المراجع...</option>
-                          {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-                        </select>
+
+                      {/* Working Days Selection */}
+                      <label className="block text-xs font-bold text-slate-600 mb-2">أيام العمل</label>
+                      <div className="flex gap-2">
+                        {[
+                          { day: 'Sun', label: 'أحد' },
+                          { day: 'Mon', label: 'إثنين' },
+                          { day: 'Tue', label: 'ثلاثاء' },
+                          { day: 'Wed', label: 'أربعاء' },
+                          { day: 'Thu', label: 'خميس' },
+                          { day: 'Fri', label: 'جمعة' },
+                          { day: 'Sat', label: 'سبت' },
+                        ].map(d => {
+                          const workDays = scheduleForm.workDays || ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
+                          const isSelected = workDays.includes(d.day);
+                          return (
+                            <button key={d.day} type="button"
+                              onClick={() => {
+                                const current = scheduleForm.workDays || ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
+                                const updated = isSelected
+                                  ? current.filter(x => x !== d.day)
+                                  : [...current, d.day];
+                                setScheduleForm({ ...scheduleForm, workDays: updated });
+                              }}
+                              className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${isSelected
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                                }`}>
+                              {d.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Schedule Category */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-sm font-black">6</span>
+                        <Tag className="w-5 h-5 text-emerald-500" />
+                        <div>
+                          <span className="block">تصنيف الجدولة</span>
+                          <span className="text-xs font-normal text-slate-500">Schedule Category</span>
+                        </div>
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { value: 'Compliance', label: 'امتثال', icon: '📋' },
+                          { value: 'Audit', label: 'تدقيق', icon: '🔍' },
+                          { value: 'Risk', label: 'مخاطر', icon: '⚠️' },
+                          { value: 'Control', label: 'ضوابط', icon: '🛡️' },
+                          { value: 'Policy', label: 'سياسات', icon: '📜' },
+                          { value: 'Training', label: 'تدريب', icon: '🎓' },
+                        ].map(cat => {
+                          const isSelected = (scheduleForm.category || 'Compliance') === cat.value;
+                          return (
+                            <button key={cat.value} type="button"
+                              onClick={() => setScheduleForm({ ...scheduleForm, category: cat.value })}
+                              className={`flex items-center gap-2 p-3 rounded-xl border-2 transition-all ${isSelected
+                                ? 'border-emerald-500 bg-emerald-50'
+                                : 'border-slate-200 bg-white hover:border-slate-300'
+                                }`}>
+                              <span className="text-xl">{cat.icon}</span>
+                              <span className={`text-sm font-bold ${isSelected ? 'text-emerald-700' : 'text-slate-700'}`}>{cat.label}</span>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
                 </div>
+              )}
 
-                {/* Right Column - Settings & Options */}
-                <div className="space-y-5">
-                  {/* Reminder Settings */}
-                  <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
-                    <label className="flex items-center gap-2 text-sm font-bold text-emerald-800 mb-3">
-                      <span className="w-6 h-6 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-xs">5</span>
-                      <Bell className="w-4 h-4 text-emerald-500" />
-                      إعدادات التذكير
-                    </label>
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-xs text-slate-500 mb-1">التذكير قبل الاستحقاق (أيام)</label>
-                        <input type="number" value={scheduleForm.reminderDays} onChange={(e) => setScheduleForm({ ...scheduleForm, reminderDays: parseInt(e.target.value) })}
-                          className="w-full px-3 py-2.5 border-2 border-emerald-200 rounded-xl text-sm" min="1" max="30" />
+              {/* ═══════════════ TAB 2: ADVANCED SCHEDULING ═══════════════ */}
+              {(scheduleForm.activeTab || 0) === 1 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Left Column */}
+                  <div className="space-y-5">
+                    {/* Custom Cron Expression */}
+                    <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-5 border-2 border-purple-200">
+                      <label className="flex items-center gap-3 font-bold text-purple-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-purple-500 text-white flex items-center justify-center text-sm">⚙️</span>
+                        <div>
+                          <span className="block">جدولة مخصصة متقدمة</span>
+                          <span className="text-xs font-normal text-purple-600">Advanced Custom Scheduling</span>
+                        </div>
+                      </label>
+
+                      {/* Visual Cron Builder */}
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-3 gap-3">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-2">اليوم من الشهر</label>
+                            <select value={scheduleForm.cronDay || '1'}
+                              onChange={(e) => setScheduleForm({ ...scheduleForm, cronDay: e.target.value })}
+                              className="w-full px-3 py-2.5 border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:outline-none text-sm">
+                              <option value="*">كل يوم</option>
+                              <option value="1">اليوم الأول</option>
+                              <option value="15">منتصف الشهر</option>
+                              <option value="L">آخر يوم</option>
+                              {[...Array(28)].map((_, i) => (
+                                <option key={i + 1} value={String(i + 1)}>اليوم {i + 1}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-2">يوم الأسبوع</label>
+                            <select value={scheduleForm.cronWeekday || '*'}
+                              onChange={(e) => setScheduleForm({ ...scheduleForm, cronWeekday: e.target.value })}
+                              className="w-full px-3 py-2.5 border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:outline-none text-sm">
+                              <option value="*">كل يوم</option>
+                              <option value="0">الأحد</option>
+                              <option value="1">الإثنين</option>
+                              <option value="2">الثلاثاء</option>
+                              <option value="3">الأربعاء</option>
+                              <option value="4">الخميس</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-2">الأسبوع من الشهر</label>
+                            <select value={scheduleForm.cronWeek || '*'}
+                              onChange={(e) => setScheduleForm({ ...scheduleForm, cronWeek: e.target.value })}
+                              className="w-full px-3 py-2.5 border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:outline-none text-sm">
+                              <option value="*">كل أسبوع</option>
+                              <option value="1">الأسبوع الأول</option>
+                              <option value="2">الأسبوع الثاني</option>
+                              <option value="3">الأسبوع الثالث</option>
+                              <option value="4">الأسبوع الأخير</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Quick Patterns */}
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">أنماط سريعة</label>
+                          <div className="flex flex-wrap gap-2">
+                            {[
+                              { label: 'أول إثنين من كل شهر', pattern: { cronDay: '1-7', cronWeekday: '1', cronWeek: '1' } },
+                              { label: 'آخر يوم عمل', pattern: { cronDay: 'LW', cronWeekday: '*', cronWeek: '*' } },
+                              { label: 'كل أربعاء', pattern: { cronDay: '*', cronWeekday: '3', cronWeek: '*' } },
+                              { label: 'نهاية كل ربع', pattern: { cronDay: 'L', cronWeekday: '*', cronWeek: '*' } },
+                            ].map(p => (
+                              <button key={p.label} type="button"
+                                onClick={() => setScheduleForm({ ...scheduleForm, ...p.pattern })}
+                                className="px-3 py-1.5 bg-white border border-purple-200 rounded-lg text-xs font-bold text-purple-700 hover:bg-purple-100 transition-all">
+                                {p.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-xs text-slate-500 mb-1">فترة السماح (أيام)</label>
-                        <input type="number" value={scheduleForm.graceperiodDays} onChange={(e) => setScheduleForm({ ...scheduleForm, graceperiodDays: parseInt(e.target.value) })}
-                          className="w-full px-3 py-2.5 border-2 border-emerald-200 rounded-xl text-sm" min="0" max="14" />
+                    </div>
+
+                    {/* Holiday Calendar */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-red-500 text-white flex items-center justify-center text-sm">🎄</span>
+                        <div>
+                          <span className="block">تقويم العطلات</span>
+                          <span className="text-xs font-normal text-slate-500">Holiday Calendar</span>
+                        </div>
+                      </label>
+
+                      <div className="space-y-3">
+                        <select value={scheduleForm.holidayCalendar || 'SA'}
+                          onChange={(e) => setScheduleForm({ ...scheduleForm, holidayCalendar: e.target.value })}
+                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-red-500 focus:outline-none">
+                          <option value="SA">تقويم المملكة العربية السعودية</option>
+                          <option value="UAE">تقويم الإمارات</option>
+                          <option value="US">تقويم الولايات المتحدة</option>
+                          <option value="UK">تقويم المملكة المتحدة</option>
+                          <option value="Custom">تقويم مخصص</option>
+                        </select>
+
+                        {/* Holiday behavior */}
+                        <div className="flex gap-3">
+                          {[
+                            { value: 'skip', label: 'تخطي العطلات', icon: '⏭️' },
+                            { value: 'before', label: 'قبل العطلة', icon: '⬅️' },
+                            { value: 'after', label: 'بعد العطلة', icon: '➡️' },
+                          ].map(opt => {
+                            const isSelected = (scheduleForm.holidayBehavior || 'skip') === opt.value;
+                            return (
+                              <button key={opt.value} type="button"
+                                onClick={() => setScheduleForm({ ...scheduleForm, holidayBehavior: opt.value })}
+                                className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${isSelected ? 'border-red-500 bg-red-50' : 'border-slate-200 bg-white hover:border-slate-300'
+                                  }`}>
+                                <span>{opt.icon}</span>
+                                <span className={`text-xs font-bold ${isSelected ? 'text-red-700' : 'text-slate-700'}`}>{opt.label}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Escalation Settings */}
-                  <div className="bg-red-50 rounded-xl p-4 border border-red-200">
-                    <label className="flex items-center justify-between text-sm font-bold text-red-800 mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-lg bg-red-500 text-white flex items-center justify-center text-xs">6</span>
-                        <TrendingUp className="w-4 h-4 text-red-500" />
-                        التصعيد التلقائي
-                      </div>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" checked={scheduleForm.escalationEnabled}
-                          onChange={(e) => setScheduleForm({ ...scheduleForm, escalationEnabled: e.target.checked })}
-                          className="w-5 h-5 rounded text-red-500" />
-                        <span className="text-xs">مفعّل</span>
+                  {/* Right Column */}
+                  <div className="space-y-5">
+                    {/* Exception Dates */}
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border-2 border-amber-200">
+                      <label className="flex items-center gap-3 font-bold text-amber-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm">📆</span>
+                        <div>
+                          <span className="block">تواريخ الاستثناء</span>
+                          <span className="text-xs font-normal text-amber-600">Exception Dates</span>
+                        </div>
                       </label>
-                    </label>
-                    {scheduleForm.escalationEnabled && (
+
+                      <div className="space-y-3">
+                        <div className="flex gap-2">
+                          <input type="date" className="flex-1 px-3 py-2.5 border-2 border-amber-200 rounded-xl focus:border-amber-500 focus:outline-none text-sm" />
+                          <button type="button" className="px-4 py-2.5 bg-amber-500 text-white rounded-xl font-bold text-sm hover:bg-amber-600">
+                            + إضافة
+                          </button>
+                        </div>
+
+                        {/* Exception list */}
+                        <div className="bg-white rounded-xl p-3 border border-amber-200 max-h-32 overflow-y-auto">
+                          {(scheduleForm.exceptionDates || []).length === 0 ? (
+                            <p className="text-center text-slate-400 text-sm py-3">لا توجد تواريخ استثناء</p>
+                          ) : (
+                            <div className="space-y-2">
+                              {/* Exception dates would be listed here */}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Batch Processing */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center text-sm">📦</span>
+                          <div>
+                            <span className="font-bold text-slate-800 block">معالجة دفعات</span>
+                            <span className="text-xs text-slate-500">Batch Processing</span>
+                          </div>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input type="checkbox" checked={scheduleForm.batchProcessing || false}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, batchProcessing: e.target.checked })}
+                            className="sr-only peer" />
+                          <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                        </label>
+                      </label>
+
+                      {scheduleForm.batchProcessing && (
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-2">حجم الدفعة</label>
+                            <input type="number" value={scheduleForm.batchSize || 10}
+                              onChange={(e) => setScheduleForm({ ...scheduleForm, batchSize: parseInt(e.target.value) })}
+                              className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none text-sm" min="1" max="100" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-2">الفاصل (دقائق)</label>
+                            <input type="number" value={scheduleForm.batchInterval || 5}
+                              onChange={(e) => setScheduleForm({ ...scheduleForm, batchInterval: parseInt(e.target.value) })}
+                              className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none text-sm" min="1" max="60" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Dependency Chain */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center text-sm">🔗</span>
+                        <div>
+                          <span className="block">سلسلة التبعيات</span>
+                          <span className="text-xs font-normal text-slate-500">Dependency Chain</span>
+                        </div>
+                      </label>
+
+                      <select value={scheduleForm.dependsOn || ''}
+                        onChange={(e) => setScheduleForm({ ...scheduleForm, dependsOn: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:outline-none">
+                        <option value="">بدون تبعيات</option>
+                        <option value="schedule-1">جدولة مراجعة السياسات</option>
+                        <option value="schedule-2">جدولة تدقيق الضوابط</option>
+                        <option value="schedule-3">جدولة تقييم المخاطر</option>
+                      </select>
+
+                      <p className="text-xs text-slate-500 mt-2">لن تبدأ هذه الجدولة إلا بعد اكتمال الجدولة المحددة</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 3: RACI & ASSIGNMENTS ═══════════════ */}
+              {(scheduleForm.activeTab || 0) === 2 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {/* RACI Matrix */}
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 border-2 border-blue-200">
+                    <label className="flex items-center gap-3 font-bold text-blue-800 mb-4">
+                      <span className="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center text-sm">👥</span>
                       <div>
-                        <label className="block text-xs text-slate-500 mb-1">التصعيد بعد فترة السماح (أيام)</label>
-                        <input type="number" value={scheduleForm.escalationDays} onChange={(e) => setScheduleForm({ ...scheduleForm, escalationDays: parseInt(e.target.value) })}
-                          className="w-full px-3 py-2.5 border-2 border-red-200 rounded-xl text-sm" min="1" max="14" />
+                        <span className="block">مصفوفة RACI</span>
+                        <span className="text-xs font-normal text-blue-600">Responsibility Assignment Matrix</span>
+                      </div>
+                    </label>
+
+                    <div className="space-y-4">
+                      {[
+                        { role: 'R', label: 'مسؤول (Responsible)', desc: 'من ينفذ المهمة', color: 'emerald' },
+                        { role: 'A', label: 'مُحاسَب (Accountable)', desc: 'من يتحمل المسؤولية النهائية', color: 'blue' },
+                        { role: 'C', label: 'مُستشار (Consulted)', desc: 'من يُستشار قبل اتخاذ القرار', color: 'amber' },
+                        { role: 'I', label: 'مُبلَّغ (Informed)', desc: 'من يُبلَّغ بالنتائج', color: 'purple' },
+                      ].map(r => (
+                        <div key={r.role} className="bg-white rounded-xl p-4 border border-slate-200">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className={`w-8 h-8 rounded-lg bg-${r.color}-500 text-white flex items-center justify-center font-black`}>{r.role}</span>
+                              <div>
+                                <span className="font-bold text-slate-800 text-sm block">{r.label}</span>
+                                <span className="text-xs text-slate-500">{r.desc}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <select
+                            value={scheduleForm[`raci${r.role}`] || ''}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, [`raci${r.role}`]: e.target.value })}
+                            className={`w-full px-3 py-2.5 border-2 border-${r.color}-200 rounded-xl focus:border-${r.color}-500 focus:outline-none text-sm`}>
+                            <option value="">اختر...</option>
+                            {USERS.map(u => <option key={u.id} value={u.id}>{u.name} - {u.role}</option>)}
+                          </select>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Backup & Delegation */}
+                  <div className="space-y-5">
+                    {/* Backup Assignees */}
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border-2 border-amber-200">
+                      <label className="flex items-center gap-3 font-bold text-amber-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm">🔄</span>
+                        <div>
+                          <span className="block">البدائل التلقائيين</span>
+                          <span className="text-xs font-normal text-amber-600">Backup Assignees</span>
+                        </div>
+                      </label>
+
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">البديل الأول</label>
+                          <select value={scheduleForm.backup1 || ''}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, backup1: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-amber-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                            <option value="">اختر البديل...</option>
+                            {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">البديل الثاني</label>
+                          <select value={scheduleForm.backup2 || ''}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, backup2: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-amber-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                            <option value="">اختر البديل...</option>
+                            {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Workload Balancing */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-xl bg-purple-500 text-white flex items-center justify-center text-sm">⚖️</span>
+                          <div>
+                            <span className="font-bold text-slate-800 block">توزيع الحمل الذكي</span>
+                            <span className="text-xs text-slate-500">AI Workload Balancing</span>
+                          </div>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input type="checkbox" checked={scheduleForm.workloadBalance || false}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, workloadBalance: e.target.checked })}
+                            className="sr-only peer" />
+                          <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                        </label>
+                      </label>
+
+                      <p className="text-xs text-slate-500">توزيع المهام تلقائياً بناءً على حمل العمل الحالي للمستخدمين</p>
+                    </div>
+
+                    {/* Auto-delegation Rules */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center text-sm">🔀</span>
+                        <div>
+                          <span className="block">قواعد التفويض التلقائي</span>
+                          <span className="text-xs font-normal text-slate-500">Auto-delegation Rules</span>
+                        </div>
+                      </label>
+
+                      <div className="space-y-2">
+                        {[
+                          { value: 'vacation', label: 'أثناء الإجازات', icon: '🏖️' },
+                          { value: 'overload', label: 'عند زيادة الحمل', icon: '📈' },
+                          { value: 'absence', label: 'عند الغياب', icon: '🚫' },
+                        ].map(rule => (
+                          <label key={rule.value} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100 transition-all">
+                            <input type="checkbox"
+                              checked={(scheduleForm.delegationRules || []).includes(rule.value)}
+                              onChange={(e) => {
+                                const current = scheduleForm.delegationRules || [];
+                                const updated = e.target.checked
+                                  ? [...current, rule.value]
+                                  : current.filter(x => x !== rule.value);
+                                setScheduleForm({ ...scheduleForm, delegationRules: updated });
+                              }}
+                              className="w-5 h-5 rounded text-indigo-500" />
+                            <span className="text-lg">{rule.icon}</span>
+                            <span className="text-sm font-bold text-slate-700">{rule.label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 4: SMART ESCALATION ═══════════════ */}
+              {(scheduleForm.activeTab || 0) === 3 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Escalation Chain */}
+                  <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-5 border-2 border-red-200">
+                    <label className="flex items-center gap-3 font-bold text-red-800 mb-4">
+                      <span className="w-8 h-8 rounded-xl bg-red-500 text-white flex items-center justify-center text-sm">🚨</span>
+                      <div>
+                        <span className="block">سلسلة التصعيد (4 مستويات)</span>
+                        <span className="text-xs font-normal text-red-600">4-Level Escalation Chain</span>
+                      </div>
+                    </label>
+
+                    <div className="space-y-3">
+                      {[
+                        { level: 1, label: 'المستوى الأول', desc: 'تذكير المسؤول', color: 'amber', defaultDays: 1 },
+                        { level: 2, label: 'المستوى الثاني', desc: 'إبلاغ المشرف المباشر', color: 'orange', defaultDays: 2 },
+                        { level: 3, label: 'المستوى الثالث', desc: 'إبلاغ مدير القسم', color: 'red', defaultDays: 3 },
+                        { level: 4, label: 'المستوى الرابع', desc: 'إبلاغ الإدارة العليا', color: 'rose', defaultDays: 5 },
+                      ].map(esc => (
+                        <div key={esc.level} className={`bg-white rounded-xl p-4 border-2 border-${esc.color}-200`}>
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <span className={`w-7 h-7 rounded-lg bg-${esc.color}-500 text-white flex items-center justify-center text-sm font-bold`}>{esc.level}</span>
+                              <div>
+                                <span className="font-bold text-slate-800 text-sm block">{esc.label}</span>
+                                <span className="text-xs text-slate-500">{esc.desc}</span>
+                              </div>
+                            </div>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input type="checkbox"
+                                checked={(scheduleForm[`escLevel${esc.level}`] !== false)}
+                                onChange={(e) => setScheduleForm({ ...scheduleForm, [`escLevel${esc.level}`]: e.target.checked })}
+                                className={`w-5 h-5 rounded text-${esc.color}-500`} />
+                            </label>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="block text-xs text-slate-500 mb-1">بعد (أيام)</label>
+                              <input type="number"
+                                value={scheduleForm[`escDays${esc.level}`] || esc.defaultDays}
+                                onChange={(e) => setScheduleForm({ ...scheduleForm, [`escDays${esc.level}`]: parseInt(e.target.value) })}
+                                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" min="1" max="14" />
+                            </div>
+                            <div>
+                              <label className="block text-xs text-slate-500 mb-1">التصعيد إلى</label>
+                              <select
+                                value={scheduleForm[`escTo${esc.level}`] || ''}
+                                onChange={(e) => setScheduleForm({ ...scheduleForm, [`escTo${esc.level}`]: e.target.value })}
+                                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">
+                                <option value="">تلقائي</option>
+                                {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Escalation Rules & SLA */}
+                  <div className="space-y-5">
+                    {/* SLA Settings */}
+                    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200">
+                      <label className="flex items-center gap-3 font-bold text-emerald-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-sm">⏱️</span>
+                        <div>
+                          <span className="block">اتفاقية مستوى الخدمة (SLA)</span>
+                          <span className="text-xs font-normal text-emerald-600">Service Level Agreement</span>
+                        </div>
+                      </label>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">هدف الإنجاز (%)</label>
+                          <input type="number" value={scheduleForm.slaTarget || 95}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, slaTarget: parseInt(e.target.value) })}
+                            className="w-full px-4 py-3 border-2 border-emerald-200 rounded-xl focus:border-emerald-500 focus:outline-none" min="50" max="100" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">الحد الأقصى للتأخير (أيام)</label>
+                          <input type="number" value={scheduleForm.slaMaxDelay || 5}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, slaMaxDelay: parseInt(e.target.value) })}
+                            className="w-full px-4 py-3 border-2 border-emerald-200 rounded-xl focus:border-emerald-500 focus:outline-none" min="1" max="30" />
+                        </div>
+                      </div>
+
+                      <div className="mt-4 p-3 bg-emerald-100 rounded-xl">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-emerald-700">هدف SLA الحالي:</span>
+                          <span className="font-bold text-emerald-800">{scheduleForm.slaTarget || 95}% خلال {scheduleForm.slaMaxDelay || 5} أيام</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Grace Period & Reminder */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center text-sm">⏰</span>
+                        <div>
+                          <span className="block">فترة السماح والتذكير</span>
+                          <span className="text-xs font-normal text-slate-500">Grace Period & Reminders</span>
+                        </div>
+                      </label>
+
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-2">التذكير قبل (أيام)</label>
+                            <input type="number" value={scheduleForm.reminderDays || 7}
+                              onChange={(e) => setScheduleForm({ ...scheduleForm, reminderDays: parseInt(e.target.value) })}
+                              className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none" min="1" max="30" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-2">فترة السماح (أيام)</label>
+                            <input type="number" value={scheduleForm.graceperiodDays || 3}
+                              onChange={(e) => setScheduleForm({ ...scheduleForm, graceperiodDays: parseInt(e.target.value) })}
+                              className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none" min="0" max="14" />
+                          </div>
+                        </div>
+
+                        {/* Reminder frequency */}
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">تكرار التذكير</label>
+                          <div className="flex gap-2">
+                            {[
+                              { value: 'once', label: 'مرة واحدة' },
+                              { value: 'daily', label: 'يومياً' },
+                              { value: 'twice', label: 'مرتين يومياً' },
+                            ].map(opt => {
+                              const isSelected = (scheduleForm.reminderFreq || 'daily') === opt.value;
+                              return (
+                                <button key={opt.value} type="button"
+                                  onClick={() => setScheduleForm({ ...scheduleForm, reminderFreq: opt.value })}
+                                  className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${isSelected ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    }`}>
+                                  {opt.label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 5: NOTIFICATIONS ═══════════════ */}
+              {(scheduleForm.activeTab || 0) === 4 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Notification Channels */}
+                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 border-2 border-indigo-200">
+                    <label className="flex items-center gap-3 font-bold text-indigo-800 mb-4">
+                      <span className="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center text-sm">📢</span>
+                      <div>
+                        <span className="block">قنوات الإشعارات</span>
+                        <span className="text-xs font-normal text-indigo-600">Multi-Channel Notifications</span>
+                      </div>
+                    </label>
+
+                    <div className="space-y-3">
+                      {[
+                        { channel: 'email', label: 'البريد الإلكتروني', icon: '📧', desc: 'إشعارات عبر Email' },
+                        { channel: 'sms', label: 'رسائل SMS', icon: '📱', desc: 'رسائل نصية قصيرة' },
+                        { channel: 'inApp', label: 'داخل التطبيق', icon: '🔔', desc: 'إشعارات فورية' },
+                        { channel: 'teams', label: 'Microsoft Teams', icon: '💬', desc: 'قناة Teams' },
+                        { channel: 'slack', label: 'Slack', icon: '💼', desc: 'قناة Slack' },
+                        { channel: 'whatsapp', label: 'WhatsApp Business', icon: '📲', desc: 'رسائل واتساب' },
+                      ].map(ch => (
+                        <label key={ch.channel} className="flex items-center justify-between p-4 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-indigo-300 transition-all">
+                          <div className="flex items-center gap-3">
+                            <span className="text-2xl">{ch.icon}</span>
+                            <div>
+                              <span className="font-bold text-slate-800 text-sm block">{ch.label}</span>
+                              <span className="text-xs text-slate-500">{ch.desc}</span>
+                            </div>
+                          </div>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox"
+                              checked={(scheduleForm.channels || ['email', 'inApp']).includes(ch.channel)}
+                              onChange={(e) => {
+                                const current = scheduleForm.channels || ['email', 'inApp'];
+                                const updated = e.target.checked
+                                  ? [...current, ch.channel]
+                                  : current.filter(x => x !== ch.channel);
+                                setScheduleForm({ ...scheduleForm, channels: updated });
+                              }}
+                              className="sr-only peer" />
+                            <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
+                          </label>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Notification Templates & Preferences */}
+                  <div className="space-y-5">
+                    {/* Notification Events */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-purple-500 text-white flex items-center justify-center text-sm">📋</span>
+                        <div>
+                          <span className="block">أحداث الإشعارات</span>
+                          <span className="text-xs font-normal text-slate-500">Notification Events</span>
+                        </div>
+                      </label>
+
+                      <div className="space-y-2">
+                        {[
+                          { event: 'created', label: 'عند إنشاء المهمة', icon: '✨' },
+                          { event: 'reminder', label: 'عند التذكير', icon: '⏰' },
+                          { event: 'due', label: 'عند الاستحقاق', icon: '📅' },
+                          { event: 'overdue', label: 'عند التأخير', icon: '⚠️' },
+                          { event: 'escalated', label: 'عند التصعيد', icon: '🚨' },
+                          { event: 'completed', label: 'عند الإكمال', icon: '✅' },
+                        ].map(ev => (
+                          <label key={ev.event} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100 transition-all">
+                            <input type="checkbox"
+                              checked={(scheduleForm.events || ['created', 'reminder', 'due', 'overdue']).includes(ev.event)}
+                              onChange={(e) => {
+                                const current = scheduleForm.events || ['created', 'reminder', 'due', 'overdue'];
+                                const updated = e.target.checked
+                                  ? [...current, ev.event]
+                                  : current.filter(x => x !== ev.event);
+                                setScheduleForm({ ...scheduleForm, events: updated });
+                              }}
+                              className="w-5 h-5 rounded text-purple-500" />
+                            <span className="text-lg">{ev.icon}</span>
+                            <span className="text-sm font-bold text-slate-700">{ev.label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Digest Settings */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm">📊</span>
+                          <div>
+                            <span className="font-bold text-slate-800 block">ملخص يومي</span>
+                            <span className="text-xs text-slate-500">Daily Digest</span>
+                          </div>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input type="checkbox" checked={scheduleForm.dailyDigest || false}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, dailyDigest: e.target.checked })}
+                            className="sr-only peer" />
+                          <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                        </label>
+                      </label>
+
+                      {scheduleForm.dailyDigest && (
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">وقت إرسال الملخص</label>
+                          <input type="time" value={scheduleForm.digestTime || '08:00'}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, digestTime: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 6: PREVIEW & ANALYTICS ═══════════════ */}
+              {(scheduleForm.activeTab || 0) === 5 && (
+                <div className="grid grid-cols-3 gap-6">
+                  {/* Schedule Summary */}
+                  <div className="col-span-2 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-5 border-2 border-slate-200">
+                    <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                      <span className="w-8 h-8 rounded-xl bg-slate-500 text-white flex items-center justify-center text-sm">📊</span>
+                      <div>
+                        <span className="block">ملخص الجدولة</span>
+                        <span className="text-xs font-normal text-slate-500">Schedule Summary</span>
+                      </div>
+                    </label>
+
+                    {scheduleForm.obligationId ? (
+                      <div className="grid grid-cols-3 gap-4">
+                        {[
+                          { label: 'الالتزام', value: INITIAL_OBLIGATIONS.find(o => o.id === parseInt(scheduleForm.obligationId))?.code || '-', color: 'indigo' },
+                          { label: 'الدورية', value: scheduleForm.frequency === 'Monthly' ? 'شهري' : scheduleForm.frequency === 'Quarterly' ? 'ربع سنوي' : scheduleForm.frequency || '-', color: 'purple' },
+                          { label: 'الأولوية', value: scheduleForm.priority === 'Critical' ? 'حرج' : scheduleForm.priority === 'High' ? 'عالي' : 'متوسط', color: 'amber' },
+                          { label: 'المهام/سنة', value: scheduleForm.frequency === 'Daily' ? '365' : scheduleForm.frequency === 'Weekly' ? '52' : scheduleForm.frequency === 'Monthly' ? '12' : scheduleForm.frequency === 'Quarterly' ? '4' : '1', color: 'emerald' },
+                          { label: 'التذكير', value: `قبل ${scheduleForm.reminderDays || 7} أيام`, color: 'blue' },
+                          { label: 'SLA', value: `${scheduleForm.slaTarget || 95}%`, color: 'teal' },
+                        ].map((item, idx) => (
+                          <div key={idx} className={`bg-white rounded-xl p-4 border-2 border-${item.color}-200`}>
+                            <p className="text-xs text-slate-500 mb-1">{item.label}</p>
+                            <p className={`text-lg font-bold text-${item.color}-600`}>{item.value}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-10 text-slate-400">
+                        <Calendar className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                        <p>اختر التزام لمعاينة الجدولة</p>
+                      </div>
+                    )}
+
+                    {/* Visual Calendar Preview */}
+                    {scheduleForm.obligationId && (
+                      <div className="mt-6">
+                        <h4 className="font-bold text-slate-700 mb-3">📅 معاينة التقويم (الـ 3 أشهر القادمة)</h4>
+                        <div className="grid grid-cols-3 gap-4">
+                          {['يناير 2025', 'فبراير 2025', 'مارس 2025'].map((month, idx) => (
+                            <div key={month} className="bg-white rounded-xl p-4 border border-slate-200">
+                              <h5 className="text-sm font-bold text-slate-700 mb-2 text-center">{month}</h5>
+                              <div className="grid grid-cols-7 gap-1">
+                                {['أ', 'إ', 'ث', 'أر', 'خ', 'ج', 'س'].map(d => (
+                                  <span key={d} className="text-xs text-slate-400 text-center">{d}</span>
+                                ))}
+                                {[...Array(35)].map((_, i) => {
+                                  const day = i - (idx * 2) + 1;
+                                  const isTask = scheduleForm.frequency === 'Monthly' && day === 1;
+                                  return (
+                                    <span key={i} className={`text-xs text-center py-1 rounded ${day < 1 || day > 31 ? 'text-transparent' :
+                                      isTask ? 'bg-indigo-500 text-white font-bold' : 'text-slate-600'
+                                      }`}>
+                                      {day > 0 && day <= 31 ? day : ''}
+                                    </span>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
 
-                  {/* Auto Generate Toggle */}
-                  <div className="bg-white rounded-xl p-4 border border-slate-200">
-                    <label className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
-                          <Zap className="w-5 h-5 text-violet-600" />
-                        </div>
+                  {/* Analytics Panel */}
+                  <div className="space-y-5">
+                    {/* Predicted Metrics */}
+                    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200">
+                      <label className="flex items-center gap-3 font-bold text-emerald-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-sm">📈</span>
                         <div>
-                          <span className="font-bold text-slate-800 block">التوليد التلقائي</span>
-                          <span className="text-xs text-slate-500">إنشاء المهام تلقائياً حسب الدورية</span>
+                          <span className="block">التحليلات التنبؤية</span>
+                          <span className="text-xs font-normal text-emerald-600">Predictive Analytics</span>
+                        </div>
+                      </label>
+
+                      <div className="space-y-3">
+                        <div className="bg-white rounded-xl p-3 flex items-center justify-between">
+                          <span className="text-sm text-slate-600">معدل الامتثال المتوقع</span>
+                          <span className="font-bold text-emerald-600">92%</span>
+                        </div>
+                        <div className="bg-white rounded-xl p-3 flex items-center justify-between">
+                          <span className="text-sm text-slate-600">احتمال التأخير</span>
+                          <span className="font-bold text-amber-600">15%</span>
+                        </div>
+                        <div className="bg-white rounded-xl p-3 flex items-center justify-between">
+                          <span className="text-sm text-slate-600">الحمل المتوقع/شهر</span>
+                          <span className="font-bold text-blue-600">متوسط</span>
                         </div>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked={scheduleForm.autoGenerate}
-                          onChange={(e) => setScheduleForm({ ...scheduleForm, autoGenerate: e.target.checked })}
-                          className="sr-only peer" />
-                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-500"></div>
-                      </label>
-                    </label>
-                  </div>
+                    </div>
 
-                  {/* Preview */}
-                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
-                    <h4 className="font-bold text-slate-700 mb-3 flex items-center gap-2">
-                      <Eye className="w-4 h-4 text-slate-500" />
-                      معاينة الجدول
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      {scheduleForm.obligationId && scheduleForm.frequency && (
-                        <>
-                          <div className="flex justify-between p-2 bg-white rounded-lg">
-                            <span className="text-slate-500">الدورية:</span>
-                            <span className="font-bold text-slate-700">
-                              {scheduleForm.frequency === 'Daily' ? 'يومي' :
-                                scheduleForm.frequency === 'Weekly' ? 'أسبوعي' :
-                                  scheduleForm.frequency === 'Monthly' ? 'شهري' :
-                                    scheduleForm.frequency === 'Quarterly' ? 'ربع سنوي' :
-                                      scheduleForm.frequency === 'SemiAnnual' ? 'نصف سنوي' :
-                                        scheduleForm.frequency === 'Annual' ? 'سنوي' : scheduleForm.frequency}
+                    {/* Auto-generation Toggle */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
+                            <Zap className="w-5 h-5 text-violet-600" />
+                          </div>
+                          <div>
+                            <span className="font-bold text-slate-800 block">التوليد التلقائي</span>
+                            <span className="text-xs text-slate-500">Auto Generate Tasks</span>
+                          </div>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input type="checkbox" checked={scheduleForm.autoGenerate !== false}
+                            onChange={(e) => setScheduleForm({ ...scheduleForm, autoGenerate: e.target.checked })}
+                            className="sr-only peer" />
+                          <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-500"></div>
+                        </label>
+                      </label>
+                    </div>
+
+                    {/* Schedule Status */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-3 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center text-sm">✓</span>
+                        <span>جاهزية الجدولة</span>
+                      </label>
+
+                      <div className="space-y-2">
+                        {[
+                          { check: !!scheduleForm.obligationId, label: 'الالتزام محدد' },
+                          { check: !!scheduleForm.frequency, label: 'الدورية محددة' },
+                          { check: !!scheduleForm.startDate, label: 'تاريخ البداية' },
+                          { check: !!scheduleForm.raciR, label: 'المسؤول محدد' },
+                        ].map((item, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${item.check ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-500'}`}>
+                              {item.check ? '✓' : '○'}
                             </span>
+                            <span className={`text-sm ${item.check ? 'text-slate-800' : 'text-slate-400'}`}>{item.label}</span>
                           </div>
-                          <div className="flex justify-between p-2 bg-white rounded-lg">
-                            <span className="text-slate-500">المهام المتوقعة:</span>
-                            <span className="font-bold text-indigo-600">
-                              {scheduleForm.frequency === 'Daily' ? '365' :
-                                scheduleForm.frequency === 'Weekly' ? '52' :
-                                  scheduleForm.frequency === 'Monthly' ? '12' :
-                                    scheduleForm.frequency === 'Quarterly' ? '4' :
-                                      scheduleForm.frequency === 'SemiAnnual' ? '2' :
-                                        scheduleForm.frequency === 'Annual' ? '1' : '-'} مهمة/سنة
-                            </span>
-                          </div>
-                          <div className="flex justify-between p-2 bg-white rounded-lg">
-                            <span className="text-slate-500">التذكير:</span>
-                            <span className="font-bold text-emerald-600">قبل {scheduleForm.reminderDays} أيام</span>
-                          </div>
-                        </>
-                      )}
-                      {!scheduleForm.obligationId && (
-                        <p className="text-center text-slate-400 py-4">اختر التزام لمعاينة الجدول</p>
-                      )}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* Footer */}
-            <div className="border-t border-slate-200 px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 flex items-center justify-between">
-              <button onClick={() => setShowScheduleSetup(false)} className="px-5 py-2.5 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white text-sm">
-                إلغاء
-              </button>
+            {/* ═══════════════ FOOTER - Enhanced ═══════════════ */}
+            <div className="border-t-2 border-slate-200 px-8 py-4 bg-gradient-to-r from-slate-50 to-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button onClick={() => setShowScheduleSetup(false)} className="px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white text-sm">
+                  إلغاء
+                </button>
+              </div>
+
+              {/* Tab Navigation */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setScheduleForm({ ...scheduleForm, activeTab: Math.max(0, (scheduleForm.activeTab || 0) - 1) })}
+                  disabled={(scheduleForm.activeTab || 0) === 0}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all ${(scheduleForm.activeTab || 0) === 0
+                    ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
+                    : 'bg-white border-2 border-slate-300 text-slate-700 hover:border-purple-500'
+                    }`}>
+                  <ChevronRight className="w-4 h-4" />
+                  <span className="text-sm">السابق</span>
+                </button>
+
+                <div className="flex items-center gap-1 px-3 py-2 bg-white border-2 border-slate-200 rounded-xl">
+                  {[0, 1, 2, 3, 4, 5].map(idx => (
+                    <button key={idx}
+                      onClick={() => setScheduleForm({ ...scheduleForm, activeTab: idx })}
+                      className={`w-8 h-8 rounded-lg font-bold text-sm transition-all ${(scheduleForm.activeTab || 0) === idx
+                        ? 'bg-purple-500 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}>
+                      {idx + 1}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setScheduleForm({ ...scheduleForm, activeTab: Math.min(5, (scheduleForm.activeTab || 0) + 1) })}
+                  disabled={(scheduleForm.activeTab || 0) === 5}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all ${(scheduleForm.activeTab || 0) === 5
+                    ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
+                    : 'bg-white border-2 border-slate-300 text-slate-700 hover:border-purple-500'
+                    }`}>
+                  <span className="text-sm">التالي</span>
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+              </div>
+
               <div className="flex items-center gap-3">
                 <button onClick={() => {
                   setScheduleForm({
                     obligationId: '', frequency: 'Monthly', startDate: '', endDate: '',
                     ownerId: '', reviewerId: '', reminderDays: 7, autoGenerate: true,
-                    graceperiodDays: 3, escalationEnabled: true, escalationDays: 2
+                    graceperiodDays: 3, escalationEnabled: true, escalationDays: 2, activeTab: 0
                   });
-                }} className="px-4 py-2.5 text-slate-500 hover:text-slate-700 font-bold text-sm">
+                }} className="px-4 py-3 text-slate-500 hover:text-slate-700 font-bold text-sm flex items-center gap-2">
                   <RotateCcw className="w-4 h-4" />
+                  إعادة تعيين
                 </button>
                 <button onClick={() => {
                   if (!scheduleForm.obligationId) {
                     alert('يرجى اختيار الالتزام');
                     return;
                   }
-                  alert('تم إنشاء الجدولة بنجاح!');
+                  alert('تم إنشاء الجدولة بنجاح! 🎉');
                   setShowScheduleSetup(false);
                 }} disabled={!scheduleForm.obligationId}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all text-sm disabled:opacity-50">
-                  <Save className="w-4 h-4" />إنشاء الجدولة
+                  className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-violet-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                  <Save className="w-5 h-5" />
+                  إنشاء الجدولة
                   <ChevronLeft className="w-4 h-4" />
                 </button>
               </div>
@@ -13746,7 +15216,7 @@ const EvidenceRepository = () => {
                       <th className="text-center px-4 py-4 font-bold text-slate-700">الفترة</th>
                       <th className="text-center px-4 py-4 font-bold text-slate-700">الصلاحية</th>
                       <th className="text-center px-4 py-4 font-bold text-slate-700">المسؤول</th>
-                      <th className="text-center px-4 py-4 font-bold text-slate-700 w-36">إجراءات</th>
+                      <th className="text-center px-4 py-4 font-bold text-slate-700 w-44">إجراءات</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -13757,44 +15227,73 @@ const EvidenceRepository = () => {
                       const StatusIcon = statusCfg.icon;
                       const TypeIcon = typeCfg.icon;
                       const isSelected = selectedItems.includes(evd.id);
+                      const isEditing = uploadForm.editingId === evd.id;
                       return (
-                        <tr key={evd.id} className={`border-b border-slate-100 transition-all ${isSelected ? 'bg-indigo-50' : idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} hover:bg-indigo-50/50`}>
-                          <td className="px-3 py-4 text-center">
+                        <tr key={evd.id}
+                          className={`border-b border-slate-100 transition-all cursor-pointer group ${isSelected ? 'bg-indigo-50' : isEditing ? 'bg-amber-50' : idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'
+                            } hover:bg-indigo-50/50`}
+                          onClick={() => { if (!isEditing) { setSelectedEvidence(evd); setShowDetailModal(true); } }}>
+                          <td className="px-3 py-4 text-center" onClick={(e) => e.stopPropagation()}>
                             <input type="checkbox" className="w-4 h-4 rounded" checked={isSelected}
                               onChange={(e) => setSelectedItems(e.target.checked ? [...selectedItems, evd.id] : selectedItems.filter(id => id !== evd.id))} />
                           </td>
-                          <td className="px-4 py-4">
+                          <td className="px-4 py-4" onClick={(e) => e.stopPropagation()}>
                             <span className="font-mono text-sm font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-lg">{evd.code}</span>
                           </td>
-                          <td className="px-4 py-4">
-                            <div>
-                              <p className="font-bold text-slate-800 mb-1">{evd.title}</p>
-                              {evd.fileName && <p className="text-xs text-slate-500 flex items-center gap-1"><Paperclip className="w-3 h-3" />{evd.fileName} • {evd.fileSize}</p>}
-                              {evd.tags && evd.tags.length > 0 && (
-                                <div className="flex items-center gap-1 mt-1.5">
-                                  {evd.tags.slice(0, 2).map((tag, i) => (
-                                    <span key={i} className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">{tag}</span>
-                                  ))}
-                                  {evd.tags.length > 2 && <span className="text-xs text-slate-400">+{evd.tags.length - 2}</span>}
-                                </div>
-                              )}
-                            </div>
+                          <td className="px-4 py-4" onClick={(e) => e.stopPropagation()}>
+                            {isEditing ? (
+                              <input type="text"
+                                defaultValue={evd.title}
+                                className="w-full px-3 py-2 border-2 border-amber-300 rounded-lg font-bold text-slate-800 focus:border-amber-500 focus:outline-none"
+                                autoFocus />
+                            ) : (
+                              <div>
+                                <p className="font-bold text-slate-800 mb-1 group-hover:text-indigo-700 transition-colors">{evd.title}</p>
+                                {evd.fileName && <p className="text-xs text-slate-500 flex items-center gap-1"><Paperclip className="w-3 h-3" />{evd.fileName} • {evd.fileSize}</p>}
+                                {evd.tags && evd.tags.length > 0 && (
+                                  <div className="flex items-center gap-1 mt-1.5">
+                                    {evd.tags.slice(0, 2).map((tag, i) => (
+                                      <span key={i} className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">{tag}</span>
+                                    ))}
+                                    {evd.tags.length > 2 && <span className="text-xs text-slate-400">+{evd.tags.length - 2}</span>}
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </td>
-                          <td className="px-4 py-4 text-center">
-                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-${typeCfg.color}-100 text-${typeCfg.color}-700`}>
-                              <TypeIcon className="w-3.5 h-3.5" />{typeCfg.label}
-                            </span>
+                          <td className="px-4 py-4 text-center" onClick={(e) => e.stopPropagation()}>
+                            {isEditing ? (
+                              <select defaultValue={evd.evidenceType} className="px-2 py-1.5 border-2 border-amber-300 rounded-lg text-xs font-bold focus:border-amber-500 focus:outline-none">
+                                {Object.entries(TYPE_CONFIG).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
+                              </select>
+                            ) : (
+                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-${typeCfg.color}-100 text-${typeCfg.color}-700`}>
+                                <TypeIcon className="w-3.5 h-3.5" />{typeCfg.label}
+                              </span>
+                            )}
                           </td>
-                          <td className="px-4 py-4 text-center">
-                            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold ${statusCfg.bg} ${statusCfg.text}`}>
-                              <StatusIcon className="w-3.5 h-3.5" />{statusCfg.label}
-                            </span>
+                          <td className="px-4 py-4 text-center" onClick={(e) => e.stopPropagation()}>
+                            {isEditing ? (
+                              <select defaultValue={evd.status} className="px-2 py-1.5 border-2 border-amber-300 rounded-lg text-xs font-bold focus:border-amber-500 focus:outline-none">
+                                {Object.entries(STATUS_CONFIG).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
+                              </select>
+                            ) : (
+                              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold ${statusCfg.bg} ${statusCfg.text}`}>
+                                <StatusIcon className="w-3.5 h-3.5" />{statusCfg.label}
+                              </span>
+                            )}
                           </td>
-                          <td className="px-4 py-4 text-center">
-                            <span className="text-sm font-medium text-slate-700 bg-slate-100 px-2 py-1 rounded">{evd.period || '—'}</span>
+                          <td className="px-4 py-4 text-center" onClick={(e) => e.stopPropagation()}>
+                            {isEditing ? (
+                              <input type="text" defaultValue={evd.period} className="w-20 px-2 py-1.5 border-2 border-amber-300 rounded-lg text-xs text-center font-bold focus:border-amber-500 focus:outline-none" />
+                            ) : (
+                              <span className="text-sm font-medium text-slate-700 bg-slate-100 px-2 py-1 rounded">{evd.period || '—'}</span>
+                            )}
                           </td>
-                          <td className="px-4 py-4 text-center">
-                            {evd.validityEnd ? (
+                          <td className="px-4 py-4 text-center" onClick={(e) => e.stopPropagation()}>
+                            {isEditing ? (
+                              <input type="date" defaultValue={evd.validityEnd} className="px-2 py-1.5 border-2 border-amber-300 rounded-lg text-xs focus:border-amber-500 focus:outline-none" />
+                            ) : evd.validityEnd ? (
                               <div className="flex flex-col items-center">
                                 <p className="text-sm text-slate-600">{evd.validityEnd}</p>
                                 {daysUntil !== null && (
@@ -13805,39 +15304,119 @@ const EvidenceRepository = () => {
                               </div>
                             ) : <span className="text-slate-400">—</span>}
                           </td>
-                          <td className="px-4 py-4">
-                            <div className="flex items-center justify-center gap-2">
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${evd.ownerId === 1 ? 'bg-blue-100 text-blue-600' : evd.ownerId === 2 ? 'bg-purple-100 text-purple-600' : 'bg-emerald-100 text-emerald-600'}`}>
-                                {evd.ownerName?.charAt(0)}
+                          <td className="px-4 py-4" onClick={(e) => e.stopPropagation()}>
+                            {isEditing ? (
+                              <select defaultValue={evd.ownerId} className="w-full px-2 py-1.5 border-2 border-amber-300 rounded-lg text-xs font-bold focus:border-amber-500 focus:outline-none">
+                                {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                              </select>
+                            ) : (
+                              <div className="flex items-center justify-center gap-2">
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${evd.ownerId === 1 ? 'bg-blue-100 text-blue-600' : evd.ownerId === 2 ? 'bg-purple-100 text-purple-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                                  {evd.ownerName?.charAt(0)}
+                                </div>
+                                <span className="text-sm text-slate-600 hidden xl:inline">{evd.ownerName}</span>
                               </div>
-                              <span className="text-sm text-slate-600 hidden xl:inline">{evd.ownerName}</span>
-                            </div>
+                            )}
                           </td>
-                          <td className="px-4 py-4">
-                            <div className="flex items-center justify-center gap-1">
-                              <button onClick={() => { setSelectedEvidence(evd); setShowDetailModal(true); }} className="p-2 hover:bg-blue-100 rounded-lg transition-all group" title="عرض التفاصيل">
-                                <Eye className="w-4 h-4 text-blue-500 group-hover:text-blue-700" />
-                              </button>
-                              {evd.status === 'Uploaded' && (
-                                <button onClick={() => handleSubmitForReview(evd)} className="p-2 hover:bg-emerald-100 rounded-lg transition-all group" title="إرسال للمراجعة">
-                                  <Send className="w-4 h-4 text-emerald-500 group-hover:text-emerald-700" />
+                          <td className="px-4 py-4" onClick={(e) => e.stopPropagation()}>
+                            {isEditing ? (
+                              <div className="flex items-center justify-center gap-1">
+                                <button onClick={() => {
+                                  alert('تم حفظ التعديلات بنجاح! ✅');
+                                  setUploadForm({ ...uploadForm, editingId: null });
+                                }} className="p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600" title="حفظ">
+                                  <Save className="w-4 h-4" />
                                 </button>
-                              )}
-                              {canReview(evd) && (
-                                <button onClick={() => { setSelectedEvidence(evd); setRejectComment(''); setShowReviewModal(true); }} className="p-2 hover:bg-amber-100 rounded-lg transition-all group" title="مراجعة">
-                                  <ClipboardCheck className="w-4 h-4 text-amber-500 group-hover:text-amber-700" />
+                                <button onClick={() => setUploadForm({ ...uploadForm, editingId: null })} className="p-2 bg-slate-500 text-white rounded-lg hover:bg-slate-600" title="إلغاء">
+                                  <X className="w-4 h-4" />
                                 </button>
-                              )}
-                              <button className="p-2 hover:bg-slate-100 rounded-lg transition-all group" title="تحميل">
-                                <Download className="w-4 h-4 text-slate-500 group-hover:text-slate-700" />
-                              </button>
-                            </div>
+                              </div>
+                            ) : (
+                              <div className="flex items-center justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                                <button onClick={(e) => { e.stopPropagation(); setSelectedEvidence(evd); setShowDetailModal(true); }}
+                                  className="p-2 hover:bg-blue-100 rounded-lg transition-all" title="عرض التفاصيل">
+                                  <Eye className="w-4 h-4 text-blue-500 hover:text-blue-700" />
+                                </button>
+                                <button onClick={(e) => { e.stopPropagation(); setUploadForm({ ...uploadForm, editingId: evd.id }); }}
+                                  className="p-2 hover:bg-amber-100 rounded-lg transition-all" title="تعديل">
+                                  <Edit className="w-4 h-4 text-amber-500 hover:text-amber-700" />
+                                </button>
+                                {evd.status === 'Uploaded' && (
+                                  <button onClick={(e) => { e.stopPropagation(); handleSubmitForReview(evd); }}
+                                    className="p-2 hover:bg-emerald-100 rounded-lg transition-all" title="إرسال للمراجعة">
+                                    <Send className="w-4 h-4 text-emerald-500 hover:text-emerald-700" />
+                                  </button>
+                                )}
+                                {canReview(evd) && (
+                                  <button onClick={(e) => { e.stopPropagation(); setSelectedEvidence(evd); setRejectComment(''); setShowReviewModal(true); }}
+                                    className="p-2 hover:bg-purple-100 rounded-lg transition-all" title="مراجعة">
+                                    <ClipboardCheck className="w-4 h-4 text-purple-500 hover:text-purple-700" />
+                                  </button>
+                                )}
+                                <button onClick={(e) => { e.stopPropagation(); }}
+                                  className="p-2 hover:bg-slate-100 rounded-lg transition-all" title="تحميل">
+                                  <Download className="w-4 h-4 text-slate-500 hover:text-slate-700" />
+                                </button>
+                                <button onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (confirm('هل أنت متأكد من حذف هذا الدليل؟')) {
+                                    setEvidence(evidence.filter(e => e.id !== evd.id));
+                                    alert('تم حذف الدليل بنجاح! 🗑️');
+                                  }
+                                }}
+                                  className="p-2 hover:bg-red-100 rounded-lg transition-all" title="حذف">
+                                  <Trash2 className="w-4 h-4 text-red-500 hover:text-red-700" />
+                                </button>
+                              </div>
+                            )}
                           </td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
+
+                {/* Bulk Actions Bar */}
+                {selectedItems.length > 0 && (
+                  <div className="sticky bottom-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-600 text-white px-6 py-4 flex items-center justify-between rounded-b-xl shadow-lg">
+                    <div className="flex items-center gap-3">
+                      <span className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center font-black text-lg">{selectedItems.length}</span>
+                      <span className="font-bold">عنصر محدد</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => {
+                        alert(`تم إرسال ${selectedItems.length} دليل للمراجعة! 📤`);
+                        setSelectedItems([]);
+                      }} className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm">
+                        <Send className="w-4 h-4" />إرسال للمراجعة
+                      </button>
+                      <button onClick={() => {
+                        alert(`تم تحميل ${selectedItems.length} دليل! 📥`);
+                      }} className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm">
+                        <Download className="w-4 h-4" />تحميل الكل
+                      </button>
+                      <button onClick={() => {
+                        alert('تم إنشاء حزمة تدقيق جديدة! 📦');
+                        setSelectedItems([]);
+                      }} className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm">
+                        <Package className="w-4 h-4" />إنشاء حزمة
+                      </button>
+                      <button onClick={() => {
+                        if (confirm(`هل أنت متأكد من حذف ${selectedItems.length} دليل؟`)) {
+                          setEvidence(evidence.filter(e => !selectedItems.includes(e.id)));
+                          setSelectedItems([]);
+                          alert('تم حذف الأدلة المحددة! 🗑️');
+                        }
+                      }} className="flex items-center gap-2 px-4 py-2 bg-red-500/50 hover:bg-red-500/70 rounded-xl font-bold text-sm">
+                        <Trash2 className="w-4 h-4" />حذف المحدد
+                      </button>
+                      <button onClick={() => setSelectedItems([])} className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-sm">
+                        <X className="w-4 h-4" />إلغاء التحديد
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {filteredEvidence.length === 0 && (
                   <div className="text-center py-12 bg-slate-50">
                     <FolderOpen className="w-12 h-12 text-slate-300 mx-auto mb-3" />
@@ -14176,94 +15755,714 @@ const EvidenceRepository = () => {
       </div>
 
       {/* ═══════════════════ UPLOAD MODAL - WORLD CLASS ═══════════════════ */}
+      {/* ═══════════════════ WORLD-CLASS EVIDENCE UPLOAD MODAL ═══════════════════ */}
       {showUploadModal && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="bg-gradient-to-l from-indigo-500 via-purple-500 to-violet-600 px-6 py-5 text-white">
-              <div className="flex items-center justify-between">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden flex flex-col">
+            {/* ═══════════════ HEADER ═══════════════ */}
+            <div className="bg-gradient-to-l from-indigo-600 via-purple-600 to-violet-700 px-8 py-5 text-white">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                    <Upload className="w-7 h-7" />
+                  <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <Upload className="w-8 h-8" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold">رفع دليل جديد</h2>
-                    <p className="text-indigo-200">Evidence Upload - مستودع الأدلة</p>
+                    <h2 className="text-2xl font-black">رفع دليل جديد</h2>
+                    <p className="text-indigo-200">Enterprise Evidence Upload - مستودع الأدلة المؤسسي</p>
                   </div>
                 </div>
-                <button onClick={() => setShowUploadModal(false)} className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl">
-                  <X className="w-6 h-6" />
-                </button>
+                <div className="flex items-center gap-3">
+                  <div className="text-center px-4 py-2 bg-white/10 backdrop-blur rounded-xl">
+                    <p className="text-white/70 text-xs">الملفات المحددة</p>
+                    <p className="text-2xl font-black">{uploadForm.files?.length || 0}</p>
+                  </div>
+                  <button onClick={() => setShowUploadModal(false)} className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl">
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Tab Navigation */}
+              <div className="flex gap-1 bg-white/10 rounded-xl p-1">
+                {[
+                  { id: 0, label: 'رفع الملفات', icon: Upload, desc: 'Upload Files' },
+                  { id: 1, label: 'معلومات الدليل', icon: FileText, desc: 'Evidence Details' },
+                  { id: 2, label: 'الربط والتصنيف', icon: Link2, desc: 'Golden Thread' },
+                  { id: 3, label: 'الموافقات والتوقيع', icon: CheckCircle2, desc: 'Approval Workflow' },
+                ].map(tab => (
+                  <button key={tab.id}
+                    onClick={() => setUploadForm({ ...uploadForm, activeUploadTab: tab.id })}
+                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-bold transition-all ${(uploadForm.activeUploadTab || 0) === tab.id
+                      ? 'bg-white text-purple-700 shadow-lg'
+                      : 'text-white/80 hover:bg-white/10'
+                      }`}>
+                    <tab.icon className="w-4 h-4" />
+                    <span className="text-sm">{tab.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
-            <div className="flex-1 overflow-y-auto p-6 space-y-5">
-              {/* Drag & Drop Zone */}
-              <div className={`border-3 border-dashed rounded-2xl p-8 text-center transition-all ${dragOver ? 'border-indigo-500 bg-indigo-50' : 'border-slate-300 hover:border-indigo-400'}`}
-                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={(e) => { e.preventDefault(); setDragOver(false); }}>
-                <div className="w-16 h-16 rounded-2xl bg-indigo-100 flex items-center justify-center mx-auto mb-4">
-                  <Upload className="w-8 h-8 text-indigo-600" />
+
+            {/* ═══════════════ CONTENT ═══════════════ */}
+            <div className="flex-1 overflow-y-auto p-6">
+
+              {/* ═══════════════ TAB 1: UPLOAD FILES ═══════════════ */}
+              {(uploadForm.activeUploadTab || 0) === 0 && (
+                <div className="space-y-6">
+                  {/* Enhanced Drag & Drop Zone */}
+                  <div className={`border-3 border-dashed rounded-2xl p-10 text-center transition-all cursor-pointer ${dragOver ? 'border-indigo-500 bg-indigo-50 scale-[1.01]' : 'border-slate-300 hover:border-indigo-400 hover:bg-slate-50'
+                    }`}
+                    onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                    onDragLeave={() => setDragOver(false)}
+                    onDrop={(e) => {
+                      e.preventDefault(); setDragOver(false);
+                      const files = Array.from(e.dataTransfer.files);
+                      setUploadForm({ ...uploadForm, files: [...(uploadForm.files || []), ...files] });
+                    }}>
+                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center mx-auto mb-4">
+                      <Upload className="w-10 h-10 text-indigo-600" />
+                    </div>
+                    <p className="text-slate-800 font-bold text-xl mb-2">اسحب الملفات هنا أو انقر للاختيار</p>
+                    <p className="text-sm text-slate-500 mb-4">يمكنك رفع ملفات متعددة دفعة واحدة</p>
+                    <div className="flex items-center justify-center gap-3 mb-4">
+                      {[
+                        { ext: 'PDF', color: 'red' },
+                        { ext: 'XLSX', color: 'emerald' },
+                        { ext: 'DOCX', color: 'blue' },
+                        { ext: 'PNG', color: 'amber' },
+                        { ext: 'JPG', color: 'orange' },
+                        { ext: 'ZIP', color: 'purple' },
+                      ].map(f => (
+                        <span key={f.ext} className={`px-2 py-1 bg-${f.color}-100 text-${f.color}-700 rounded text-xs font-bold`}>{f.ext}</span>
+                      ))}
+                    </div>
+                    <p className="text-xs text-slate-400">الحد الأقصى: 100 MB لكل ملف • 10 ملفات كحد أقصى</p>
+                    <button className="mt-4 px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold hover:shadow-lg transition-all">
+                      <FolderPlus className="w-5 h-5 inline ml-2" />اختيار الملفات
+                    </button>
+                  </div>
+
+                  {/* Uploaded Files List */}
+                  {(uploadForm.files?.length > 0 || true) && (
+                    <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
+                      <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <Package className="w-5 h-5 text-indigo-600" />
+                        الملفات المحددة للرفع
+                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold mr-2">
+                          {uploadForm.files?.length || 3} ملف
+                        </span>
+                      </h4>
+
+                      <div className="space-y-3 max-h-60 overflow-y-auto">
+                        {/* Demo files */}
+                        {[
+                          { name: 'AML_Report_Jan2025.pdf', size: '2.4 MB', type: 'PDF', status: 'ready', progress: 100 },
+                          { name: 'Transaction_Log.xlsx', size: '1.8 MB', type: 'XLSX', status: 'uploading', progress: 65 },
+                          { name: 'Supporting_Document.docx', size: '856 KB', type: 'DOCX', status: 'ready', progress: 100 },
+                        ].map((file, idx) => (
+                          <div key={idx} className="flex items-center gap-4 bg-white rounded-xl p-4 border border-slate-200">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${file.type === 'PDF' ? 'bg-red-100 text-red-600' :
+                              file.type === 'XLSX' ? 'bg-emerald-100 text-emerald-600' :
+                                'bg-blue-100 text-blue-600'
+                              }`}>
+                              <FileText className="w-6 h-6" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-bold text-slate-800 truncate">{file.name}</p>
+                              <div className="flex items-center gap-3 mt-1">
+                                <span className="text-xs text-slate-500">{file.size}</span>
+                                <span className={`px-2 py-0.5 rounded text-xs font-bold ${file.type === 'PDF' ? 'bg-red-100 text-red-700' :
+                                  file.type === 'XLSX' ? 'bg-emerald-100 text-emerald-700' :
+                                    'bg-blue-100 text-blue-700'
+                                  }`}>{file.type}</span>
+                                {file.status === 'uploading' && (
+                                  <div className="flex-1 max-w-32">
+                                    <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                      <div className="h-full bg-indigo-500 rounded-full transition-all" style={{ width: `${file.progress}%` }}></div>
+                                    </div>
+                                  </div>
+                                )}
+                                {file.status === 'ready' && (
+                                  <span className="text-xs text-emerald-600 font-bold flex items-center gap-1">
+                                    <CheckCircle2 className="w-3 h-3" />جاهز
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button className="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-200">
+                                <Eye className="w-4 h-4" />
+                              </button>
+                              <button className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Upload Stats */}
+                      <div className="mt-4 pt-4 border-t border-slate-200 grid grid-cols-4 gap-4">
+                        <div className="text-center">
+                          <p className="text-2xl font-black text-indigo-600">3</p>
+                          <p className="text-xs text-slate-500">ملفات</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-2xl font-black text-purple-600">5.1 MB</p>
+                          <p className="text-xs text-slate-500">الحجم الكلي</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-2xl font-black text-emerald-600">2</p>
+                          <p className="text-xs text-slate-500">جاهز</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-2xl font-black text-amber-600">1</p>
+                          <p className="text-xs text-slate-500">قيد الرفع</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Quick Upload Options */}
+                  <div className="grid grid-cols-3 gap-4">
+                    {[
+                      { label: 'من Google Drive', icon: Globe, color: 'blue' },
+                      { label: 'من OneDrive', icon: Globe, color: 'indigo' },
+                      { label: 'من SharePoint', icon: Globe, color: 'purple' },
+                    ].map((opt, idx) => (
+                      <button key={idx} className={`flex items-center justify-center gap-2 p-4 bg-${opt.color}-50 border-2 border-${opt.color}-200 rounded-xl font-bold text-${opt.color}-700 hover:bg-${opt.color}-100 transition-all`}>
+                        <opt.icon className="w-5 h-5" />
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <p className="text-slate-700 font-bold text-lg mb-2">اسحب الملف هنا أو انقر للاختيار</p>
-                <p className="text-sm text-slate-500">PDF, XLSX, PNG, DOC (حتى 50 MB)</p>
-                <button className="mt-4 px-6 py-2.5 bg-indigo-100 text-indigo-600 rounded-xl font-bold hover:bg-indigo-200">
-                  اختيار ملف
+              )}
+
+              {/* ═══════════════ TAB 2: EVIDENCE DETAILS ═══════════════ */}
+              {(uploadForm.activeUploadTab || 0) === 1 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Left Column */}
+                  <div className="space-y-5">
+                    {/* Evidence Type */}
+                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 border-2 border-indigo-200">
+                      <label className="flex items-center gap-2 font-bold text-indigo-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center text-sm">1</span>
+                        نوع الدليل *
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { value: 'Report', label: 'تقرير', icon: '📊' },
+                          { value: 'Document', label: 'مستند', icon: '📄' },
+                          { value: 'Screenshot', label: 'لقطة شاشة', icon: '🖼️' },
+                          { value: 'Log', label: 'سجل', icon: '📋' },
+                          { value: 'Certificate', label: 'شهادة', icon: '🏆' },
+                          { value: 'Contract', label: 'عقد', icon: '📝' },
+                          { value: 'Policy', label: 'سياسة', icon: '📜' },
+                          { value: 'Other', label: 'أخرى', icon: '📁' },
+                        ].map(type => {
+                          const isSelected = uploadForm.evidenceType === type.value;
+                          return (
+                            <button key={type.value} type="button"
+                              onClick={() => setUploadForm({ ...uploadForm, evidenceType: type.value })}
+                              className={`flex items-center gap-2 p-3 rounded-xl border-2 transition-all ${isSelected ? 'border-indigo-500 bg-indigo-100' : 'border-slate-200 bg-white hover:border-slate-300'
+                                }`}>
+                              <span className="text-xl">{type.icon}</span>
+                              <span className={`text-sm font-bold ${isSelected ? 'text-indigo-700' : 'text-slate-700'}`}>{type.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Title & Description */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-purple-500 text-white flex items-center justify-center text-sm">2</span>
+                        العنوان والوصف
+                      </label>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">عنوان الدليل *</label>
+                          <input type="text" value={uploadForm.title} onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                            placeholder="مثال: تقرير مكافحة غسيل الأموال - يناير 2025" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">الوصف التفصيلي</label>
+                          <textarea rows={3} value={uploadForm.description} onChange={(e) => setUploadForm({ ...uploadForm, description: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-500 focus:outline-none resize-none"
+                            placeholder="وصف تفصيلي للدليل ومحتوياته..." />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Priority & Confidentiality */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm">3</span>
+                        الأولوية والتصنيف
+                      </label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">الأولوية</label>
+                          <div className="flex gap-2">
+                            {[
+                              { value: 'Critical', label: 'حرج', color: 'red' },
+                              { value: 'High', label: 'عالي', color: 'orange' },
+                              { value: 'Medium', label: 'متوسط', color: 'amber' },
+                              { value: 'Low', label: 'منخفض', color: 'emerald' },
+                            ].map(pri => {
+                              const isSelected = (uploadForm.priority || 'Medium') === pri.value;
+                              return (
+                                <button key={pri.value} type="button"
+                                  onClick={() => setUploadForm({ ...uploadForm, priority: pri.value })}
+                                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${isSelected ? `bg-${pri.color}-500 text-white` : `bg-${pri.color}-50 text-${pri.color}-700 hover:bg-${pri.color}-100`
+                                    }`}>
+                                  {pri.label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">التصنيف السري</label>
+                          <select value={uploadForm.confidentiality} onChange={(e) => setUploadForm({ ...uploadForm, confidentiality: e.target.value })}
+                            className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                            <option value="Public">عام</option>
+                            <option value="Internal">داخلي</option>
+                            <option value="Confidential">سري</option>
+                            <option value="Restricted">مقيد</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column */}
+                  <div className="space-y-5">
+                    {/* Dates */}
+                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 border-2 border-blue-200">
+                      <label className="flex items-center gap-2 font-bold text-blue-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center text-sm">4</span>
+                        <Calendar className="w-5 h-5" />
+                        التواريخ والفترات
+                      </label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">تاريخ الإصدار *</label>
+                          <input type="date" value={uploadForm.issueDate} onChange={(e) => setUploadForm({ ...uploadForm, issueDate: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:outline-none" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">نهاية الصلاحية *</label>
+                          <input type="date" value={uploadForm.validityEnd} onChange={(e) => setUploadForm({ ...uploadForm, validityEnd: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:outline-none" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">الفترة المرجعية</label>
+                          <input type="text" value={uploadForm.period} onChange={(e) => setUploadForm({ ...uploadForm, period: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:outline-none"
+                            placeholder="مثال: 2025-Q1" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">تاريخ التذكير</label>
+                          <input type="date" value={uploadForm.reminderDate} onChange={(e) => setUploadForm({ ...uploadForm, reminderDate: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:outline-none" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-sm">5</span>
+                        <Tag className="w-5 h-5" />
+                        الوسوم والتصنيفات
+                      </label>
+                      <input type="text" value={uploadForm.tags} onChange={(e) => setUploadForm({ ...uploadForm, tags: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:outline-none mb-3"
+                        placeholder="أدخل الوسوم مفصولة بفاصلة" />
+                      <div className="flex flex-wrap gap-2">
+                        {['AML', 'شهري', 'SAMA', 'تقرير', '2025'].map(tag => (
+                          <span key={tag} className="px-3 py-1.5 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-bold flex items-center gap-1">
+                            {tag}
+                            <X className="w-3 h-3 cursor-pointer hover:text-emerald-900" />
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Source & Reference */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <span className="w-8 h-8 rounded-xl bg-purple-500 text-white flex items-center justify-center text-sm">6</span>
+                        المصدر والمرجع
+                      </label>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">مصدر الدليل</label>
+                          <select value={uploadForm.source} onChange={(e) => setUploadForm({ ...uploadForm, source: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-500 focus:outline-none">
+                            <option value="">اختر المصدر...</option>
+                            <option value="Internal">داخلي - من أنظمة المنشأة</option>
+                            <option value="External">خارجي - من جهة أخرى</option>
+                            <option value="Regulator">تنظيمي - من جهة رقابية</option>
+                            <option value="Audit">تدقيق - من مراجع</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">رقم المرجع الخارجي</label>
+                          <input type="text" value={uploadForm.externalRef} onChange={(e) => setUploadForm({ ...uploadForm, externalRef: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                            placeholder="مثال: REF-2025-001" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 3: GOLDEN THREAD LINKING ═══════════════ */}
+              {(uploadForm.activeUploadTab || 0) === 2 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Link to Objects */}
+                  <div className="space-y-5">
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border-2 border-amber-200">
+                      <label className="flex items-center gap-2 font-bold text-amber-800 mb-4">
+                        <Link2 className="w-5 h-5" />
+                        ربط بـ Golden Thread
+                      </label>
+
+                      {/* Linked Objects */}
+                      <div className="space-y-3">
+                        {[
+                          { type: 'obligation', label: 'الالتزام', icon: '📋', color: 'indigo', selected: 'OBL-001: تقديم تقرير مكافحة غسيل الأموال' },
+                          { type: 'control', label: 'الضابط', icon: '🛡️', color: 'emerald', selected: null },
+                          { type: 'risk', label: 'الخطر', icon: '⚠️', color: 'red', selected: null },
+                          { type: 'policy', label: 'السياسة', icon: '📜', color: 'purple', selected: null },
+                        ].map(obj => (
+                          <div key={obj.type} className={`bg-white rounded-xl p-4 border-2 ${obj.selected ? `border-${obj.color}-300` : 'border-slate-200'}`}>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xl">{obj.icon}</span>
+                                <span className="font-bold text-slate-700">{obj.label}</span>
+                              </div>
+                              {obj.selected ? (
+                                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-xs font-bold">مربوط</span>
+                              ) : (
+                                <button className={`px-3 py-1 bg-${obj.color}-100 text-${obj.color}-700 rounded-lg text-xs font-bold hover:bg-${obj.color}-200`}>
+                                  + ربط
+                                </button>
+                              )}
+                            </div>
+                            {obj.selected && (
+                              <div className={`flex items-center justify-between p-2 bg-${obj.color}-50 rounded-lg`}>
+                                <span className="text-sm text-slate-700 truncate">{obj.selected}</span>
+                                <button className="text-red-500 hover:text-red-700">
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Related Tasks */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <ClipboardCheck className="w-5 h-5" />
+                        المهام المرتبطة
+                      </label>
+                      <select className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:outline-none mb-3">
+                        <option value="">اختر المهمة...</option>
+                        <option value="task-1">TASK-001: تقديم تقرير مكافحة غسيل الأموال الشهري</option>
+                        <option value="task-2">TASK-002: مراجعة سجلات الوصول</option>
+                      </select>
+                      <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-200">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-indigo-600" />
+                          <span className="text-sm text-indigo-800 font-bold">TASK-001</span>
+                        </div>
+                        <p className="text-xs text-slate-600 mt-1">تقديم تقرير مكافحة غسيل الأموال الشهري - يناير 2025</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Categories & Departments */}
+                  <div className="space-y-5">
+                    {/* Regulatory Framework */}
+                    <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-5 border-2 border-indigo-200">
+                      <label className="flex items-center gap-2 font-bold text-indigo-800 mb-4">
+                        <Building2 className="w-5 h-5" />
+                        الإطار التنظيمي
+                      </label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">الجهة الرقابية</label>
+                          <select className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:outline-none">
+                            <option value="SAMA">SAMA - البنك المركزي</option>
+                            <option value="CMA">CMA - هيئة السوق المالية</option>
+                            <option value="NCA">NCA - الأمن السيبراني</option>
+                            <option value="SDAIA">SDAIA - حماية البيانات</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">الإطار</label>
+                          <select className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:outline-none">
+                            <option value="AML">SAMA-AML - مكافحة غسيل الأموال</option>
+                            <option value="Cyber">NCA-Cyber - الأمن السيبراني</option>
+                            <option value="PDPL">PDPL - حماية البيانات</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Department & Owner */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <Users className="w-5 h-5" />
+                        القسم والمسؤول
+                      </label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">القسم</label>
+                          <select className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-slate-400 focus:outline-none">
+                            <option value="compliance">إدارة الامتثال</option>
+                            <option value="risk">إدارة المخاطر</option>
+                            <option value="audit">التدقيق الداخلي</option>
+                            <option value="legal">الشؤون القانونية</option>
+                            <option value="it">تقنية المعلومات</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">المسؤول</label>
+                          <select className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-slate-400 focus:outline-none">
+                            {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Compliance Categories */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <Layers className="w-5 h-5" />
+                        تصنيفات الامتثال
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { label: 'AML/CFT', active: true },
+                          { label: 'حماية البيانات', active: false },
+                          { label: 'الأمن السيبراني', active: false },
+                          { label: 'الحوكمة', active: false },
+                          { label: 'التدقيق', active: true },
+                          { label: 'المخاطر', active: false },
+                        ].map(cat => (
+                          <button key={cat.label}
+                            className={`px-3 py-2 rounded-xl text-sm font-bold transition-all ${cat.active
+                              ? 'bg-indigo-500 text-white'
+                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                              }`}>
+                            {cat.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════ TAB 4: APPROVAL WORKFLOW ═══════════════ */}
+              {(uploadForm.activeUploadTab || 0) === 3 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Approval Chain */}
+                  <div className="space-y-5">
+                    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200">
+                      <label className="flex items-center gap-2 font-bold text-emerald-800 mb-4">
+                        <CheckCircle2 className="w-5 h-5" />
+                        سلسلة الموافقات
+                      </label>
+
+                      <div className="space-y-3">
+                        {[
+                          { step: 1, role: 'المراجع الأول', user: 'فاطمة الأحمد', status: 'pending', color: 'amber' },
+                          { step: 2, role: 'مدير الامتثال', user: 'نورة الحربي', status: 'waiting', color: 'slate' },
+                          { step: 3, role: 'المدير التنفيذي', user: 'محمد العتيبي', status: 'waiting', color: 'slate' },
+                        ].map(approver => (
+                          <div key={approver.step} className={`bg-white rounded-xl p-4 border-2 ${approver.status === 'pending' ? 'border-amber-300' : 'border-slate-200'
+                            }`}>
+                            <div className="flex items-center gap-4">
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold ${approver.status === 'approved' ? 'bg-emerald-500 text-white' :
+                                approver.status === 'pending' ? 'bg-amber-500 text-white' :
+                                  'bg-slate-200 text-slate-500'
+                                }`}>
+                                {approver.status === 'approved' ? <Check className="w-5 h-5" /> : approver.step}
+                              </div>
+                              <div className="flex-1">
+                                <p className="font-bold text-slate-800">{approver.role}</p>
+                                <p className="text-sm text-slate-500">{approver.user}</p>
+                              </div>
+                              <span className={`px-3 py-1 rounded-lg text-xs font-bold ${approver.status === 'approved' ? 'bg-emerald-100 text-emerald-700' :
+                                approver.status === 'pending' ? 'bg-amber-100 text-amber-700' :
+                                  'bg-slate-100 text-slate-500'
+                                }`}>
+                                {approver.status === 'approved' ? 'تمت الموافقة' :
+                                  approver.status === 'pending' ? 'قيد المراجعة' : 'في الانتظار'}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <button className="mt-4 w-full px-4 py-2 bg-emerald-100 text-emerald-700 rounded-xl font-bold text-sm hover:bg-emerald-200">
+                        + إضافة موافق
+                      </button>
+                    </div>
+
+                    {/* Notification Settings */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <Bell className="w-5 h-5" />
+                        إعدادات الإشعارات
+                      </label>
+                      <div className="space-y-3">
+                        {[
+                          { label: 'إشعار البريد الإلكتروني', checked: true },
+                          { label: 'إشعار داخل التطبيق', checked: true },
+                          { label: 'تذكير تلقائي بعد 3 أيام', checked: false },
+                          { label: 'تصعيد تلقائي بعد 7 أيام', checked: false },
+                        ].map((opt, idx) => (
+                          <label key={idx} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100">
+                            <span className="text-sm font-bold text-slate-700">{opt.label}</span>
+                            <input type="checkbox" defaultChecked={opt.checked} className="w-5 h-5 rounded text-indigo-500" />
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Digital Signature & Verification */}
+                  <div className="space-y-5">
+                    {/* Digital Signature */}
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 border-2 border-blue-200">
+                      <label className="flex items-center gap-2 font-bold text-blue-800 mb-4">
+                        <Shield className="w-5 h-5" />
+                        التوقيع الإلكتروني
+                      </label>
+
+                      <div className="bg-white rounded-xl p-4 border border-blue-200 mb-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="font-bold text-slate-700">التوقيع مطلوب</span>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" defaultChecked className="sr-only peer" />
+                            <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                          </label>
+                        </div>
+                        <p className="text-xs text-slate-500">سيتم طلب التوقيع الإلكتروني من جميع الموافقين</p>
+                      </div>
+
+                      <div className="p-4 bg-blue-100 rounded-xl border border-blue-200">
+                        <div className="flex items-center gap-3 mb-2">
+                          <Lock className="w-5 h-5 text-blue-600" />
+                          <span className="font-bold text-blue-800">حماية بكلمة مرور</span>
+                        </div>
+                        <input type="password" placeholder="أدخل كلمة مرور للملف (اختياري)"
+                          className="w-full px-4 py-2 border border-blue-200 rounded-lg bg-white focus:border-blue-400 focus:outline-none text-sm" />
+                      </div>
+                    </div>
+
+                    {/* Integrity Verification */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <FileCheck className="w-5 h-5" />
+                        التحقق من السلامة
+                      </label>
+
+                      <div className="space-y-3">
+                        <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                          <div className="flex items-center gap-2 mb-1">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                            <span className="font-bold text-emerald-800 text-sm">SHA-256 Checksum</span>
+                          </div>
+                          <code className="text-xs text-slate-600 break-all">a7f5e8c9d3b2a1...</code>
+                        </div>
+                        <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                          <div className="flex items-center gap-2 mb-1">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                            <span className="font-bold text-emerald-800 text-sm">MD5 Checksum</span>
+                          </div>
+                          <code className="text-xs text-slate-600 break-all">e3b0c442...</code>
+                        </div>
+                        <div className="p-3 bg-blue-50 rounded-xl border border-blue-200">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Shield className="w-4 h-4 text-blue-600" />
+                            <span className="font-bold text-blue-800 text-sm">تحقق من الفيروسات</span>
+                          </div>
+                          <span className="text-xs text-emerald-600 font-bold">✓ الملف نظيف</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Retention Policy */}
+                    <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                      <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                        <Archive className="w-5 h-5" />
+                        سياسة الاحتفاظ
+                      </label>
+                      <select className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-slate-400 focus:outline-none">
+                        <option value="1year">سنة واحدة</option>
+                        <option value="3years">3 سنوات</option>
+                        <option value="5years" selected>5 سنوات</option>
+                        <option value="7years">7 سنوات</option>
+                        <option value="permanent">دائم</option>
+                      </select>
+                      <p className="text-xs text-slate-500 mt-2">سيتم حذف الملف تلقائياً بعد انتهاء فترة الاحتفاظ</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ═══════════════ FOOTER ═══════════════ */}
+            <div className="border-t-2 border-slate-200 px-8 py-4 bg-gradient-to-r from-slate-50 to-slate-100 flex items-center justify-between">
+              <button onClick={() => setShowUploadModal(false)} className="px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white">
+                إلغاء
+              </button>
+
+              {/* Tab Navigation */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setUploadForm({ ...uploadForm, activeUploadTab: Math.max(0, (uploadForm.activeUploadTab || 0) - 1) })}
+                  disabled={(uploadForm.activeUploadTab || 0) === 0}
+                  className={`px-4 py-2 rounded-xl font-bold text-sm ${(uploadForm.activeUploadTab || 0) === 0 ? 'bg-slate-100 text-slate-300' : 'bg-white border-2 border-slate-300 text-slate-700 hover:border-purple-500'
+                    }`}>
+                  <ChevronRight className="w-4 h-4 inline" /> السابق
+                </button>
+                <div className="flex gap-1 px-2">
+                  {[0, 1, 2, 3].map(idx => (
+                    <button key={idx}
+                      onClick={() => setUploadForm({ ...uploadForm, activeUploadTab: idx })}
+                      className={`w-8 h-8 rounded-lg font-bold text-sm ${(uploadForm.activeUploadTab || 0) === idx ? 'bg-purple-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}>
+                      {idx + 1}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setUploadForm({ ...uploadForm, activeUploadTab: Math.min(3, (uploadForm.activeUploadTab || 0) + 1) })}
+                  disabled={(uploadForm.activeUploadTab || 0) === 3}
+                  className={`px-4 py-2 rounded-xl font-bold text-sm ${(uploadForm.activeUploadTab || 0) === 3 ? 'bg-slate-100 text-slate-300' : 'bg-white border-2 border-slate-300 text-slate-700 hover:border-purple-500'
+                    }`}>
+                  التالي <ChevronLeft className="w-4 h-4 inline" />
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">نوع الدليل *</label>
-                  <select value={uploadForm.evidenceType} onChange={(e) => setUploadForm({ ...uploadForm, evidenceType: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:outline-none">
-                    <option value="">اختر النوع...</option>
-                    {Object.entries(TYPE_CONFIG).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">الأولوية</label>
-                  <select value={uploadForm.priority} onChange={(e) => setUploadForm({ ...uploadForm, priority: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:outline-none">
-                    {Object.entries(PRIORITY_CONFIG).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">عنوان الدليل *</label>
-                <input type="text" value={uploadForm.title} onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:outline-none" placeholder="مثال: تقرير الامتثال الشهري - يناير 2025" />
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">نهاية الصلاحية *</label>
-                  <input type="date" value={uploadForm.validityEnd} onChange={(e) => setUploadForm({ ...uploadForm, validityEnd: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">الفترة المرجعية</label>
-                  <input type="text" value={uploadForm.period} onChange={(e) => setUploadForm({ ...uploadForm, period: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="مثال: 2025-01" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">التصنيف</label>
-                  <select value={uploadForm.confidentiality} onChange={(e) => setUploadForm({ ...uploadForm, confidentiality: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
-                    {Object.entries(CONFIDENTIALITY_CONFIG).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">الوسوم (Tags)</label>
-                <input type="text" value={uploadForm.tags} onChange={(e) => setUploadForm({ ...uploadForm, tags: e.target.value })}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="أدخل الوسوم مفصولة بفاصلة" />
-              </div>
-            </div>
-            <div className="border-t-2 border-slate-200 px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 flex items-center justify-between">
-              <button onClick={() => setShowUploadModal(false)} className="px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white">إلغاء</button>
-              <button onClick={handleUpload} className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl">
+              <button onClick={() => {
+                alert('تم رفع الدليل بنجاح! 🎉\nسيتم إرسال الإشعارات للموافقين.');
+                setShowUploadModal(false);
+              }} className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-violet-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl">
                 <Upload className="w-5 h-5" />رفع الدليل
               </button>
             </div>
@@ -14465,13 +16664,44 @@ const EvidenceRepository = () => {
             <div className="border-t-2 border-slate-200 px-6 py-4 bg-slate-50 flex items-center justify-between">
               <button onClick={() => setShowDetailModal(false)} className="px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white">إغلاق</button>
               <div className="flex items-center gap-2">
+                {/* Edit Button */}
+                {selectedEvidence.status !== 'Accepted' && (
+                  <button onClick={() => {
+                    setUploadForm({
+                      ...uploadForm,
+                      editingEvidence: selectedEvidence,
+                      editMode: true,
+                      title: selectedEvidence.title,
+                      evidenceType: selectedEvidence.evidenceType,
+                      period: selectedEvidence.period,
+                      validityEnd: selectedEvidence.validityEnd,
+                      priority: selectedEvidence.priority,
+                      confidentiality: selectedEvidence.confidentiality,
+                      tags: selectedEvidence.tags?.join(', ') || ''
+                    });
+                    setShowDetailModal(false);
+                    setShowUploadModal(true);
+                  }} className="flex items-center gap-2 px-5 py-3 bg-amber-100 text-amber-700 rounded-xl font-bold hover:bg-amber-200">
+                    <Edit className="w-5 h-5" />تعديل
+                  </button>
+                )}
                 {canReview(selectedEvidence) && (
-                  <button onClick={() => { setShowDetailModal(false); setRejectComment(''); setShowReviewModal(true); }} className="flex items-center gap-2 px-5 py-3 bg-amber-100 text-amber-700 rounded-xl font-bold hover:bg-amber-200">
+                  <button onClick={() => { setShowDetailModal(false); setRejectComment(''); setShowReviewModal(true); }} className="flex items-center gap-2 px-5 py-3 bg-purple-100 text-purple-700 rounded-xl font-bold hover:bg-purple-200">
                     <ClipboardCheck className="w-5 h-5" />مراجعة
                   </button>
                 )}
                 <button className="flex items-center gap-2 px-5 py-3 bg-indigo-100 text-indigo-700 rounded-xl font-bold hover:bg-indigo-200">
                   <Download className="w-5 h-5" />تحميل
+                </button>
+                {/* Delete Button */}
+                <button onClick={() => {
+                  if (confirm('هل أنت متأكد من حذف هذا الدليل؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                    setEvidence(evidence.filter(e => e.id !== selectedEvidence.id));
+                    setShowDetailModal(false);
+                    alert('تم حذف الدليل بنجاح! 🗑️');
+                  }
+                }} className="flex items-center gap-2 px-5 py-3 bg-red-100 text-red-700 rounded-xl font-bold hover:bg-red-200">
+                  <Trash2 className="w-5 h-5" />حذف
                 </button>
               </div>
             </div>
@@ -14479,144 +16709,753 @@ const EvidenceRepository = () => {
         </div>
       )}
 
-      {/* ═══════════════════ DOCUMENT MODAL - CREATE/EDIT/VIEW ═══════════════════ */}
-      {showDocModal && (
+      {/* ═══════════════════ QUICK EDIT MODAL ═══════════════════ */}
+      {uploadForm.quickEditEvidence && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className={`px-6 py-5 text-white ${docModalMode === 'create' ? 'bg-gradient-to-l from-purple-500 to-indigo-600' : docModalMode === 'edit' ? 'bg-gradient-to-l from-amber-500 to-orange-600' : 'bg-gradient-to-l from-blue-500 to-indigo-600'}`}>
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden">
+            <div className="bg-gradient-to-l from-amber-500 to-orange-600 px-6 py-5 text-white">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center">
-                    {docModalMode === 'create' ? <Plus className="w-7 h-7" /> : docModalMode === 'edit' ? <Edit className="w-7 h-7" /> : <FileText className="w-7 h-7" />}
+                    <Edit className="w-7 h-7" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold">
-                      {docModalMode === 'create' ? 'إضافة وثيقة جديدة' : docModalMode === 'edit' ? 'تعديل الوثيقة' : 'تفاصيل الوثيقة'}
-                    </h2>
-                    <p className="text-white/80 text-sm">
-                      {docModalMode === 'view' && selectedDoc ? selectedDoc.code : 'Document Management'}
-                    </p>
+                    <h2 className="text-xl font-bold">تعديل سريع</h2>
+                    <p className="text-amber-100">{uploadForm.quickEditEvidence.code} - Quick Edit</p>
                   </div>
                 </div>
-                <button onClick={() => setShowDocModal(false)} className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl">
+                <button onClick={() => setUploadForm({ ...uploadForm, quickEditEvidence: null })} className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl">
                   <X className="w-6 h-6" />
                 </button>
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-5">
-              {docModalMode === 'view' && selectedDoc ? (
-                <>
-                  <div className="bg-slate-50 rounded-xl p-4">
-                    <h3 className="font-bold text-slate-800 text-lg">{selectedDoc.titleAr}</h3>
-                    <p className="text-slate-500">{selectedDoc.titleEn}</p>
+            <div className="p-6 space-y-5">
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">العنوان *</label>
+                <input type="text" defaultValue={uploadForm.quickEditEvidence.title}
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">النوع</label>
+                  <select defaultValue={uploadForm.quickEditEvidence.evidenceType}
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                    {Object.entries(TYPE_CONFIG).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">الحالة</label>
+                  <select defaultValue={uploadForm.quickEditEvidence.status}
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                    {Object.entries(STATUS_CONFIG).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">الفترة المرجعية</label>
+                  <input type="text" defaultValue={uploadForm.quickEditEvidence.period}
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">نهاية الصلاحية</label>
+                  <input type="date" defaultValue={uploadForm.quickEditEvidence.validityEnd}
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">الأولوية</label>
+                  <div className="flex gap-2">
+                    {[
+                      { value: 'Critical', label: 'حرج', color: 'red' },
+                      { value: 'High', label: 'عالي', color: 'orange' },
+                      { value: 'Medium', label: 'متوسط', color: 'amber' },
+                      { value: 'Low', label: 'منخفض', color: 'emerald' },
+                    ].map(pri => (
+                      <button key={pri.value} type="button"
+                        className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${uploadForm.quickEditEvidence.priority === pri.value
+                          ? `bg-${pri.color}-500 text-white`
+                          : `bg-${pri.color}-50 text-${pri.color}-700 hover:bg-${pri.color}-100`
+                          }`}>
+                        {pri.label}
+                      </button>
+                    ))}
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-slate-50 rounded-xl p-4">
-                      <p className="text-xs text-slate-500 mb-1">نوع الوثيقة</p>
-                      <p className="font-bold text-slate-800">{DOC_TYPE_CONFIG[selectedDoc.docType]?.label || selectedDoc.docType}</p>
-                    </div>
-                    <div className="bg-slate-50 rounded-xl p-4">
-                      <p className="text-xs text-slate-500 mb-1">التصنيف</p>
-                      <p className="font-bold text-slate-800">{selectedDoc.classification === 'Confidential' ? 'سري' : selectedDoc.classification === 'Internal' ? 'داخلي' : 'عام'}</p>
-                    </div>
-                    <div className="bg-slate-50 rounded-xl p-4">
-                      <p className="text-xs text-slate-500 mb-1">الإصدار</p>
-                      <p className="font-bold text-slate-800">{selectedDoc.version}</p>
-                    </div>
-                    <div className="bg-slate-50 rounded-xl p-4">
-                      <p className="text-xs text-slate-500 mb-1">الحالة</p>
-                      <span className={`px-2 py-1 rounded text-xs font-bold ${selectedDoc.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
-                        {selectedDoc.status === 'Active' ? 'نشط' : 'قيد المراجعة'}
-                      </span>
-                    </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">التصنيف السري</label>
+                  <select defaultValue={uploadForm.quickEditEvidence.confidentiality}
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                    <option value="Public">عام</option>
+                    <option value="Internal">داخلي</option>
+                    <option value="Confidential">سري</option>
+                    <option value="Restricted">مقيد</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">الوسوم</label>
+                <input type="text" defaultValue={uploadForm.quickEditEvidence.tags?.join(', ')}
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none"
+                  placeholder="أدخل الوسوم مفصولة بفاصلة" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">المسؤول</label>
+                <select defaultValue={uploadForm.quickEditEvidence.ownerId}
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                  {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div className="border-t-2 border-slate-200 px-6 py-4 bg-slate-50 flex items-center justify-between">
+              <button onClick={() => setUploadForm({ ...uploadForm, quickEditEvidence: null })}
+                className="px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white">
+                إلغاء
+              </button>
+              <button onClick={() => {
+                alert('تم حفظ التعديلات بنجاح! ✅');
+                setUploadForm({ ...uploadForm, quickEditEvidence: null });
+              }} className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl">
+                <Save className="w-5 h-5" />حفظ التعديلات
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════ DOCUMENT MODAL - CREATE/EDIT/VIEW ═══════════════════ */}
+      {/* ═══════════════════ WORLD-CLASS DOCUMENT MANAGEMENT MODAL ═══════════════════ */}
+      {showDocModal && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[95vh] overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className={`px-8 py-5 text-white ${docModalMode === 'create' ? 'bg-gradient-to-l from-purple-600 via-indigo-600 to-violet-700' : docModalMode === 'edit' ? 'bg-gradient-to-l from-amber-500 via-orange-500 to-red-500' : 'bg-gradient-to-l from-blue-600 via-indigo-600 to-purple-600'}`}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    {docModalMode === 'create' ? <FilePlus className="w-8 h-8" /> : docModalMode === 'edit' ? <Edit className="w-8 h-8" /> : <FileText className="w-8 h-8" />}
                   </div>
-                  {selectedDoc.description && (
-                    <div className="bg-slate-50 rounded-xl p-4">
-                      <p className="text-xs text-slate-500 mb-1">الوصف</p>
-                      <p className="text-slate-700">{selectedDoc.description}</p>
+                  <div>
+                    <h2 className="text-2xl font-black">
+                      {docModalMode === 'create' ? 'إضافة وثيقة جديدة' : docModalMode === 'edit' ? 'تعديل الوثيقة' : 'تفاصيل الوثيقة'}
+                    </h2>
+                    <p className="text-white/80">
+                      {docModalMode === 'view' && selectedDoc ? `${selectedDoc.code} - ${selectedDoc.titleAr}` : 'Enterprise Document Management System'}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  {docModalMode === 'view' && selectedDoc && (
+                    <div className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-xl">
+                      <span className={`w-3 h-3 rounded-full ${selectedDoc.status === 'Active' ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
+                      <span className="font-bold">{selectedDoc.status === 'Active' ? 'نشط' : 'قيد المراجعة'}</span>
                     </div>
                   )}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
-                      <p className="text-xs text-purple-600 mb-2">المالك</p>
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold text-sm">{selectedDoc.ownerName?.charAt(0)}</div>
-                        <span className="font-bold text-slate-800">{selectedDoc.ownerName}</span>
+                  <button onClick={() => setShowDocModal(false)} className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl">
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Tab Navigation for Create/Edit */}
+              {docModalMode !== 'view' && (
+                <div className="flex gap-1 bg-white/10 rounded-xl p-1">
+                  {[
+                    { id: 0, label: 'المعلومات الأساسية', icon: FileText },
+                    { id: 1, label: 'التصنيف والنطاق', icon: Layers },
+                    { id: 2, label: 'الموافقات والنشر', icon: CheckCircle2 },
+                    { id: 3, label: 'الملفات المرفقة', icon: Paperclip },
+                  ].map(tab => (
+                    <button key={tab.id}
+                      onClick={() => setDocForm({ ...docForm, activeTab: tab.id })}
+                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-bold transition-all ${(docForm.activeTab || 0) === tab.id
+                        ? 'bg-white text-purple-700 shadow-lg'
+                        : 'text-white/80 hover:bg-white/10'
+                        }`}>
+                      <tab.icon className="w-4 h-4" />
+                      <span className="text-sm">{tab.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {docModalMode === 'view' && selectedDoc ? (
+                /* ═══════════════ VIEW MODE ═══════════════ */
+                <div className="grid grid-cols-3 gap-6">
+                  {/* Left Column - Main Info */}
+                  <div className="col-span-2 space-y-5">
+                    {/* Title Card */}
+                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 border-2 border-indigo-200">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h3 className="text-2xl font-black text-slate-800">{selectedDoc.titleAr}</h3>
+                          <p className="text-slate-500 text-lg">{selectedDoc.titleEn}</p>
+                        </div>
+                        <span className="font-mono text-sm bg-indigo-500 text-white px-3 py-1 rounded-lg">{selectedDoc.code}</span>
                       </div>
+                      {selectedDoc.description && (
+                        <p className="text-slate-600 bg-white/50 rounded-xl p-3">{selectedDoc.description}</p>
+                      )}
                     </div>
-                    <div className="bg-indigo-50 rounded-xl p-4 border border-indigo-200">
-                      <p className="text-xs text-indigo-600 mb-2">الإحصائيات</p>
-                      <div className="flex items-center gap-4">
-                        <span className="text-sm"><Download className="w-4 h-4 inline ml-1" />{selectedDoc.downloads} تحميل</span>
-                        <span className="text-sm"><Link2 className="w-4 h-4 inline ml-1" />{selectedDoc.linkedEvidence} أدلة</span>
+
+                    {/* Details Grid */}
+                    <div className="grid grid-cols-4 gap-3">
+                      {[
+                        { label: 'نوع الوثيقة', value: DOC_TYPE_CONFIG[selectedDoc.docType]?.label, icon: FileText, color: 'blue' },
+                        { label: 'التصنيف', value: selectedDoc.classification === 'Confidential' ? 'سري' : selectedDoc.classification === 'Internal' ? 'داخلي' : 'عام', icon: Lock, color: selectedDoc.classification === 'Confidential' ? 'red' : 'emerald' },
+                        { label: 'الإصدار', value: selectedDoc.version, icon: GitBranch, color: 'purple' },
+                        { label: 'آخر تحديث', value: selectedDoc.lastUpdated, icon: Calendar, color: 'amber' },
+                      ].map((item, idx) => (
+                        <div key={idx} className={`bg-${item.color}-50 rounded-xl p-4 border border-${item.color}-200`}>
+                          <div className="flex items-center gap-2 mb-2">
+                            <item.icon className={`w-4 h-4 text-${item.color}-600`} />
+                            <p className={`text-xs text-${item.color}-600`}>{item.label}</p>
+                          </div>
+                          <p className="font-bold text-slate-800">{item.value}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Version History */}
+                    <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
+                      <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <History className="w-5 h-5 text-indigo-600" />
+                        سجل الإصدارات
+                      </h4>
+                      <div className="space-y-2">
+                        {[
+                          { version: selectedDoc.version, date: selectedDoc.lastUpdated, user: selectedDoc.ownerName, status: 'current' },
+                          { version: 'v1.2', date: '2024-12-15', user: 'فاطمة الأحمد', status: 'old' },
+                          { version: 'v1.0', date: '2024-06-01', user: 'أحمد السعيد', status: 'old' },
+                        ].map((ver, idx) => (
+                          <div key={idx} className={`flex items-center justify-between p-3 rounded-xl ${ver.status === 'current' ? 'bg-emerald-100 border border-emerald-200' : 'bg-white border border-slate-200'}`}>
+                            <div className="flex items-center gap-3">
+                              <span className={`px-2 py-1 rounded font-mono text-sm font-bold ${ver.status === 'current' ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                                {ver.version}
+                              </span>
+                              <span className="text-sm text-slate-600">{ver.date}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-slate-500">{ver.user}</span>
+                              {ver.status === 'current' && <span className="px-2 py-0.5 bg-emerald-500 text-white text-xs rounded font-bold">الحالي</span>}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
-                  <div className="text-xs text-slate-500">آخر تحديث: {selectedDoc.lastUpdated}</div>
-                </>
+
+                  {/* Right Column - Sidebar */}
+                  <div className="space-y-5">
+                    {/* Owner Card */}
+                    <div className="bg-purple-50 rounded-2xl p-5 border-2 border-purple-200">
+                      <h4 className="font-bold text-purple-800 mb-3 flex items-center gap-2">
+                        <User className="w-5 h-5" />المالك
+                      </h4>
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-purple-500 text-white flex items-center justify-center font-bold text-lg">
+                          {selectedDoc.ownerName?.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-800">{selectedDoc.ownerName}</p>
+                          <p className="text-sm text-slate-500">إدارة الامتثال</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Statistics */}
+                    <div className="bg-indigo-50 rounded-2xl p-5 border-2 border-indigo-200">
+                      <h4 className="font-bold text-indigo-800 mb-4 flex items-center gap-2">
+                        <BarChart3 className="w-5 h-5" />الإحصائيات
+                      </h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="text-center p-3 bg-white rounded-xl">
+                          <p className="text-2xl font-black text-indigo-600">{selectedDoc.downloads}</p>
+                          <p className="text-xs text-slate-500">تحميل</p>
+                        </div>
+                        <div className="text-center p-3 bg-white rounded-xl">
+                          <p className="text-2xl font-black text-emerald-600">{selectedDoc.linkedEvidence}</p>
+                          <p className="text-xs text-slate-500">أدلة مرتبطة</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Related Docs */}
+                    <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
+                      <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <Link2 className="w-5 h-5 text-slate-600" />وثائق مرتبطة
+                      </h4>
+                      <div className="space-y-2">
+                        {['إجراءات العناية الواجبة', 'دليل التدريب'].map((doc, idx) => (
+                          <div key={idx} className="flex items-center gap-2 p-2 bg-white rounded-lg hover:bg-indigo-50 cursor-pointer">
+                            <FileText className="w-4 h-4 text-indigo-500" />
+                            <span className="text-sm text-slate-700">{doc}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="space-y-2">
+                      <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-500 text-white rounded-xl font-bold hover:bg-indigo-600">
+                        <Download className="w-5 h-5" />تحميل الوثيقة
+                      </button>
+                      <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-purple-100 text-purple-700 rounded-xl font-bold hover:bg-purple-200">
+                        <Eye className="w-5 h-5" />معاينة
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ) : (
+                /* ═══════════════ CREATE/EDIT MODE ═══════════════ */
                 <>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-bold text-slate-700 mb-2">العنوان بالعربية *</label>
-                      <input type="text" value={docForm.titleAr} onChange={(e) => setDocForm({ ...docForm, titleAr: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-500 focus:outline-none" placeholder="سياسة..." />
+                  {/* Tab 1: Basic Info */}
+                  {(docForm.activeTab || 0) === 0 && (
+                    <div className="grid grid-cols-2 gap-6">
+                      {/* Left Column */}
+                      <div className="space-y-5">
+                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 border-2 border-indigo-200">
+                          <label className="flex items-center gap-2 font-bold text-indigo-800 mb-4">
+                            <span className="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center text-sm">1</span>
+                            العنوان بالعربية *
+                          </label>
+                          <input type="text" value={docForm.titleAr} onChange={(e) => setDocForm({ ...docForm, titleAr: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:outline-none text-lg font-bold"
+                            placeholder="مثال: سياسة مكافحة غسل الأموال" />
+                        </div>
+
+                        <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                          <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                            <span className="w-8 h-8 rounded-xl bg-purple-500 text-white flex items-center justify-center text-sm">2</span>
+                            العنوان بالإنجليزية *
+                          </label>
+                          <input type="text" value={docForm.titleEn} onChange={(e) => setDocForm({ ...docForm, titleEn: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                            placeholder="Example: Anti-Money Laundering Policy" />
+                        </div>
+
+                        <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                          <label className="flex items-center gap-2 font-bold text-slate-800 mb-4">
+                            <span className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-sm">3</span>
+                            نوع الوثيقة
+                          </label>
+                          <div className="grid grid-cols-3 gap-2">
+                            {[
+                              { value: 'Policy', label: 'سياسة', icon: '📜' },
+                              { value: 'Procedure', label: 'إجراء', icon: '📋' },
+                              { value: 'Guide', label: 'دليل', icon: '📖' },
+                              { value: 'Standard', label: 'معيار', icon: '📏' },
+                              { value: 'Framework', label: 'إطار', icon: '🏗️' },
+                              { value: 'Manual', label: 'دليل عمل', icon: '📚' },
+                            ].map(type => (
+                              <button key={type.value} type="button"
+                                onClick={() => setDocForm({ ...docForm, docType: type.value })}
+                                className={`p-3 rounded-xl border-2 transition-all ${docForm.docType === type.value
+                                  ? 'border-emerald-500 bg-emerald-50'
+                                  : 'border-slate-200 bg-white hover:border-slate-300'
+                                  }`}>
+                                <span className="text-xl">{type.icon}</span>
+                                <p className={`text-sm font-bold mt-1 ${docForm.docType === type.value ? 'text-emerald-700' : 'text-slate-700'}`}>
+                                  {type.label}
+                                </p>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right Column */}
+                      <div className="space-y-5">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-blue-50 rounded-2xl p-5 border-2 border-blue-200">
+                            <label className="flex items-center gap-2 font-bold text-blue-800 mb-3">
+                              <Lock className="w-5 h-5" />التصنيف السري
+                            </label>
+                            <div className="space-y-2">
+                              {[
+                                { value: 'Public', label: 'عام', color: 'emerald', desc: 'متاح للجميع' },
+                                { value: 'Internal', label: 'داخلي', color: 'blue', desc: 'للموظفين فقط' },
+                                { value: 'Confidential', label: 'سري', color: 'amber', desc: 'محدود الوصول' },
+                                { value: 'Restricted', label: 'مقيد', color: 'red', desc: 'حساس جداً' },
+                              ].map(cls => (
+                                <button key={cls.value} type="button"
+                                  onClick={() => setDocForm({ ...docForm, classification: cls.value })}
+                                  className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-all ${docForm.classification === cls.value
+                                    ? `border-${cls.color}-500 bg-${cls.color}-100`
+                                    : 'border-slate-200 bg-white hover:border-slate-300'
+                                    }`}>
+                                  <div className="flex items-center gap-2">
+                                    <span className={`w-3 h-3 rounded-full bg-${cls.color}-500`}></span>
+                                    <span className="font-bold text-slate-700">{cls.label}</span>
+                                  </div>
+                                  <span className="text-xs text-slate-500">{cls.desc}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <div className="bg-purple-50 rounded-2xl p-5 border-2 border-purple-200">
+                              <label className="flex items-center gap-2 font-bold text-purple-800 mb-3">
+                                <GitBranch className="w-5 h-5" />الإصدار
+                              </label>
+                              <input type="text" value={docForm.version} onChange={(e) => setDocForm({ ...docForm, version: e.target.value })}
+                                className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:outline-none font-mono font-bold text-center"
+                                placeholder="v1.0" />
+                            </div>
+
+                            <div className="bg-amber-50 rounded-2xl p-5 border-2 border-amber-200">
+                              <label className="flex items-center gap-2 font-bold text-amber-800 mb-3">
+                                <User className="w-5 h-5" />المالك
+                              </label>
+                              <select value={docForm.ownerId} onChange={(e) => setDocForm({ ...docForm, ownerId: parseInt(e.target.value) })}
+                                className="w-full px-4 py-3 border-2 border-amber-200 rounded-xl focus:border-amber-500 focus:outline-none font-bold">
+                                {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                          <label className="flex items-center gap-2 font-bold text-slate-800 mb-3">
+                            <FileText className="w-5 h-5" />الوصف
+                          </label>
+                          <textarea value={docForm.description} onChange={(e) => setDocForm({ ...docForm, description: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:outline-none resize-none"
+                            rows={4} placeholder="وصف تفصيلي للوثيقة وأهدافها ونطاق تطبيقها..." />
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-bold text-slate-700 mb-2">العنوان بالإنجليزية *</label>
-                      <input type="text" value={docForm.titleEn} onChange={(e) => setDocForm({ ...docForm, titleEn: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-500 focus:outline-none" placeholder="Policy..." />
+                  )}
+
+                  {/* Tab 2: Classification & Scope */}
+                  {(docForm.activeTab || 0) === 1 && (
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-5">
+                        {/* Regulatory Framework */}
+                        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 border-2 border-blue-200">
+                          <h4 className="font-bold text-blue-800 mb-4 flex items-center gap-2">
+                            <Building2 className="w-5 h-5" />الإطار التنظيمي
+                          </h4>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-bold text-slate-600 mb-2">الجهة الرقابية</label>
+                              <select className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:outline-none">
+                                <option value="">اختر الجهة...</option>
+                                <option value="SAMA">SAMA - البنك المركزي</option>
+                                <option value="CMA">CMA - هيئة السوق المالية</option>
+                                <option value="NCA">NCA - الأمن السيبراني</option>
+                                <option value="SDAIA">SDAIA - حماية البيانات</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-bold text-slate-600 mb-2">المتطلب التنظيمي</label>
+                              <select className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:outline-none">
+                                <option value="">اختر المتطلب...</option>
+                                <option value="AML">مكافحة غسل الأموال</option>
+                                <option value="KYC">اعرف عميلك</option>
+                                <option value="Cyber">الأمن السيبراني</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Tags */}
+                        <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                          <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <Tag className="w-5 h-5" />الوسوم والتصنيفات
+                          </h4>
+                          <input type="text" placeholder="أدخل الوسوم مفصولة بفاصلة..."
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:outline-none mb-3" />
+                          <div className="flex flex-wrap gap-2">
+                            {['AML', 'سياسة', 'SAMA', 'امتثال'].map(tag => (
+                              <span key={tag} className="px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-lg text-sm font-bold flex items-center gap-1">
+                                {tag}
+                                <X className="w-3 h-3 cursor-pointer hover:text-indigo-900" />
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Applicable Departments */}
+                        <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                          <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <Building className="w-5 h-5" />الإدارات المعنية
+                          </h4>
+                          <div className="grid grid-cols-2 gap-2">
+                            {['الامتثال', 'المخاطر', 'التدقيق', 'تقنية المعلومات', 'الشؤون القانونية', 'الموارد البشرية'].map(dept => (
+                              <label key={dept} className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100">
+                                <input type="checkbox" className="w-4 h-4 rounded text-indigo-500" />
+                                <span className="text-sm font-bold text-slate-700">{dept}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-5">
+                        {/* Validity Period */}
+                        <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border-2 border-amber-200">
+                          <h4 className="font-bold text-amber-800 mb-4 flex items-center gap-2">
+                            <Calendar className="w-5 h-5" />فترة الصلاحية
+                          </h4>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-bold text-slate-600 mb-2">تاريخ السريان</label>
+                              <input type="date" className="w-full px-4 py-3 border-2 border-amber-200 rounded-xl focus:border-amber-500 focus:outline-none" />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-bold text-slate-600 mb-2">تاريخ الانتهاء</label>
+                              <input type="date" className="w-full px-4 py-3 border-2 border-amber-200 rounded-xl focus:border-amber-500 focus:outline-none" />
+                            </div>
+                          </div>
+                          <div className="mt-3">
+                            <label className="block text-xs font-bold text-slate-600 mb-2">دورة المراجعة</label>
+                            <select className="w-full px-4 py-3 border-2 border-amber-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                              <option value="annual">سنوي</option>
+                              <option value="biannual">نصف سنوي</option>
+                              <option value="quarterly">ربع سنوي</option>
+                              <option value="asneeded">حسب الحاجة</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Related Documents */}
+                        <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                          <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <Link2 className="w-5 h-5" />وثائق مرتبطة
+                          </h4>
+                          <select className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:outline-none mb-3">
+                            <option value="">اختر وثيقة للربط...</option>
+                            {documents.map(d => <option key={d.id} value={d.id}>{d.titleAr}</option>)}
+                          </select>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between p-2 bg-indigo-50 rounded-lg">
+                              <span className="text-sm font-bold text-slate-700">إجراءات العناية الواجبة</span>
+                              <button className="text-red-500 hover:text-red-700"><X className="w-4 h-4" /></button>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Access Control */}
+                        <div className="bg-red-50 rounded-2xl p-5 border-2 border-red-200">
+                          <h4 className="font-bold text-red-800 mb-4 flex items-center gap-2">
+                            <Lock className="w-5 h-5" />صلاحيات الوصول
+                          </h4>
+                          <div className="space-y-2">
+                            {[
+                              { label: 'قراءة فقط', desc: 'يمكن العرض فقط' },
+                              { label: 'قراءة وتحميل', desc: 'يمكن العرض والتحميل' },
+                              { label: 'كامل', desc: 'يمكن التعديل والحذف' },
+                            ].map((perm, idx) => (
+                              <label key={idx} className="flex items-center justify-between p-3 bg-white rounded-xl cursor-pointer hover:bg-red-100">
+                                <div>
+                                  <p className="font-bold text-slate-700">{perm.label}</p>
+                                  <p className="text-xs text-slate-500">{perm.desc}</p>
+                                </div>
+                                <input type="radio" name="access" className="w-4 h-4 text-red-500" />
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-sm font-bold text-slate-700 mb-2">نوع الوثيقة</label>
-                      <select value={docForm.docType} onChange={(e) => setDocForm({ ...docForm, docType: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
-                        {Object.entries(DOC_TYPE_CONFIG).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
-                      </select>
+                  )}
+
+                  {/* Tab 3: Approval Workflow */}
+                  {(docForm.activeTab || 0) === 2 && (
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-5">
+                        {/* Approval Chain */}
+                        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200">
+                          <h4 className="font-bold text-emerald-800 mb-4 flex items-center gap-2">
+                            <CheckCircle2 className="w-5 h-5" />سلسلة الموافقات
+                          </h4>
+                          <div className="space-y-3">
+                            {[
+                              { step: 1, role: 'المراجع', user: '' },
+                              { step: 2, role: 'مدير الامتثال', user: '' },
+                              { step: 3, role: 'المدير التنفيذي', user: '' },
+                            ].map(approver => (
+                              <div key={approver.step} className="bg-white rounded-xl p-4 border border-emerald-200">
+                                <div className="flex items-center gap-4">
+                                  <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold">
+                                    {approver.step}
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="font-bold text-slate-700 mb-1">{approver.role}</p>
+                                    <select className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm">
+                                      <option value="">اختر الموظف...</option>
+                                      {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <button className="mt-3 w-full px-4 py-2 bg-emerald-100 text-emerald-700 rounded-xl font-bold text-sm hover:bg-emerald-200">
+                            + إضافة موافق
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-5">
+                        {/* Notification Settings */}
+                        <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
+                          <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <Bell className="w-5 h-5" />إعدادات الإشعارات
+                          </h4>
+                          <div className="space-y-3">
+                            {[
+                              { label: 'إشعار البريد الإلكتروني', checked: true },
+                              { label: 'إشعار داخل التطبيق', checked: true },
+                              { label: 'تذكير قبل انتهاء الصلاحية', checked: false },
+                              { label: 'إشعار عند التحديث', checked: true },
+                            ].map((opt, idx) => (
+                              <label key={idx} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100">
+                                <span className="text-sm font-bold text-slate-700">{opt.label}</span>
+                                <input type="checkbox" defaultChecked={opt.checked} className="w-5 h-5 rounded text-indigo-500" />
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Publish Options */}
+                        <div className="bg-blue-50 rounded-2xl p-5 border-2 border-blue-200">
+                          <h4 className="font-bold text-blue-800 mb-4 flex items-center gap-2">
+                            <Globe className="w-5 h-5" />خيارات النشر
+                          </h4>
+                          <div className="space-y-3">
+                            <label className="flex items-center justify-between p-3 bg-white rounded-xl cursor-pointer">
+                              <div>
+                                <p className="font-bold text-slate-700">نشر فوري</p>
+                                <p className="text-xs text-slate-500">تنشر الوثيقة فور الاعتماد</p>
+                              </div>
+                              <input type="radio" name="publish" className="w-4 h-4 text-blue-500" defaultChecked />
+                            </label>
+                            <label className="flex items-center justify-between p-3 bg-white rounded-xl cursor-pointer">
+                              <div>
+                                <p className="font-bold text-slate-700">نشر مجدول</p>
+                                <p className="text-xs text-slate-500">تحديد تاريخ النشر</p>
+                              </div>
+                              <input type="radio" name="publish" className="w-4 h-4 text-blue-500" />
+                            </label>
+                            <label className="flex items-center justify-between p-3 bg-white rounded-xl cursor-pointer">
+                              <div>
+                                <p className="font-bold text-slate-700">مسودة</p>
+                                <p className="text-xs text-slate-500">حفظ كمسودة للمراجعة</p>
+                              </div>
+                              <input type="radio" name="publish" className="w-4 h-4 text-blue-500" />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-bold text-slate-700 mb-2">التصنيف</label>
-                      <select value={docForm.classification} onChange={(e) => setDocForm({ ...docForm, classification: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
-                        <option value="Public">عام</option>
-                        <option value="Internal">داخلي</option>
-                        <option value="Confidential">سري</option>
-                      </select>
+                  )}
+
+                  {/* Tab 4: Attachments */}
+                  {(docForm.activeTab || 0) === 3 && (
+                    <div className="space-y-6">
+                      {/* Main File Upload */}
+                      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border-2 border-indigo-200">
+                        <h4 className="font-bold text-indigo-800 mb-4 flex items-center gap-2">
+                          <FileText className="w-5 h-5" />ملف الوثيقة الرئيسي *
+                        </h4>
+                        <div className={`border-3 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer ${dragOver ? 'border-indigo-500 bg-indigo-100' : 'border-indigo-300 hover:border-indigo-400 hover:bg-indigo-50'
+                          }`}>
+                          <div className="w-16 h-16 rounded-2xl bg-indigo-100 flex items-center justify-center mx-auto mb-4">
+                            <Upload className="w-8 h-8 text-indigo-600" />
+                          </div>
+                          <p className="text-slate-800 font-bold text-lg mb-2">اسحب الملف هنا أو انقر للاختيار</p>
+                          <p className="text-sm text-slate-500 mb-4">PDF, DOCX, DOC (حتى 50 MB)</p>
+                          <button className="px-6 py-3 bg-indigo-500 text-white rounded-xl font-bold hover:bg-indigo-600">
+                            <FolderPlus className="w-5 h-5 inline ml-2" />اختيار ملف
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Additional Attachments */}
+                      <div className="bg-white rounded-2xl p-6 border-2 border-slate-200">
+                        <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                          <Paperclip className="w-5 h-5" />مرفقات إضافية
+                        </h4>
+                        <div className="grid grid-cols-3 gap-4 mb-4">
+                          {[
+                            { name: 'attachment_1.pdf', size: '1.2 MB', type: 'PDF' },
+                            { name: 'appendix.xlsx', size: '456 KB', type: 'XLSX' },
+                          ].map((file, idx) => (
+                            <div key={idx} className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${file.type === 'PDF' ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'
+                                }`}>
+                                <FileText className="w-5 h-5" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-bold text-slate-800 text-sm truncate">{file.name}</p>
+                                <p className="text-xs text-slate-500">{file.size}</p>
+                              </div>
+                              <button className="text-red-500 hover:text-red-700">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                          <button className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-300 rounded-xl hover:border-indigo-400 hover:bg-indigo-50">
+                            <Plus className="w-6 h-6 text-slate-400 mb-1" />
+                            <span className="text-sm text-slate-500">إضافة مرفق</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Document Preview */}
+                      <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                        <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                          <Eye className="w-5 h-5" />معاينة الوثيقة
+                        </h4>
+                        <div className="bg-white rounded-xl border border-slate-200 h-64 flex items-center justify-center">
+                          <div className="text-center">
+                            <FileSearch className="w-12 h-12 text-slate-300 mx-auto mb-2" />
+                            <p className="text-slate-500">ارفع ملفاً لمعاينته</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-bold text-slate-700 mb-2">الإصدار</label>
-                      <input type="text" value={docForm.version} onChange={(e) => setDocForm({ ...docForm, version: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="v1.0" />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-2">المالك</label>
-                    <select value={docForm.ownerId} onChange={(e) => setDocForm({ ...docForm, ownerId: parseInt(e.target.value) })}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
-                      {USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-2">الوصف</label>
-                    <textarea value={docForm.description} onChange={(e) => setDocForm({ ...docForm, description: e.target.value })}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl resize-none" rows={3} placeholder="وصف مختصر للوثيقة..." />
-                  </div>
-                  <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center">
-                    <Upload className="w-10 h-10 text-slate-400 mx-auto mb-2" />
-                    <p className="text-slate-600 font-medium">اسحب الملف هنا أو انقر للاختيار</p>
-                    <p className="text-xs text-slate-400 mt-1">PDF, DOCX (حتى 20 MB)</p>
-                  </div>
+                  )}
                 </>
               )}
             </div>
 
-            <div className="border-t-2 border-slate-200 px-6 py-4 bg-slate-50 flex items-center justify-between">
+            {/* Footer */}
+            <div className="border-t-2 border-slate-200 px-8 py-4 bg-gradient-to-r from-slate-50 to-slate-100 flex items-center justify-between">
               <button onClick={() => setShowDocModal(false)} className="px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white">
                 {docModalMode === 'view' ? 'إغلاق' : 'إلغاء'}
               </button>
+
+              {docModalMode !== 'view' && (
+                <div className="flex items-center gap-2">
+                  {/* Tab Navigation */}
+                  <div className="flex gap-1 px-2">
+                    {[0, 1, 2, 3].map(idx => (
+                      <button key={idx}
+                        onClick={() => setDocForm({ ...docForm, activeTab: idx })}
+                        className={`w-8 h-8 rounded-lg font-bold text-sm ${(docForm.activeTab || 0) === idx ? 'bg-indigo-500 text-white' : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
+                          }`}>
+                        {idx + 1}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="flex items-center gap-2">
                 {docModalMode === 'view' && selectedDoc && (
                   <>
@@ -14626,10 +17465,19 @@ const EvidenceRepository = () => {
                     <button className="flex items-center gap-2 px-5 py-3 bg-indigo-100 text-indigo-700 rounded-xl font-bold hover:bg-indigo-200">
                       <Download className="w-5 h-5" />تحميل
                     </button>
+                    <button onClick={() => {
+                      if (confirm('هل أنت متأكد من حذف هذه الوثيقة؟')) {
+                        setDocuments(documents.filter(d => d.id !== selectedDoc.id));
+                        setShowDocModal(false);
+                        alert('تم حذف الوثيقة بنجاح! 🗑️');
+                      }
+                    }} className="flex items-center gap-2 px-5 py-3 bg-red-100 text-red-700 rounded-xl font-bold hover:bg-red-200">
+                      <Trash2 className="w-5 h-5" />حذف
+                    </button>
                   </>
                 )}
                 {docModalMode !== 'view' && (
-                  <button onClick={handleSaveDoc} className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl">
+                  <button onClick={handleSaveDoc} className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-500 via-indigo-500 to-violet-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl">
                     <Save className="w-5 h-5" />{docModalMode === 'create' ? 'إضافة الوثيقة' : 'حفظ التعديلات'}
                   </button>
                 )}
@@ -14830,23 +17678,107 @@ const ComplianceTests = () => {
     {
       id: 1, code: 'PLAN-2025-Q1-001', title: 'خطة اختبار الامتثال - الربع الأول 2025',
       authorityId: 1, periodKey: 'Q1-2025', scope: { bu: 'All', process: 'All', system: 'All' },
-      status: 'Active', ownerId: 1, approverId: 2, testCaseCount: 5,
+      status: 'Active', ownerId: 1, approverId: 2, testCaseCount: 4,
       startDate: '2025-01-01', endDate: '2025-03-31',
-      createdAt: '2025-01-01', approvedAt: '2025-01-05',
+      createdAt: '2025-01-01', approvedAt: '2025-01-05', progress: 75,
     },
     {
       id: 2, code: 'PLAN-2025-Q1-002', title: 'خطة اختبار الأمن السيبراني - Q1',
       authorityId: 3, periodKey: 'Q1-2025', scope: { bu: 'IT', process: 'Security', system: 'All' },
-      status: 'Active', ownerId: 3, approverId: 1, testCaseCount: 3,
+      status: 'Completed', ownerId: 3, approverId: 1, testCaseCount: 3,
       startDate: '2025-01-15', endDate: '2025-03-15',
-      createdAt: '2025-01-10', approvedAt: '2025-01-12',
+      createdAt: '2025-01-10', approvedAt: '2025-01-12', progress: 100,
     },
     {
       id: 3, code: 'PLAN-2025-Q2-001', title: 'خطة اختبار حماية البيانات - الربع الثاني',
       authorityId: 4, periodKey: 'Q2-2025', scope: { bu: 'All', process: 'Data', system: 'All' },
       status: 'Draft', ownerId: 4, approverId: 1, testCaseCount: 0,
       startDate: '2025-04-01', endDate: '2025-06-30',
-      createdAt: '2025-02-01', approvedAt: null,
+      createdAt: '2025-02-01', approvedAt: null, progress: 0,
+    },
+    {
+      id: 4, code: 'PLAN-2025-Q1-003', title: 'خطة اختبار مكافحة غسل الأموال - Q1',
+      authorityId: 1, periodKey: 'Q1-2025', scope: { bu: 'Finance', process: 'AML', system: 'Core' },
+      status: 'Active', ownerId: 2, approverId: 1, testCaseCount: 6,
+      startDate: '2025-01-01', endDate: '2025-03-31',
+      createdAt: '2025-01-05', approvedAt: '2025-01-08', progress: 50,
+    },
+    {
+      id: 5, code: 'PLAN-2025-Q2-002', title: 'خطة اختبار استمرارية الأعمال - Q2',
+      authorityId: 1, periodKey: 'Q2-2025', scope: { bu: 'All', process: 'BCM', system: 'All' },
+      status: 'Pending', ownerId: 1, approverId: 3, testCaseCount: 4,
+      startDate: '2025-04-01', endDate: '2025-06-30',
+      createdAt: '2025-02-10', approvedAt: null, progress: 0,
+    },
+    {
+      id: 6, code: 'PLAN-2025-Q1-004', title: 'خطة اختبار أمن التطبيقات - Q1',
+      authorityId: 3, periodKey: 'Q1-2025', scope: { bu: 'IT', process: 'AppSec', system: 'All' },
+      status: 'Active', ownerId: 3, approverId: 2, testCaseCount: 5,
+      startDate: '2025-02-01', endDate: '2025-03-31',
+      createdAt: '2025-01-20', approvedAt: '2025-01-25', progress: 40,
+    },
+    {
+      id: 7, code: 'PLAN-2025-Q3-001', title: 'خطة اختبار الخصوصية - الربع الثالث',
+      authorityId: 4, periodKey: 'Q3-2025', scope: { bu: 'All', process: 'Privacy', system: 'All' },
+      status: 'Draft', ownerId: 4, approverId: 1, testCaseCount: 0,
+      startDate: '2025-07-01', endDate: '2025-09-30',
+      createdAt: '2025-02-15', approvedAt: null, progress: 0,
+    },
+    {
+      id: 8, code: 'PLAN-2025-Q2-003', title: 'خطة اختبار تقارير هيئة السوق المالية - Q2',
+      authorityId: 2, periodKey: 'Q2-2025', scope: { bu: 'Finance', process: 'Reporting', system: 'ERP' },
+      status: 'Pending', ownerId: 2, approverId: 1, testCaseCount: 3,
+      startDate: '2025-04-15', endDate: '2025-06-15',
+      createdAt: '2025-02-20', approvedAt: null, progress: 0,
+    },
+    {
+      id: 9, code: 'PLAN-2025-Q4-001', title: 'خطة الاختبار السنوية الشاملة - Q4',
+      authorityId: 1, periodKey: 'Q4-2025', scope: { bu: 'All', process: 'All', system: 'All' },
+      status: 'Draft', ownerId: 1, approverId: 2, testCaseCount: 0,
+      startDate: '2025-10-01', endDate: '2025-12-31',
+      createdAt: '2025-02-25', approvedAt: null, progress: 0,
+    },
+    {
+      id: 10, code: 'PLAN-2025-Q1-005', title: 'خطة اختبار الضوابط الداخلية - Q1',
+      authorityId: 1, periodKey: 'Q1-2025', scope: { bu: 'Finance', process: 'Internal Controls', system: 'ERP' },
+      status: 'Active', ownerId: 2, approverId: 1, testCaseCount: 8,
+      startDate: '2025-01-10', endDate: '2025-03-25',
+      createdAt: '2025-01-08', approvedAt: '2025-01-09', progress: 65,
+    },
+    {
+      id: 11, code: 'PLAN-2025-Q1-006', title: 'خطة اختبار إدارة المخاطر التشغيلية',
+      authorityId: 1, periodKey: 'Q1-2025', scope: { bu: 'Operations', process: 'Risk Management', system: 'All' },
+      status: 'Active', ownerId: 1, approverId: 3, testCaseCount: 5,
+      startDate: '2025-02-01', endDate: '2025-03-31',
+      createdAt: '2025-01-25', approvedAt: '2025-01-28', progress: 30,
+    },
+    {
+      id: 12, code: 'PLAN-2025-Q2-004', title: 'خطة اختبار حوكمة تقنية المعلومات',
+      authorityId: 3, periodKey: 'Q2-2025', scope: { bu: 'IT', process: 'IT Governance', system: 'All' },
+      status: 'Pending', ownerId: 3, approverId: 2, testCaseCount: 4,
+      startDate: '2025-04-15', endDate: '2025-06-15',
+      createdAt: '2025-02-28', approvedAt: null, progress: 0,
+    },
+    {
+      id: 13, code: 'PLAN-2025-Q2-005', title: 'خطة اختبار الامتثال لنظام حماية البيانات الشخصية',
+      authorityId: 4, periodKey: 'Q2-2025', scope: { bu: 'All', process: 'PDPL', system: 'All' },
+      status: 'Draft', ownerId: 4, approverId: 1, testCaseCount: 0,
+      startDate: '2025-05-01', endDate: '2025-06-30',
+      createdAt: '2025-03-01', approvedAt: null, progress: 0,
+    },
+    {
+      id: 14, code: 'PLAN-2025-Q3-002', title: 'خطة اختبار إدارة الهوية والوصول',
+      authorityId: 3, periodKey: 'Q3-2025', scope: { bu: 'IT', process: 'IAM', system: 'All' },
+      status: 'Draft', ownerId: 3, approverId: 1, testCaseCount: 0,
+      startDate: '2025-07-15', endDate: '2025-09-15',
+      createdAt: '2025-03-05', approvedAt: null, progress: 0,
+    },
+    {
+      id: 15, code: 'PLAN-2025-Q1-007', title: 'خطة اختبار التقارير التنظيمية الشهرية',
+      authorityId: 1, periodKey: 'Q1-2025', scope: { bu: 'Finance', process: 'Regulatory Reporting', system: 'Core' },
+      status: 'Completed', ownerId: 2, approverId: 1, testCaseCount: 6,
+      startDate: '2025-01-05', endDate: '2025-02-28',
+      createdAt: '2025-01-03', approvedAt: '2025-01-04', progress: 100,
     },
   ]);
 
@@ -14971,8 +17903,10 @@ const ComplianceTests = () => {
 
   const PLAN_STATUS_CONFIG = {
     Draft: { label: 'مسودة', bg: 'bg-slate-100', text: 'text-slate-600' },
+    Pending: { label: 'معلق', bg: 'bg-amber-100', text: 'text-amber-700' },
     Approved: { label: 'معتمد', bg: 'bg-blue-100', text: 'text-blue-700' },
     Active: { label: 'نشط', bg: 'bg-emerald-100', text: 'text-emerald-700' },
+    Completed: { label: 'مكتمل', bg: 'bg-purple-100', text: 'text-purple-700' },
     Closed: { label: 'مغلق', bg: 'bg-slate-100', text: 'text-slate-500' },
   };
 
@@ -15559,42 +18493,71 @@ const ComplianceTests = () => {
                 const statusCfg = PLAN_STATUS_CONFIG[plan.status];
                 const planCases = testCases.filter(tc => tc.planId === plan.id);
                 const completedCases = planCases.filter(tc => tc.status === 'Reviewed' || tc.status === 'Closed').length;
+                const progressPercent = plan.progress || (planCases.length > 0 ? Math.round((completedCases / planCases.length) * 100) : 0);
 
                 return (
-                  <div key={plan.id} className="bg-white rounded-xl border-2 border-slate-200 p-5 hover:shadow-lg">
+                  <div key={plan.id} className="bg-white rounded-2xl border-2 border-slate-200 p-5 hover:shadow-xl hover:border-purple-300 transition-all group">
+                    {/* Header with Code, Authority & Status */}
                     <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <span className="font-mono text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">{plan.code}</span>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-mono text-xs font-bold text-purple-600 bg-purple-50 px-2 py-1 rounded-lg">{plan.code}</span>
                         {auth && (
-                          <span className="mr-2 px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-xs font-bold">{auth.code}</span>
+                          <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-xs font-bold">{auth.code}</span>
                         )}
                       </div>
-                      <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${statusCfg?.bg} ${statusCfg?.text}`}>
+                      <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${statusCfg?.bg} ${statusCfg?.text}`}>
                         {statusCfg?.label}
                       </span>
                     </div>
-                    <h4 className="font-bold text-slate-800 mb-2">{plan.title}</h4>
-                    <div className="flex items-center gap-4 text-xs text-slate-500 mb-3">
-                      <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{plan.periodKey}</span>
-                      <span className="flex items-center gap-1"><FileCheck className="w-3.5 h-3.5" />{planCases.length} اختبار</span>
+
+                    {/* Title */}
+                    <h4 className="font-bold text-slate-800 mb-3 text-base leading-tight">{plan.title}</h4>
+
+                    {/* Info Row */}
+                    <div className="flex items-center gap-3 text-xs text-slate-500 mb-4 flex-wrap">
+                      <span className="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-lg">
+                        <Calendar className="w-3.5 h-3.5" />{plan.periodKey}
+                      </span>
+                      <span className="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-lg">
+                        <FileCheck className="w-3.5 h-3.5" />{planCases.length} اختبار
+                      </span>
                     </div>
-                    <div className="mb-3">
-                      <div className="flex items-center justify-between text-xs mb-1">
-                        <span className="text-slate-500">التقدم</span>
-                        <span className="font-bold">{planCases.length > 0 ? Math.round((completedCases / planCases.length) * 100) : 0}%</span>
+
+                    {/* Progress Bar */}
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between text-xs mb-1.5">
+                        <span className="text-slate-500 font-medium">التقدم</span>
+                        <span className={`font-bold ${progressPercent === 100 ? 'text-emerald-600' : progressPercent > 50 ? 'text-blue-600' : 'text-slate-600'}`}>
+                          {progressPercent}%
+                        </span>
                       </div>
-                      <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-purple-500 rounded-full" style={{ width: `${planCases.length > 0 ? (completedCases / planCases.length) * 100 : 0}%` }}></div>
+                      <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className={`h-full rounded-full transition-all ${progressPercent === 100 ? 'bg-emerald-500' : progressPercent > 50 ? 'bg-blue-500' : 'bg-purple-500'
+                          }`} style={{ width: `${progressPercent}%` }}></div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => { setFormData(plan); setModalType('plan'); setModalMode('edit'); setShowModal(true); }}
-                        className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-bold hover:bg-slate-200">
-                        <Edit className="w-4 h-4" />تعديل
+
+                    {/* Action Buttons - Enhanced */}
+                    <div className="grid grid-cols-4 gap-2">
+                      <button onClick={() => { setFormData(plan); setModalType('plan'); setModalMode('view'); setShowModal(true); }}
+                        className="flex flex-col items-center justify-center gap-1 p-2.5 bg-blue-50 text-blue-700 rounded-xl text-xs font-bold hover:bg-blue-100 transition-all">
+                        <Eye className="w-4 h-4" />
+                        <span>استعراض</span>
+                      </button>
+                      <button onClick={() => { setFormData(plan); setModalType('plan'); setModalMode('edit'); setShowModal(true); setExecutionStep(0); }}
+                        className="flex flex-col items-center justify-center gap-1 p-2.5 bg-amber-50 text-amber-700 rounded-xl text-xs font-bold hover:bg-amber-100 transition-all">
+                        <Edit className="w-4 h-4" />
+                        <span>تعديل</span>
                       </button>
                       <button onClick={() => handleCreateCase(plan.id)}
-                        className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-purple-100 text-purple-700 rounded-lg text-sm font-bold hover:bg-purple-200">
-                        <Plus className="w-4 h-4" />إضافة اختبار
+                        className="flex flex-col items-center justify-center gap-1 p-2.5 bg-emerald-50 text-emerald-700 rounded-xl text-xs font-bold hover:bg-emerald-100 transition-all">
+                        <Plus className="w-4 h-4" />
+                        <span>اختبار</span>
+                      </button>
+                      <button onClick={() => { setDeleteTarget({ type: 'plan', id: plan.id, code: plan.code, title: plan.title }); setShowDeleteConfirm(true); }}
+                        className="flex flex-col items-center justify-center gap-1 p-2.5 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-all">
+                        <Trash2 className="w-4 h-4" />
+                        <span>حذف</span>
                       </button>
                     </div>
                   </div>
@@ -15739,9 +18702,9 @@ const ComplianceTests = () => {
               <div className="space-y-6">
                 {/* Test Case Header */}
                 <div className={`rounded-2xl p-5 ${selectedItem.overallResult === 'Pass' ? 'bg-emerald-50 border-2 border-emerald-200' :
-                    selectedItem.overallResult === 'Fail' ? 'bg-red-50 border-2 border-red-200' :
-                      selectedItem.overallResult === 'Partial' ? 'bg-amber-50 border-2 border-amber-200' :
-                        'bg-slate-50 border-2 border-slate-200'
+                  selectedItem.overallResult === 'Fail' ? 'bg-red-50 border-2 border-red-200' :
+                    selectedItem.overallResult === 'Partial' ? 'bg-amber-50 border-2 border-amber-200' :
+                      'bg-slate-50 border-2 border-slate-200'
                   }`}>
                   <div className="flex items-start justify-between">
                     <div>
@@ -15810,10 +18773,10 @@ const ComplianceTests = () => {
                         <div key={step.id} className={`p-5 ${stepResult?.result === 'Fail' ? 'bg-red-50' : stepResult?.result === 'Pass' ? 'bg-emerald-50' : ''}`}>
                           <div className="flex items-start gap-4">
                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg shrink-0 ${stepResult?.result === 'Pass' ? 'bg-emerald-500 text-white' :
-                                stepResult?.result === 'Fail' ? 'bg-red-500 text-white' :
-                                  stepResult?.result === 'Partial' ? 'bg-amber-500 text-white' :
-                                    stepResult?.result === 'N/A' ? 'bg-slate-400 text-white' :
-                                      'bg-slate-200 text-slate-600'
+                              stepResult?.result === 'Fail' ? 'bg-red-500 text-white' :
+                                stepResult?.result === 'Partial' ? 'bg-amber-500 text-white' :
+                                  stepResult?.result === 'N/A' ? 'bg-slate-400 text-white' :
+                                    'bg-slate-200 text-slate-600'
                               }`}>
                               {stepResult?.result === 'Pass' ? <CheckCircle2 className="w-6 h-6" /> :
                                 stepResult?.result === 'Fail' ? <XCircle className="w-6 h-6" /> :
@@ -16068,1034 +19031,521 @@ const ComplianceTests = () => {
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden">
 
             {/* ═══════════════════════════════════════════════════════════════════════════
-                PLAN WIZARD MODAL - معالج إنشاء خطة الاختبار - WORLD CLASS EDITION
+                PLAN WIZARD MODAL - معالج إنشاء خطة الاختبار - ULTIMATE 10-STEP EDITION
             ═══════════════════════════════════════════════════════════════════════════ */}
             {modalType === 'plan' && (
               <>
-                {/* World-Class Header */}
-                <div className="bg-gradient-to-l from-purple-600 via-indigo-600 to-blue-600 px-6 py-5 text-white relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-white/10 to-transparent rounded-full opacity-50" />
-
-                  <div className="relative">
-                    <div className="flex items-center justify-between mb-5">
-                      <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-xl border border-white/20">
-                          <FolderPlus className="w-8 h-8" />
-                        </div>
-                        <div>
-                          <h2 className="text-2xl font-bold">{modalMode === 'create' ? 'معالج إنشاء خطة اختبار' : 'تعديل خطة الاختبار'}</h2>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-lg text-sm font-mono border border-white/20">{formData.code}</span>
-                            <span className="text-purple-200 text-sm">Test Plan Wizard • {executionStep + 1}/5</span>
-                          </div>
-                        </div>
-                      </div>
-                      <button onClick={() => { setShowModal(false); setExecutionStep(0); }} className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl transition-all backdrop-blur-sm border border-white/10">
-                        <X className="w-6 h-6" />
-                      </button>
-                    </div>
-
-                    {/* Enhanced Progress Steps */}
-                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-2 border border-white/10">
-                      <div className="flex items-center">
-                        {[
-                          { step: 0, label: 'المعلومات الأساسية', icon: FileText, desc: 'العنوان والفترة' },
-                          { step: 1, label: 'النطاق والجهات', icon: Building2, desc: 'الجهات الرقابية' },
-                          { step: 2, label: 'الالتزامات', icon: Target, desc: 'اختيار الالتزامات' },
-                          { step: 3, label: 'الفريق', icon: Users, desc: 'المسؤولين' },
-                          { step: 4, label: 'المراجعة', icon: CheckCircle2, desc: 'التأكيد النهائي' },
-                        ].map((s, idx) => (
-                          <div key={s.step} className="flex items-center flex-1">
-                            <button onClick={() => setExecutionStep(s.step)}
-                              className={`flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all w-full ${executionStep === s.step ? 'bg-white text-purple-600 shadow-lg' :
-                                  executionStep > s.step ? 'bg-emerald-400/30 text-white' : 'text-white/60 hover:bg-white/10'
-                                }`}>
-                              <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${executionStep === s.step ? 'bg-purple-100' :
-                                  executionStep > s.step ? 'bg-emerald-500 text-white' : 'bg-white/10'
-                                }`}>
-                                {executionStep > s.step ? <Check className="w-5 h-5" /> : <s.icon className="w-4 h-4" />}
-                              </div>
-                              <div className="text-right hidden lg:block">
-                                <p className={`font-bold text-xs ${executionStep === s.step ? 'text-purple-700' : ''}`}>{s.label}</p>
-                                <p className={`text-[10px] ${executionStep === s.step ? 'text-purple-500' : 'opacity-70'}`}>{s.desc}</p>
-                              </div>
-                            </button>
-                            {idx < 4 && <ChevronLeft className="w-4 h-4 mx-1 text-white/30 shrink-0" />}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Animated Progress Bar */}
-                    <div className="mt-3 h-1.5 bg-white/20 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 rounded-full transition-all duration-700 ease-out"
-                        style={{ width: `${(executionStep / 4) * 100}%` }} />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content Area with Optional Sidebar */}
-                <div className="flex">
-                  {/* Main Content */}
-                  <div className="flex-1 p-6 max-h-[55vh] overflow-y-auto">
-
-                    {/* Step 0: Basic Info - World Class */}
-                    {executionStep === 0 && (
-                      <div className="space-y-5">
-                        {/* Quick Templates Section */}
-                        <div className="bg-gradient-to-r from-violet-50 via-purple-50 to-fuchsia-50 rounded-2xl p-5 border border-violet-200">
-                          <h4 className="font-bold text-violet-800 mb-3 flex items-center gap-2">
-                            <Zap className="w-5 h-5" />قوالب جاهزة - Quick Templates
-                          </h4>
-                          <div className="grid grid-cols-4 gap-3">
-                            {[
-                              { id: 'aml', name: 'مكافحة غسل الأموال', icon: '🛡️', auth: 'SAMA', color: 'emerald' },
-                              { id: 'cyber', name: 'الأمن السيبراني', icon: '🔒', auth: 'NCA', color: 'blue' },
-                              { id: 'pdpl', name: 'حماية البيانات', icon: '📊', auth: 'SDAIA', color: 'purple' },
-                              { id: 'full', name: 'اختبار شامل', icon: '🎯', auth: 'All', color: 'amber' },
-                            ].map(t => (
-                              <button key={t.id} onClick={() => setFormData({ ...formData, title: `خطة اختبار ${t.name} - ${formData.periodKey || 'Q1-2025'}`, template: t.id })}
-                                className={`p-4 rounded-xl border-2 transition-all text-center hover:shadow-lg group ${formData.template === t.id ? 'border-violet-500 bg-violet-100 shadow-lg' : 'border-slate-200 bg-white hover:border-violet-300'
-                                  }`}>
-                                <div className="text-3xl mb-2 group-hover:scale-110 transition-transform">{t.icon}</div>
-                                <p className="text-sm font-bold text-slate-700">{t.name}</p>
-                                <p className="text-xs text-violet-600 mt-1">{t.auth}</p>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Main Form */}
-                        <div className="bg-white rounded-2xl p-5 border-2 border-slate-200 shadow-sm">
-                          <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                            <FileText className="w-5 h-5 text-purple-500" />المعلومات الأساسية للخطة
-                          </h3>
-
-                          <div className="space-y-4">
-                            <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-2">عنوان الخطة *</label>
-                              <input type="text" value={formData.title || ''} onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-lg focus:border-purple-400 focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all"
-                                placeholder="مثال: خطة اختبار الامتثال الشاملة للربع الأول 2025" />
-                              <div className="flex items-center justify-between mt-2">
-                                {formData.title && formData.title.length < 10 && (
-                                  <p className="text-xs text-amber-600 flex items-center gap-1"><AlertTriangle className="w-3 h-3" />العنوان قصير - يُفضل 10 أحرف على الأقل</p>
-                                )}
-                                {formData.title && formData.title.length >= 10 && (
-                                  <p className="text-xs text-emerald-600 flex items-center gap-1"><CheckCircle2 className="w-3 h-3" />العنوان مناسب</p>
-                                )}
-                                <span className="text-xs text-slate-400">{formData.title?.length || 0} حرف</span>
-                              </div>
-                            </div>
-
-                            <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-3">الفترة الزمنية *</label>
-                              <div className="grid grid-cols-5 gap-3">
-                                {[
-                                  { key: 'Q1-2025', label: 'الربع الأول', sub: 'Q1 2025', icon: '🌸', months: 'يناير - مارس', color: 'pink' },
-                                  { key: 'Q2-2025', label: 'الربع الثاني', sub: 'Q2 2025', icon: '☀️', months: 'أبريل - يونيو', color: 'amber' },
-                                  { key: 'Q3-2025', label: 'الربع الثالث', sub: 'Q3 2025', icon: '🍂', months: 'يوليو - سبتمبر', color: 'orange' },
-                                  { key: 'Q4-2025', label: 'الربع الرابع', sub: 'Q4 2025', icon: '❄️', months: 'أكتوبر - ديسمبر', color: 'blue' },
-                                  { key: '2025', label: 'سنوي كامل', sub: '2025', icon: '📅', months: 'السنة كاملة', color: 'purple' },
-                                ].map(period => (
-                                  <button key={period.key} onClick={() => setFormData({ ...formData, periodKey: period.key })}
-                                    className={`p-4 rounded-xl border-2 transition-all text-center group ${formData.periodKey === period.key
-                                        ? 'border-purple-500 bg-purple-50 shadow-lg ring-4 ring-purple-100'
-                                        : 'border-slate-200 hover:border-purple-300 bg-white hover:shadow-md'
-                                      }`}>
-                                    <div className="text-3xl mb-2 group-hover:scale-125 transition-transform">{period.icon}</div>
-                                    <p className="font-bold text-slate-800 text-sm">{period.label}</p>
-                                    <p className="text-xs text-slate-500">{period.sub}</p>
-                                    <p className="text-[10px] text-purple-600 mt-1 font-medium">{period.months}</p>
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ البداية</label>
-                                <input type="date" value={formData.startDate || ''} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-400 focus:outline-none focus:ring-4 focus:ring-purple-100" />
-                              </div>
-                              <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ النهاية</label>
-                                <input type="date" value={formData.endDate || ''} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-400 focus:outline-none focus:ring-4 focus:ring-purple-100" />
-                              </div>
-                            </div>
-
-                            <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-2">وصف الخطة</label>
-                              <textarea rows={3} value={formData.description || ''} onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-400 focus:outline-none focus:ring-4 focus:ring-purple-100 resize-none"
-                                placeholder="وصف تفصيلي لأهداف ونطاق خطة الاختبار..." />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Step 1: Scope & Authorities */}
-                    {executionStep === 1 && (
-                      <div className="space-y-6">
-                        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-200">
-                          <h3 className="text-lg font-bold text-emerald-800 mb-4 flex items-center gap-2">
-                            <Building2 className="w-5 h-5" />اختيار الجهات الرقابية
-                          </h3>
-                          <p className="text-sm text-emerald-600 mb-4">اختر الجهات الرقابية المستهدفة في هذه الخطة (يمكن اختيار أكثر من جهة)</p>
-
-                          <div className="grid grid-cols-3 gap-4">
-                            {AUTHORITIES.map(auth => {
-                              const isSelected = formData.authorityId === auth.id || (formData.selectedAuthorities && formData.selectedAuthorities.includes(auth.id));
-                              const authColors = {
-                                SAMA: { bg: 'bg-emerald-500', light: 'bg-emerald-100', text: 'text-emerald-700' },
-                                CMA: { bg: 'bg-blue-500', light: 'bg-blue-100', text: 'text-blue-700' },
-                                NCA: { bg: 'bg-purple-500', light: 'bg-purple-100', text: 'text-purple-700' },
-                                SDAIA: { bg: 'bg-indigo-500', light: 'bg-indigo-100', text: 'text-indigo-700' },
-                                ZATCA: { bg: 'bg-amber-500', light: 'bg-amber-100', text: 'text-amber-700' },
-                              };
-                              const colors = authColors[auth.code] || { bg: 'bg-slate-500', light: 'bg-slate-100', text: 'text-slate-700' };
-                              const oblCount = INITIAL_OBLIGATIONS.filter(o => o.authorityId === auth.id).length;
-
-                              return (
-                                <div key={auth.id} onClick={() => setFormData({ ...formData, authorityId: isSelected ? '' : auth.id })}
-                                  className={`rounded-2xl border-2 p-5 cursor-pointer transition-all ${isSelected ? `border-emerald-500 ${colors.light} shadow-lg` : 'border-slate-200 hover:border-emerald-300 bg-white'
-                                    }`}>
-                                  <div className="flex items-start justify-between mb-3">
-                                    <div className={`w-12 h-12 rounded-xl ${colors.bg} flex items-center justify-center text-white font-bold`}>
-                                      {auth.code.substring(0, 2)}
-                                    </div>
-                                    {isSelected && <CheckCircle2 className="w-6 h-6 text-emerald-500" />}
-                                  </div>
-                                  <h4 className="font-bold text-slate-800">{auth.code}</h4>
-                                  <p className="text-sm text-slate-600 mt-1">{auth.nameAr}</p>
-                                  <div className="mt-3 flex items-center gap-2">
-                                    <span className={`px-2 py-1 rounded-lg text-xs font-bold ${colors.light} ${colors.text}`}>
-                                      {oblCount} التزام
-                                    </span>
-                                  </div>
-                                </div>
-                              );
-                            })}
-
-                            {/* All Authorities Option */}
-                            <div onClick={() => setFormData({ ...formData, authorityId: '' })}
-                              className={`rounded-2xl border-2 p-5 cursor-pointer transition-all ${!formData.authorityId ? 'border-purple-500 bg-purple-50 shadow-lg' : 'border-slate-200 hover:border-purple-300 bg-white'
-                                }`}>
-                              <div className="flex items-start justify-between mb-3">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white">
-                                  <Globe className="w-6 h-6" />
-                                </div>
-                                {!formData.authorityId && <CheckCircle2 className="w-6 h-6 text-purple-500" />}
-                              </div>
-                              <h4 className="font-bold text-slate-800">جميع الجهات</h4>
-                              <p className="text-sm text-slate-600 mt-1">شامل لكل الجهات الرقابية</p>
-                              <div className="mt-3 flex items-center gap-2">
-                                <span className="px-2 py-1 rounded-lg text-xs font-bold bg-purple-100 text-purple-700">
-                                  {INITIAL_OBLIGATIONS.length} التزام
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Scope Details */}
-                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
-                          <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center gap-2">
-                            <Layers className="w-5 h-5" />نطاق الاختبار
-                          </h3>
-                          <div className="grid grid-cols-3 gap-4">
-                            <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-2">وحدة العمل</label>
-                              <select value={formData.scope?.bu || 'All'} onChange={(e) => setFormData({ ...formData, scope: { ...formData.scope, bu: e.target.value } })}
-                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-white">
-                                <option value="All">جميع الوحدات</option>
-                                <option value="IT">تقنية المعلومات</option>
-                                <option value="Finance">المالية</option>
-                                <option value="Operations">العمليات</option>
-                                <option value="HR">الموارد البشرية</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-2">العملية</label>
-                              <select value={formData.scope?.process || 'All'} onChange={(e) => setFormData({ ...formData, scope: { ...formData.scope, process: e.target.value } })}
-                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-white">
-                                <option value="All">جميع العمليات</option>
-                                <option value="Security">الأمن السيبراني</option>
-                                <option value="Data">حماية البيانات</option>
-                                <option value="AML">مكافحة غسل الأموال</option>
-                                <option value="Reporting">التقارير</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-2">النظام</label>
-                              <select value={formData.scope?.system || 'All'} onChange={(e) => setFormData({ ...formData, scope: { ...formData.scope, system: e.target.value } })}
-                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-white">
-                                <option value="All">جميع الأنظمة</option>
-                                <option value="Core">النظام الأساسي</option>
-                                <option value="ERP">نظام ERP</option>
-                                <option value="CRM">نظام CRM</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Step 2: Target Obligations */}
-                    {executionStep === 2 && (
-                      <div className="space-y-6">
-                        <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200">
-                          <h3 className="text-lg font-bold text-amber-800 mb-4 flex items-center gap-2">
-                            <Target className="w-5 h-5" />الالتزامات المستهدفة للاختبار
-                          </h3>
-
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="relative flex-1 max-w-md">
-                              <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                              <input type="text" placeholder="بحث في الالتزامات..."
-                                className="w-full pr-12 pl-4 py-3 border-2 border-slate-200 rounded-xl bg-white" />
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <button onClick={() => {
-                                const filtered = INITIAL_OBLIGATIONS.filter(o => !formData.authorityId || o.authorityId === parseInt(formData.authorityId));
-                                setFormData({ ...formData, targetObligations: filtered.map(o => o.id) });
-                              }} className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-bold">
-                                تحديد الكل
-                              </button>
-                              <button onClick={() => setFormData({ ...formData, targetObligations: [] })} className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm font-bold">
-                                إلغاء التحديد
-                              </button>
-                            </div>
-                          </div>
-
-                          <div className="max-h-64 overflow-y-auto space-y-2">
-                            {INITIAL_OBLIGATIONS.filter(o => !formData.authorityId || o.authorityId === parseInt(formData.authorityId)).map(obl => {
-                              const auth = AUTHORITIES.find(a => a.id === obl.authorityId);
-                              const isSelected = formData.targetObligations?.includes(obl.id);
-                              return (
-                                <div key={obl.id} onClick={() => {
-                                  const current = formData.targetObligations || [];
-                                  setFormData({
-                                    ...formData,
-                                    targetObligations: isSelected ? current.filter(id => id !== obl.id) : [...current, obl.id]
-                                  });
-                                }}
-                                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${isSelected ? 'border-amber-500 bg-amber-100' : 'border-slate-200 hover:border-amber-300 bg-white'
-                                    }`}>
-                                  <div className="flex items-center gap-4">
-                                    <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center ${isSelected ? 'bg-amber-500 border-amber-500' : 'border-slate-300'
-                                      }`}>
-                                      {isSelected && <Check className="w-4 h-4 text-white" />}
-                                    </div>
-                                    <div className="flex-1">
-                                      <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-mono text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">{obl.code}</span>
-                                        {auth && <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">{auth.code}</span>}
-                                        <span className={`px-2 py-0.5 rounded text-xs font-bold ${obl.criticality === 'High' ? 'bg-red-100 text-red-600' :
-                                            obl.criticality === 'Critical' ? 'bg-red-200 text-red-700' : 'bg-amber-100 text-amber-600'
-                                          }`}>{obl.criticality}</span>
-                                      </div>
-                                      <p className="font-medium text-slate-800 text-sm">{obl.title}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-
-                          <div className="mt-4 p-4 bg-white rounded-xl border border-slate-200">
-                            <div className="flex items-center justify-between">
-                              <span className="text-slate-600">الالتزامات المحددة:</span>
-                              <span className="font-bold text-amber-600 text-lg">{formData.targetObligations?.length || 0} من {INITIAL_OBLIGATIONS.filter(o => !formData.authorityId || o.authorityId === parseInt(formData.authorityId)).length}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Step 3: Team & Resources - NEW */}
-                    {executionStep === 3 && (
-                      <div className="space-y-5">
-                        {/* Team Assignment */}
-                        <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-5 border border-blue-200">
-                          <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center gap-2">
-                            <Users className="w-5 h-5" />فريق العمل والمسؤوليات
-                          </h3>
-
-                          <div className="grid grid-cols-2 gap-5 mb-5">
-                            <div className="bg-white rounded-xl p-4 border-2 border-slate-200">
-                              <label className="block text-sm font-bold text-slate-700 mb-2">مالك الخطة (Owner) *</label>
-                              <select value={formData.ownerId || CURRENT_USER.id} onChange={(e) => setFormData({ ...formData, ownerId: parseInt(e.target.value) })}
-                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-400 focus:outline-none">
-                                {TESTERS.map(t => <option key={t.id} value={t.id}>{t.name} - {t.role}</option>)}
-                              </select>
-                            </div>
-                            <div className="bg-white rounded-xl p-4 border-2 border-slate-200">
-                              <label className="block text-sm font-bold text-slate-700 mb-2">المعتمد (Approver)</label>
-                              <select value={formData.approverId || ''} onChange={(e) => setFormData({ ...formData, approverId: parseInt(e.target.value) || '' })}
-                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-400 focus:outline-none">
-                                <option value="">اختر المعتمد</option>
-                                {TESTERS.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                              </select>
-                            </div>
-                          </div>
-
-                          {/* Testers Selection */}
-                          <div className="mb-5">
-                            <label className="block text-sm font-bold text-slate-700 mb-3">المختبرين (Testers)</label>
-                            <div className="grid grid-cols-3 gap-3">
-                              {TESTERS.map(tester => {
-                                const isSelected = formData.testers?.includes(tester.id);
-                                return (
-                                  <div key={tester.id} onClick={() => {
-                                    const current = formData.testers || [];
-                                    setFormData({
-                                      ...formData,
-                                      testers: isSelected ? current.filter(id => id !== tester.id) : [...current, tester.id]
-                                    });
-                                  }}
-                                    className={`p-3 rounded-xl border-2 cursor-pointer transition-all flex items-center gap-3 ${isSelected ? 'border-blue-500 bg-blue-50 shadow-md' : 'border-slate-200 hover:border-blue-300 bg-white'
-                                      }`}>
-                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${isSelected ? 'bg-blue-500' : 'bg-slate-300'
-                                      }`}>
-                                      {tester.name.charAt(0)}
-                                    </div>
-                                    <div className="flex-1">
-                                      <p className="font-bold text-slate-800 text-sm">{tester.name}</p>
-                                      <p className="text-xs text-slate-500">{tester.role}</p>
-                                    </div>
-                                    {isSelected && <Check className="w-5 h-5 text-blue-500" />}
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Resource Estimation */}
-                        <div className="bg-white rounded-2xl p-5 border-2 border-slate-200">
-                          <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                            <Activity className="w-5 h-5 text-purple-500" />تقدير الموارد والجهد
-                          </h3>
-                          <div className="grid grid-cols-4 gap-4">
-                            <div className="bg-gradient-to-br from-purple-100 to-indigo-100 rounded-xl p-4 text-center border border-purple-200">
-                              <Target className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                              <p className="text-3xl font-bold text-purple-700">{formData.targetObligations?.length || 0}</p>
-                              <p className="text-sm text-purple-600">حالات الاختبار</p>
-                            </div>
-                            <div className="bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl p-4 text-center border border-blue-200">
-                              <Clock className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                              <p className="text-3xl font-bold text-blue-700">{Math.ceil((formData.targetObligations?.length || 0) * 0.5)}</p>
-                              <p className="text-sm text-blue-600">ساعات تقديرية</p>
-                            </div>
-                            <div className="bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl p-4 text-center border border-emerald-200">
-                              <Users className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
-                              <p className="text-3xl font-bold text-emerald-700">{formData.testers?.length || 1}</p>
-                              <p className="text-sm text-emerald-600">مختبرين</p>
-                            </div>
-                            <div className="bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl p-4 text-center border border-amber-200">
-                              <Calendar className="w-8 h-8 text-amber-600 mx-auto mb-2" />
-                              <p className="text-3xl font-bold text-amber-700">{Math.ceil((formData.targetObligations?.length || 0) / (formData.testers?.length || 1) * 0.5)}</p>
-                              <p className="text-sm text-amber-600">أيام متوقعة</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Step 4: Review & Confirm - ENHANCED */}
-                    {executionStep === 4 && (
-                      <div className="space-y-5">
-                        <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 rounded-2xl p-5 border border-emerald-200">
-                          <h3 className="text-lg font-bold text-emerald-800 mb-4 flex items-center gap-2">
-                            <CheckCircle2 className="w-5 h-5" />مراجعة نهائية لخطة الاختبار
-                          </h3>
-
-                          {/* Summary Cards */}
-                          <div className="grid grid-cols-4 gap-3 mb-5">
-                            <div className="bg-white rounded-xl p-4 border border-slate-200 text-center">
-                              <FileText className="w-7 h-7 text-purple-500 mx-auto mb-2" />
-                              <p className="font-bold text-slate-800 text-sm truncate">{formData.title?.substring(0, 20) || '—'}...</p>
-                              <p className="text-xs text-slate-500">عنوان الخطة</p>
-                            </div>
-                            <div className="bg-white rounded-xl p-4 border border-slate-200 text-center">
-                              <Calendar className="w-7 h-7 text-blue-500 mx-auto mb-2" />
-                              <p className="font-bold text-slate-800">{formData.periodKey || '—'}</p>
-                              <p className="text-xs text-slate-500">الفترة</p>
-                            </div>
-                            <div className="bg-white rounded-xl p-4 border border-slate-200 text-center">
-                              <Target className="w-7 h-7 text-amber-500 mx-auto mb-2" />
-                              <p className="font-bold text-slate-800 text-2xl">{formData.targetObligations?.length || 0}</p>
-                              <p className="text-xs text-slate-500">الالتزامات</p>
-                            </div>
-                            <div className="bg-white rounded-xl p-4 border border-slate-200 text-center">
-                              <Users className="w-7 h-7 text-emerald-500 mx-auto mb-2" />
-                              <p className="font-bold text-slate-800">{formData.testers?.length || 1}</p>
-                              <p className="text-xs text-slate-500">المختبرين</p>
-                            </div>
-                          </div>
-
-                          {/* Details Grid */}
-                          <div className="grid grid-cols-2 gap-4 mb-5">
-                            <div className="bg-white rounded-xl p-4 border border-slate-200">
-                              <h4 className="font-bold text-slate-700 mb-3 flex items-center gap-2">
-                                <FileText className="w-4 h-4 text-purple-500" />المعلومات الأساسية
-                              </h4>
-                              <div className="space-y-2 text-sm">
-                                <div className="flex justify-between"><span className="text-slate-500">الكود:</span><span className="font-mono font-bold text-purple-600">{formData.code}</span></div>
-                                <div className="flex justify-between"><span className="text-slate-500">البداية:</span><span className="font-bold">{formData.startDate || '—'}</span></div>
-                                <div className="flex justify-between"><span className="text-slate-500">النهاية:</span><span className="font-bold">{formData.endDate || '—'}</span></div>
-                              </div>
-                            </div>
-                            <div className="bg-white rounded-xl p-4 border border-slate-200">
-                              <h4 className="font-bold text-slate-700 mb-3 flex items-center gap-2">
-                                <Building2 className="w-4 h-4 text-emerald-500" />النطاق
-                              </h4>
-                              <div className="space-y-2 text-sm">
-                                <div className="flex justify-between"><span className="text-slate-500">الجهة:</span><span className="font-bold">{formData.authorityId ? getAuthority(parseInt(formData.authorityId))?.code : 'جميع الجهات'}</span></div>
-                                <div className="flex justify-between"><span className="text-slate-500">وحدة العمل:</span><span className="font-bold">{formData.scope?.bu || 'All'}</span></div>
-                                <div className="flex justify-between"><span className="text-slate-500">العملية:</span><span className="font-bold">{formData.scope?.process || 'All'}</span></div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Validation Checklist */}
-                          <div className="bg-white rounded-xl p-4 border border-slate-200">
-                            <h4 className="font-bold text-slate-700 mb-3">✅ التحقق من البيانات</h4>
-                            <div className="grid grid-cols-4 gap-3">
-                              {[
-                                { label: 'عنوان الخطة', valid: formData.title?.length >= 10, icon: FileText },
-                                { label: 'الفترة الزمنية', valid: !!formData.periodKey, icon: Calendar },
-                                { label: 'الالتزامات', valid: formData.targetObligations?.length > 0, icon: Target },
-                                { label: 'مالك الخطة', valid: !!formData.ownerId || true, icon: User },
-                              ].map((check, idx) => (
-                                <div key={idx} className={`flex items-center gap-2 p-3 rounded-xl border ${check.valid ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
-                                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${check.valid ? 'bg-emerald-500' : 'bg-red-500'}`}>
-                                    {check.valid ? <Check className="w-5 h-5 text-white" /> : <X className="w-5 h-5 text-white" />}
-                                  </div>
-                                  <div>
-                                    <p className={`font-bold text-xs ${check.valid ? 'text-emerald-700' : 'text-red-700'}`}>{check.label}</p>
-                                    <p className={`text-[10px] ${check.valid ? 'text-emerald-600' : 'text-red-600'}`}>{check.valid ? '✓ تم' : '✗ مطلوب'}</p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Side Panel - Quick Summary */}
-                  <div className="w-64 border-r-2 border-slate-200 bg-gradient-to-b from-slate-50 to-white p-4 hidden xl:block">
-                    <h4 className="font-bold text-slate-700 mb-4 flex items-center gap-2">
-                      <Info className="w-4 h-4 text-purple-500" />ملخص الخطة
-                    </h4>
-
-                    <div className="space-y-3">
-                      <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm">
-                        <p className="text-xs text-slate-500 mb-1">الكود</p>
-                        <p className="font-mono font-bold text-purple-600 text-sm">{formData.code}</p>
-                      </div>
-
-                      <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm">
-                        <p className="text-xs text-slate-500 mb-1">العنوان</p>
-                        <p className="font-bold text-slate-800 text-xs truncate">{formData.title || '—'}</p>
-                      </div>
-
-                      <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm">
-                        <p className="text-xs text-slate-500 mb-1">الفترة</p>
-                        <p className="font-bold text-slate-800 text-sm">{formData.periodKey || '—'}</p>
-                      </div>
-
-                      <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm">
-                        <p className="text-xs text-slate-500 mb-1">الجهة الرقابية</p>
-                        <p className="font-bold text-slate-800 text-sm">{formData.authorityId ? AUTHORITIES.find(a => a.id === parseInt(formData.authorityId))?.code : 'الكل'}</p>
-                      </div>
-
-                      <div className="bg-gradient-to-br from-purple-100 to-indigo-100 rounded-xl p-3 border border-purple-200">
-                        <p className="text-xs text-purple-600 mb-1">الالتزامات المستهدفة</p>
-                        <p className="font-bold text-purple-700 text-2xl">{formData.targetObligations?.length || 0}</p>
-                      </div>
-
-                      <div className="bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl p-3 border border-blue-200">
-                        <p className="text-xs text-blue-600 mb-1">الجهد المتوقع</p>
-                        <p className="font-bold text-blue-700 text-lg">{Math.ceil((formData.targetObligations?.length || 0) * 0.5)} ساعة</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Enhanced Footer */}
-                <div className="border-t-2 border-slate-200 px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 flex items-center justify-between">
-                  <button onClick={() => executionStep > 0 ? setExecutionStep(executionStep - 1) : setShowModal(false)}
-                    className="flex items-center gap-2 px-5 py-2.5 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white transition-all">
-                    <ChevronRight className="w-5 h-5" />
-                    {executionStep === 0 ? 'إلغاء' : 'السابق'}
-                  </button>
-
-                  <div className="flex items-center gap-1.5">
-                    {[0, 1, 2, 3, 4].map(step => (
-                      <div key={step} className={`h-2 rounded-full transition-all duration-500 ${executionStep === step ? 'bg-purple-500 w-8' :
-                          executionStep > step ? 'bg-emerald-500 w-2' : 'bg-slate-300 w-2'
-                        }`} />
-                    ))}
-                  </div>
-
-                  {executionStep < 4 ? (
-                    <button onClick={() => setExecutionStep(executionStep + 1)}
-                      className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all">
-                      التالي<ChevronLeft className="w-5 h-5" />
-                    </button>
-                  ) : (
-                    <button onClick={handleSave}
-                      disabled={!formData.title || !formData.periodKey}
-                      className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                      <CheckCircle2 className="w-5 h-5" />إنشاء خطة الاختبار
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-
-            {/* ═══════════ Test Case Wizard Modal ═══════════ */}
-            {modalType === 'case' && (
-              <>
-                {/* Header with Progress */}
-                <div className="bg-gradient-to-l from-purple-600 via-indigo-600 to-blue-600 px-8 py-6 text-white">
-                  <div className="flex items-center justify-between mb-6">
+                {/* Header with Progress Circle */}
+                <div className="bg-gradient-to-l from-indigo-600 via-purple-600 to-violet-700 px-6 py-5 text-white">
+                  <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center">
-                        <ClipboardCheck className="w-7 h-7" />
+                      <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                        <FolderPlus className="w-7 h-7" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold">{modalMode === 'create' ? 'معالج إنشاء حالة اختبار' : 'تعديل حالة الاختبار'}</h2>
-                        <p className="text-purple-200">{formData.code}</p>
+                        <h2 className="text-xl font-black">{modalMode === 'create' ? 'معالج إنشاء خطة اختبار' : 'تعديل خطة الاختبار'}</h2>
+                        <p className="text-purple-200 font-mono text-sm">{formData.code}</p>
                       </div>
                     </div>
-                    <button onClick={() => setShowModal(false)} className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl transition-all">
-                      <X className="w-6 h-6" />
-                    </button>
+                    <div className="flex items-center gap-3">
+                      {/* Progress Circle */}
+                      <div className="relative w-16 h-16">
+                        <svg className="w-16 h-16 transform -rotate-90">
+                          <circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.2)" strokeWidth="4" fill="none" />
+                          <circle cx="32" cy="32" r="28" stroke="white" strokeWidth="4" fill="none"
+                            strokeDasharray={`${(executionStep / 9) * 176} 176`} strokeLinecap="round" />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-lg font-black">{executionStep + 1}/10</span>
+                        </div>
+                      </div>
+                      <button onClick={() => { setShowModal(false); setExecutionStep(0); }} className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl">
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Wizard Steps */}
-                  <div className="flex items-center justify-between">
+                  {/* 10-Step Progress Bar */}
+                  <div className="grid grid-cols-10 gap-1">
                     {[
                       { step: 0, label: 'المعلومات الأساسية', icon: FileText },
-                      { step: 1, label: 'الالتزامات والضوابط', icon: Link2 },
-                      { step: 2, label: 'قالب الاختبار', icon: ClipboardList },
-                      { step: 3, label: 'فريق العمل', icon: Users },
-                      { step: 4, label: 'المراجعة والتأكيد', icon: CheckCircle2 },
-                    ].map((s, idx) => (
-                      <div key={s.step} className="flex items-center">
-                        <button onClick={() => setExecutionStep(s.step)}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${executionStep === s.step ? 'bg-white text-purple-600 font-bold shadow-lg' :
-                              executionStep > s.step ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'
-                            }`}>
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${executionStep === s.step ? 'bg-purple-100' :
-                              executionStep > s.step ? 'bg-emerald-400 text-white' : 'bg-white/10'
-                            }`}>
-                            {executionStep > s.step ? <Check className="w-5 h-5" /> : <s.icon className="w-4 h-4" />}
-                          </div>
-                          <span className="hidden xl:inline">{s.label}</span>
-                        </button>
-                        {idx < 4 && <ChevronLeft className="w-5 h-5 mx-2 text-white/40" />}
-                      </div>
+                      { step: 1, label: 'الفترة الزمنية', icon: Calendar },
+                      { step: 2, label: 'الإطار التنظيمي', icon: Building2 },
+                      { step: 3, label: 'الالتزامات المستهدفة', icon: ClipboardCheck },
+                      { step: 4, label: 'الضوابط الرقابية', icon: Shield },
+                      { step: 5, label: 'قوالب الاختبار', icon: ClipboardList },
+                      { step: 6, label: 'فريق العمل', icon: Users },
+                      { step: 7, label: 'الجدولة والمواعيد', icon: Clock },
+                      { step: 8, label: 'الموارد والميزانية', icon: DollarSign },
+                      { step: 9, label: 'المراجعة والتأكيد', icon: CheckCircle2 },
+                    ].map((s) => (
+                      <button key={s.step} onClick={() => setExecutionStep(s.step)}
+                        className={`flex flex-col items-center p-2 rounded-xl transition-all ${executionStep === s.step ? 'bg-white text-purple-600' :
+                          executionStep > s.step ? 'bg-emerald-400/40 text-white' : 'bg-white/10 text-white/60 hover:bg-white/20'
+                          }`}>
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-1 ${executionStep === s.step ? 'bg-purple-100' :
+                          executionStep > s.step ? 'bg-emerald-500' : 'bg-white/20'
+                          }`}>
+                          {executionStep > s.step ? <Check className="w-4 h-4" /> : <s.icon className="w-4 h-4" />}
+                        </div>
+                        <span className="text-[9px] font-bold text-center leading-tight">{s.label}</span>
+                      </button>
                     ))}
                   </div>
                 </div>
 
                 {/* Content Area */}
-                <div className="p-8 max-h-[55vh] overflow-y-auto">
+                <div className="p-6 max-h-[50vh] overflow-y-auto">
 
-                  {/* Step 0: Basic Info */}
+                  {/* ═══════════ Step 0: المعلومات الأساسية ═══════════ */}
                   {executionStep === 0 && (
-                    <div className="space-y-6">
-                      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-6 border border-purple-200">
-                        <h3 className="text-lg font-bold text-purple-800 mb-4 flex items-center gap-2">
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-5 border-2 border-purple-200">
+                        <h3 className="text-lg font-black text-purple-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-purple-500 text-white rounded-lg flex items-center justify-center text-sm">1</span>
                           <FileText className="w-5 h-5" />المعلومات الأساسية
                         </h3>
                         <div className="space-y-4">
                           <div>
-                            <label className="block text-sm font-bold text-slate-700 mb-2">عنوان الاختبار *</label>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">عنوان الخطة *</label>
                             <input type="text" value={formData.title || ''} onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                              className="w-full px-5 py-4 border-2 border-slate-200 rounded-2xl text-lg focus:border-purple-400 focus:outline-none bg-white"
-                              placeholder="مثال: اختبار امتثال تقرير مكافحة غسل الأموال الشهري" />
+                              className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl text-lg font-bold focus:border-purple-500 focus:outline-none"
+                              placeholder="مثال: خطة اختبار الامتثال الشاملة للربع الأول 2025" />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-2">خطة الاختبار</label>
-                              <select value={formData.planId || ''} onChange={(e) => setFormData({ ...formData, planId: parseInt(e.target.value) || '' })}
-                                className="w-full px-5 py-4 border-2 border-slate-200 rounded-2xl focus:border-purple-400 focus:outline-none bg-white">
-                                <option value="">بدون خطة (اختبار مستقل)</option>
-                                {testPlans.filter(p => p.status === 'Active').map(p => (
-                                  <option key={p.id} value={p.id}>{p.code} - {p.title}</option>
+                              <label className="block text-sm font-bold text-slate-700 mb-2">نوع الخطة</label>
+                              <div className="grid grid-cols-2 gap-2">
+                                {[
+                                  { value: 'Quarterly', label: 'ربع سنوية', icon: '📅' },
+                                  { value: 'Annual', label: 'سنوية', icon: '📆' },
+                                  { value: 'AdHoc', label: 'خاصة', icon: '🎯' },
+                                  { value: 'Continuous', label: 'مستمرة', icon: '🔄' },
+                                ].map(type => (
+                                  <button key={type.value} type="button" onClick={() => setFormData({ ...formData, planType: type.value })}
+                                    className={`p-3 rounded-xl border-2 transition-all ${formData.planType === type.value ? 'border-purple-500 bg-purple-50' : 'border-slate-200 hover:border-slate-300'}`}>
+                                    <span className="text-xl">{type.icon}</span>
+                                    <p className="text-xs font-bold mt-1">{type.label}</p>
+                                  </button>
                                 ))}
-                              </select>
+                              </div>
                             </div>
                             <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ الاستحقاق *</label>
-                              <input type="date" value={formData.dueDate || ''} onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                                className="w-full px-5 py-4 border-2 border-slate-200 rounded-2xl focus:border-purple-400 focus:outline-none bg-white" />
+                              <label className="block text-sm font-bold text-slate-700 mb-2">الأولوية</label>
+                              <div className="flex gap-1">
+                                {[
+                                  { value: 'Critical', label: 'حرج', color: 'red' },
+                                  { value: 'High', label: 'عالي', color: 'orange' },
+                                  { value: 'Medium', label: 'متوسط', color: 'amber' },
+                                  { value: 'Low', label: 'منخفض', color: 'emerald' },
+                                ].map(pri => (
+                                  <button key={pri.value} type="button" onClick={() => setFormData({ ...formData, priority: pri.value })}
+                                    className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all ${formData.priority === pri.value ? `bg-${pri.color}-500 text-white` : `bg-${pri.color}-50 text-${pri.color}-700`}`}>
+                                    {pri.label}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
                           </div>
                           <div>
-                            <label className="block text-sm font-bold text-slate-700 mb-2">وصف الاختبار</label>
-                            <textarea rows={3} value={formData.notes || ''} onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                              className="w-full px-5 py-4 border-2 border-slate-200 rounded-2xl focus:border-purple-400 focus:outline-none bg-white resize-none"
-                              placeholder="وصف تفصيلي لهدف الاختبار والنطاق..." />
+                            <label className="block text-sm font-bold text-slate-700 mb-2">وصف الخطة</label>
+                            <textarea rows={2} value={formData.description || ''} onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                              className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-400 focus:outline-none resize-none"
+                              placeholder="وصف تفصيلي لأهداف ونطاق خطة الاختبار..." />
                           </div>
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* Step 1: Obligations & Controls */}
+                  {/* ═══════════ Step 1: الفترة الزمنية ═══════════ */}
                   {executionStep === 1 && (
-                    <div className="space-y-6">
-                      <div className="grid grid-cols-2 gap-6">
-                        {/* Obligations Selection */}
-                        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-200">
-                          <h3 className="text-lg font-bold text-emerald-800 mb-4 flex items-center gap-2">
-                            <ClipboardCheck className="w-5 h-5" />اختيار الالتزام *
-                          </h3>
-                          <div className="relative mb-4">
-                            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                            <input type="text" placeholder="بحث في الالتزامات..."
-                              className="w-full pr-12 pl-4 py-3 border-2 border-slate-200 rounded-xl bg-white" />
-                          </div>
-                          <div className="max-h-64 overflow-y-auto space-y-2">
-                            {INITIAL_OBLIGATIONS.map(obl => {
-                              const auth = AUTHORITIES.find(a => a.id === obl.authorityId);
-                              const isSelected = formData.obligationId === obl.id;
-                              return (
-                                <div key={obl.id} onClick={() => setFormData({ ...formData, obligationId: obl.id, controlId: '' })}
-                                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${isSelected ? 'border-emerald-500 bg-emerald-100' : 'border-slate-200 hover:border-emerald-300 bg-white'
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 border-2 border-blue-200">
+                        <h3 className="text-lg font-black text-blue-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center text-sm">2</span>
+                          <Calendar className="w-5 h-5" />الفترة الزمنية
+                        </h3>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-3">اختر الفترة</label>
+                            <div className="grid grid-cols-5 gap-3">
+                              {[
+                                { key: 'Q1-2025', label: 'الربع الأول', sub: 'Q1 2025', icon: '🌸', months: 'يناير - مارس' },
+                                { key: 'Q2-2025', label: 'الربع الثاني', sub: 'Q2 2025', icon: '☀️', months: 'أبريل - يونيو' },
+                                { key: 'Q3-2025', label: 'الربع الثالث', sub: 'Q3 2025', icon: '🍂', months: 'يوليو - سبتمبر' },
+                                { key: 'Q4-2025', label: 'الربع الرابع', sub: 'Q4 2025', icon: '❄️', months: 'أكتوبر - ديسمبر' },
+                                { key: '2025', label: 'سنوي كامل', sub: '2025', icon: '📅', months: 'السنة كاملة' },
+                              ].map(period => (
+                                <button key={period.key} onClick={() => setFormData({ ...formData, periodKey: period.key })}
+                                  className={`p-4 rounded-xl border-2 transition-all text-center ${formData.periodKey === period.key ? 'border-blue-500 bg-blue-50 shadow-lg' : 'border-slate-200 hover:border-blue-300'
                                     }`}>
-                                  <div className="flex items-start justify-between">
-                                    <div>
-                                      <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-mono text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">{obl.code}</span>
-                                        {auth && <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">{auth.code}</span>}
-                                      </div>
-                                      <p className="font-medium text-slate-800 text-sm">{obl.title}</p>
-                                    </div>
-                                    {isSelected && <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />}
-                                  </div>
-                                </div>
-                              );
-                            })}
+                                  <div className="text-3xl mb-2">{period.icon}</div>
+                                  <p className="font-bold text-slate-800 text-sm">{period.label}</p>
+                                  <p className="text-xs text-slate-500">{period.sub}</p>
+                                  <p className="text-[10px] text-blue-600 mt-1">{period.months}</p>
+                                </button>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-
-                        {/* Controls Selection */}
-                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
-                          <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center gap-2">
-                            <Shield className="w-5 h-5" />اختيار الضابط (اختياري)
-                          </h3>
-                          {formData.obligationId ? (
-                            <div className="max-h-72 overflow-y-auto space-y-2">
-                              {CONTROLS.map(ctrl => {
-                                const isSelected = formData.controlId === ctrl.id;
-                                return (
-                                  <div key={ctrl.id} onClick={() => setFormData({ ...formData, controlId: ctrl.id })}
-                                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${isSelected ? 'border-blue-500 bg-blue-100' : 'border-slate-200 hover:border-blue-300 bg-white'
-                                      }`}>
-                                    <div className="flex items-start justify-between">
-                                      <div>
-                                        <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">{ctrl.code}</span>
-                                        <p className="font-medium text-slate-800 text-sm mt-1">{ctrl.title}</p>
-                                        <p className="text-xs text-slate-500 mt-1">{ctrl.description?.substring(0, 80)}...</p>
-                                      </div>
-                                      {isSelected && <CheckCircle2 className="w-6 h-6 text-blue-500 shrink-0" />}
-                                    </div>
-                                  </div>
-                                );
-                              })}
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ البداية</label>
+                              <input type="date" value={formData.startDate || ''} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                                className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:outline-none" />
                             </div>
-                          ) : (
-                            <div className="text-center py-12 text-slate-400">
-                              <Shield className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                              <p>اختر الالتزام أولاً</p>
+                            <div>
+                              <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ النهاية</label>
+                              <input type="date" value={formData.endDate || ''} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                                className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:outline-none" />
                             </div>
-                          )}
+                          </div>
                         </div>
                       </div>
-
-                      {/* Selected Summary */}
-                      {formData.obligationId && (
-                        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200">
-                          <p className="text-sm text-slate-600">
-                            <strong>المحدد:</strong> {INITIAL_OBLIGATIONS.find(o => o.id === formData.obligationId)?.code}
-                            {formData.controlId && ` → ${CONTROLS.find(c => c.id === formData.controlId)?.code}`}
-                          </p>
-                        </div>
-                      )}
                     </div>
                   )}
 
-                  {/* Step 2: Test Template */}
+                  {/* ═══════════ Step 2: الإطار التنظيمي ═══════════ */}
                   {executionStep === 2 && (
-                    <div className="space-y-6">
-                      <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                        <ClipboardList className="w-5 h-5 text-purple-500" />اختر قالب الاختبار *
-                      </h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        {testTemplates.map(template => {
-                          const isSelected = formData.templateId === template.id;
-                          const typeCfg = TEST_TYPE_CONFIG[template.testType];
-                          const TypeIcon = typeCfg?.icon || FileText;
-                          return (
-                            <div key={template.id} onClick={() => setFormData({ ...formData, templateId: template.id, sampleSize: template.defaultSampleSize })}
-                              className={`rounded-2xl border-2 p-5 cursor-pointer transition-all ${isSelected ? 'border-purple-500 bg-purple-50 shadow-lg' : 'border-slate-200 hover:border-purple-300'
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200">
+                        <h3 className="text-lg font-black text-emerald-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-emerald-500 text-white rounded-lg flex items-center justify-center text-sm">3</span>
+                          <Building2 className="w-5 h-5" />الإطار التنظيمي والجهات الرقابية
+                        </h3>
+                        <p className="text-sm text-emerald-600 mb-4">اختر الجهات الرقابية المستهدفة (يمكن اختيار أكثر من جهة)</p>
+                        <div className="grid grid-cols-4 gap-3">
+                          {[
+                            { id: 'SAMA', code: 'SA', name: 'البنك المركزي السعودي', color: 'emerald' },
+                            { id: 'CMA', code: 'CM', name: 'هيئة السوق المالية', color: 'blue' },
+                            { id: 'NCA', code: 'NC', name: 'الهيئة الوطنية للأمن السيبراني', color: 'purple' },
+                            { id: 'SDAIA', code: 'SD', name: 'هيئة البيانات والذكاء الاصطناعي', color: 'indigo' },
+                            { id: 'ZATCA', code: 'ZA', name: 'هيئة الزكاة والضريبة والجمارك', color: 'amber' },
+                            { id: 'CCHI', code: 'CC', name: 'مجلس الضمان الصحي', color: 'teal' },
+                            { id: 'HRSD', code: 'HR', name: 'وزارة الموارد البشرية', color: 'rose' },
+                            { id: 'ALL', code: 'الكل', name: 'جميع الجهات', color: 'slate' },
+                          ].map(auth => (
+                            <button key={auth.id} type="button" onClick={() => setFormData({ ...formData, authorityId: auth.id })}
+                              className={`p-3 rounded-xl border-2 transition-all text-center ${formData.authorityId === auth.id ? `border-${auth.color}-500 bg-${auth.color}-100` : 'border-slate-200 hover:border-slate-300'
                                 }`}>
-                              <div className="flex items-start justify-between mb-3">
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isSelected ? 'bg-purple-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
-                                  <TypeIcon className="w-6 h-6" />
-                                </div>
-                                {isSelected && <CheckCircle2 className="w-6 h-6 text-purple-500" />}
-                              </div>
-                              <span className="font-mono text-xs font-bold text-purple-600">{template.code}</span>
-                              <h4 className="font-bold text-slate-800 mt-1">{template.title}</h4>
-                              <p className="text-sm text-slate-600 mt-2">{template.objective}</p>
-                              <div className="flex items-center gap-3 mt-4 text-xs text-slate-500">
-                                <span className="px-2 py-1 bg-slate-100 rounded">{typeCfg?.label}</span>
-                                <span>{template.stepCount} خطوات</span>
-                                <span>عينة: {template.defaultSampleSize}</span>
-                              </div>
-                            </div>
-                          );
-                        })}
+                              <div className={`w-10 h-10 rounded-lg mx-auto mb-2 flex items-center justify-center font-black ${formData.authorityId === auth.id ? `bg-${auth.color}-500 text-white` : 'bg-slate-100 text-slate-600'
+                                }`}>{auth.code}</div>
+                              <p className="text-xs font-bold text-slate-700">{auth.name}</p>
+                            </button>
+                          ))}
+                        </div>
                       </div>
+                    </div>
+                  )}
 
-                      {/* Template Preview */}
-                      {formData.templateId && (
-                        <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
-                          <h4 className="font-bold text-slate-800 mb-4">معاينة خطوات الاختبار</h4>
-                          <div className="space-y-2">
-                            {getTemplate(formData.templateId)?.steps.map((step, idx) => (
-                              <div key={step.id} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200">
-                                <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
-                                  {step.stepNo}
+                  {/* ═══════════ Step 3: الالتزامات المستهدفة ═══════════ */}
+                  {executionStep === 3 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border-2 border-amber-200">
+                        <h3 className="text-lg font-black text-amber-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-amber-500 text-white rounded-lg flex items-center justify-center text-sm">4</span>
+                          <ClipboardCheck className="w-5 h-5" />الالتزامات المستهدفة
+                        </h3>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="relative flex-1 ml-4">
+                            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                            <input type="text" placeholder="بحث في الالتزامات..." className="w-full pr-10 pl-4 py-2 border-2 border-slate-200 rounded-xl" />
+                          </div>
+                          <button className="px-4 py-2 bg-amber-500 text-white rounded-xl font-bold text-sm">تحديد الكل</button>
+                        </div>
+                        <div className="max-h-48 overflow-y-auto space-y-2">
+                          {INITIAL_OBLIGATIONS.map(obl => {
+                            const isSelected = formData.targetObligations?.includes(obl.id);
+                            return (
+                              <div key={obl.id} onClick={() => {
+                                const current = formData.targetObligations || [];
+                                const updated = isSelected ? current.filter(id => id !== obl.id) : [...current, obl.id];
+                                setFormData({ ...formData, targetObligations: updated });
+                              }}
+                                className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${isSelected ? 'border-amber-500 bg-amber-100' : 'border-slate-200 hover:border-amber-300'}`}>
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                    <input type="checkbox" checked={isSelected} readOnly className="w-4 h-4 rounded text-amber-500" />
+                                    <span className="font-mono text-xs font-bold text-amber-600">{obl.code}</span>
+                                  </div>
+                                  {isSelected && <CheckCircle2 className="w-5 h-5 text-amber-500" />}
+                                </div>
+                                <p className="font-medium text-slate-800 text-sm mt-1">{obl.title}</p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className="mt-3 p-2 bg-white rounded-lg border">
+                          <p className="text-sm text-slate-600">المحدد: <strong className="text-amber-600">{formData.targetObligations?.length || 0}</strong> التزام</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 4: الضوابط الرقابية ═══════════ */}
+                  {executionStep === 4 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-5 border-2 border-indigo-200">
+                        <h3 className="text-lg font-black text-indigo-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-indigo-500 text-white rounded-lg flex items-center justify-center text-sm">5</span>
+                          <Shield className="w-5 h-5" />الضوابط الرقابية المستهدفة
+                        </h3>
+                        <div className="max-h-52 overflow-y-auto space-y-2">
+                          {CONTROLS.map(ctrl => {
+                            const isSelected = formData.targetControls?.includes(ctrl.id);
+                            return (
+                              <div key={ctrl.id} onClick={() => {
+                                const current = formData.targetControls || [];
+                                const updated = isSelected ? current.filter(id => id !== ctrl.id) : [...current, ctrl.id];
+                                setFormData({ ...formData, targetControls: updated });
+                              }}
+                                className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${isSelected ? 'border-indigo-500 bg-indigo-100' : 'border-slate-200 hover:border-indigo-300'}`}>
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                    <input type="checkbox" checked={isSelected} readOnly className="w-4 h-4 rounded text-indigo-500" />
+                                    <span className="font-mono text-xs font-bold text-indigo-600">{ctrl.code}</span>
+                                  </div>
+                                  {isSelected && <CheckCircle2 className="w-4 h-4 text-indigo-500" />}
+                                </div>
+                                <p className="text-sm text-slate-700 mt-1">{ctrl.title}</p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className="mt-3 p-2 bg-white rounded-lg border">
+                          <p className="text-sm text-slate-600">المحدد: <strong className="text-indigo-600">{formData.targetControls?.length || 0}</strong> ضابط</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 5: قوالب الاختبار ═══════════ */}
+                  {executionStep === 5 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-violet-50 to-purple-50 rounded-2xl p-5 border-2 border-violet-200">
+                        <h3 className="text-lg font-black text-violet-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-violet-500 text-white rounded-lg flex items-center justify-center text-sm">6</span>
+                          <ClipboardList className="w-5 h-5" />قوالب الاختبار المستخدمة
+                        </h3>
+                        <div className="grid grid-cols-2 gap-3">
+                          {testTemplates.map(template => {
+                            const isSelected = formData.selectedTemplates?.includes(template.id);
+                            return (
+                              <div key={template.id} onClick={() => {
+                                const current = formData.selectedTemplates || [];
+                                const updated = isSelected ? current.filter(id => id !== template.id) : [...current, template.id];
+                                setFormData({ ...formData, selectedTemplates: updated });
+                              }}
+                                className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${isSelected ? 'border-violet-500 bg-violet-100' : 'border-slate-200 hover:border-violet-300'}`}>
+                                <div className="flex items-start justify-between mb-2">
+                                  <input type="checkbox" checked={isSelected} readOnly className="w-4 h-4 rounded text-violet-500 mt-1" />
+                                  {isSelected && <CheckCircle2 className="w-5 h-5 text-violet-500" />}
+                                </div>
+                                <span className="font-mono text-xs font-bold text-violet-600">{template.code}</span>
+                                <h4 className="font-bold text-slate-800 text-sm mt-1">{template.title}</h4>
+                                <div className="flex items-center gap-2 mt-2 text-xs text-slate-500">
+                                  <span className="px-2 py-0.5 bg-slate-100 rounded">{template.stepCount} خطوات</span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 6: فريق العمل ═══════════ */}
+                  {executionStep === 6 && (
+                    <div className="grid grid-cols-2 gap-5">
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 border-2 border-blue-200">
+                        <h3 className="text-base font-black text-blue-800 mb-3 flex items-center gap-2">
+                          <User className="w-5 h-5" />مدير الخطة
+                        </h3>
+                        <div className="space-y-2">
+                          {TESTERS.map(user => (
+                            <div key={user.id} onClick={() => setFormData({ ...formData, managerId: user.id })}
+                              className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${formData.managerId === user.id ? 'border-blue-500 bg-blue-100' : 'border-slate-200 hover:border-blue-300'}`}>
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold ${formData.managerId === user.id ? 'bg-blue-500 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                                {user.name.charAt(0)}
+                              </div>
+                              <div className="flex-1">
+                                <p className="font-bold text-slate-800 text-sm">{user.name}</p>
+                                <p className="text-xs text-slate-500">{user.role}</p>
+                              </div>
+                              {formData.managerId === user.id && <CheckCircle2 className="w-5 h-5 text-blue-500" />}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200">
+                        <h3 className="text-base font-black text-emerald-800 mb-3 flex items-center gap-2">
+                          <Users className="w-5 h-5" />فريق التنفيذ
+                        </h3>
+                        <div className="space-y-2">
+                          {TESTERS.map(user => {
+                            const isSelected = formData.teamMembers?.includes(user.id);
+                            return (
+                              <div key={user.id} onClick={() => {
+                                const current = formData.teamMembers || [];
+                                const updated = isSelected ? current.filter(id => id !== user.id) : [...current, user.id];
+                                setFormData({ ...formData, teamMembers: updated });
+                              }}
+                                className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${isSelected ? 'border-emerald-500 bg-emerald-100' : 'border-slate-200 hover:border-emerald-300'}`}>
+                                <input type="checkbox" checked={isSelected} readOnly className="w-4 h-4 rounded text-emerald-500" />
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold ${isSelected ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                                  {user.name.charAt(0)}
                                 </div>
                                 <div className="flex-1">
-                                  <p className="text-sm font-medium text-slate-800">{step.instruction}</p>
-                                  <p className="text-xs text-slate-500">الدليل: {step.expectedEvidence}</p>
+                                  <p className="font-bold text-slate-800 text-sm">{user.name}</p>
+                                  <p className="text-xs text-slate-500">{user.role}</p>
                                 </div>
-                                {step.isMandatory && <span className="px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded">إلزامي</span>}
                               </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 7: الجدولة والمواعيد ═══════════ */}
+                  {executionStep === 7 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-5 border-2 border-cyan-200">
+                        <h3 className="text-lg font-black text-cyan-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-cyan-500 text-white rounded-lg flex items-center justify-center text-sm">8</span>
+                          <Clock className="w-5 h-5" />الجدولة والمواعيد
+                        </h3>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ بدء التنفيذ</label>
+                            <input type="date" value={formData.executionStart || ''} onChange={(e) => setFormData({ ...formData, executionStart: e.target.value })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl" />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ التسليم المستهدف</label>
+                            <input type="date" value={formData.targetDelivery || ''} onChange={(e) => setFormData({ ...formData, targetDelivery: e.target.value })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl" />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">المدة المقدرة (أيام)</label>
+                            <input type="number" value={formData.estimatedDays || 30} onChange={(e) => setFormData({ ...formData, estimatedDays: parseInt(e.target.value) })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl" />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 mt-4">
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">التذكيرات</label>
+                            <select value={formData.reminderDays || 7} onChange={(e) => setFormData({ ...formData, reminderDays: parseInt(e.target.value) })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl">
+                              <option value={3}>قبل 3 أيام</option>
+                              <option value={7}>قبل أسبوع</option>
+                              <option value={14}>قبل أسبوعين</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">المراجعات الدورية</label>
+                            <select value={formData.reviewFrequency || 'weekly'} onChange={(e) => setFormData({ ...formData, reviewFrequency: e.target.value })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl">
+                              <option value="daily">يومي</option>
+                              <option value="weekly">أسبوعي</option>
+                              <option value="biweekly">كل أسبوعين</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 8: الموارد والميزانية ═══════════ */}
+                  {executionStep === 8 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-5 border-2 border-rose-200">
+                        <h3 className="text-lg font-black text-rose-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-rose-500 text-white rounded-lg flex items-center justify-center text-sm">9</span>
+                          <DollarSign className="w-5 h-5" />الموارد والميزانية
+                        </h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">ساعات العمل المقدرة</label>
+                            <input type="number" value={formData.estimatedHours || 100} onChange={(e) => setFormData({ ...formData, estimatedHours: parseInt(e.target.value) })}
+                              className="w-full px-4 py-3 border-2 border-rose-200 rounded-xl" />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">الميزانية (ريال)</label>
+                            <input type="number" value={formData.budget || 50000} onChange={(e) => setFormData({ ...formData, budget: parseInt(e.target.value) })}
+                              className="w-full px-4 py-3 border-2 border-rose-200 rounded-xl" />
+                          </div>
+                        </div>
+                        <div className="mt-4">
+                          <label className="block text-sm font-bold text-slate-700 mb-2">الموارد المطلوبة</label>
+                          <div className="grid grid-cols-3 gap-2">
+                            {['أنظمة التدقيق', 'وصول للأنظمة', 'تقارير سابقة', 'مستندات', 'مقابلات', 'تدريب'].map(res => (
+                              <label key={res} className="flex items-center gap-2 p-3 bg-white rounded-xl border border-rose-200 cursor-pointer hover:bg-rose-50">
+                                <input type="checkbox" className="w-4 h-4 rounded text-rose-500" />
+                                <span className="text-sm font-bold text-slate-700">{res}</span>
+                              </label>
                             ))}
                           </div>
-                          <div className="mt-4 grid grid-cols-2 gap-4">
-                            <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-2">حجم العينة</label>
-                              <input type="number" value={formData.sampleSize || 10} onChange={(e) => setFormData({ ...formData, sampleSize: parseInt(e.target.value) })}
-                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-2">مرجع المجتمع</label>
-                              <input type="text" value={formData.populationRef || ''} onChange={(e) => setFormData({ ...formData, populationRef: e.target.value })}
-                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="مثال: معاملات يناير 2025" />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Step 3: Team Assignment */}
-                  {executionStep === 3 && (
-                    <div className="space-y-6">
-                      <div className="grid grid-cols-2 gap-6">
-                        {/* Tester Selection */}
-                        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-200">
-                          <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center gap-2">
-                            <User className="w-5 h-5" />اختيار المختبر *
-                          </h3>
-                          <div className="space-y-3">
-                            {TESTERS.map(tester => {
-                              const isSelected = formData.testerId === tester.id;
-                              const isDisabled = formData.reviewerId === tester.id;
-                              return (
-                                <div key={tester.id} onClick={() => !isDisabled && setFormData({ ...formData, testerId: tester.id })}
-                                  className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${isDisabled ? 'border-slate-200 bg-slate-100 cursor-not-allowed opacity-50' :
-                                      isSelected ? 'border-blue-500 bg-blue-100 cursor-pointer' : 'border-slate-200 hover:border-blue-300 cursor-pointer'
-                                    }`}>
-                                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold ${isSelected ? 'bg-blue-500 text-white' : 'bg-slate-200 text-slate-600'
-                                    }`}>
-                                    {tester.name.charAt(0)}
-                                  </div>
-                                  <div className="flex-1">
-                                    <p className="font-bold text-slate-800">{tester.name}</p>
-                                    <p className="text-sm text-slate-500">{tester.role}</p>
-                                  </div>
-                                  {isSelected && <CheckCircle2 className="w-6 h-6 text-blue-500" />}
-                                  {isDisabled && <span className="text-xs text-red-500">مختار كمراجع</span>}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-
-                        {/* Reviewer Selection */}
-                        <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200">
-                          <h3 className="text-lg font-bold text-amber-800 mb-4 flex items-center gap-2">
-                            <UserCheck className="w-5 h-5" />اختيار المراجع * (SoD)
-                          </h3>
-                          <div className="space-y-3">
-                            {TESTERS.map(reviewer => {
-                              const isSelected = formData.reviewerId === reviewer.id;
-                              const isDisabled = formData.testerId === reviewer.id;
-                              return (
-                                <div key={reviewer.id} onClick={() => !isDisabled && setFormData({ ...formData, reviewerId: reviewer.id })}
-                                  className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${isDisabled ? 'border-red-200 bg-red-50 cursor-not-allowed' :
-                                      isSelected ? 'border-amber-500 bg-amber-100 cursor-pointer' : 'border-slate-200 hover:border-amber-300 cursor-pointer'
-                                    }`}>
-                                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold ${isDisabled ? 'bg-red-200 text-red-600' :
-                                      isSelected ? 'bg-amber-500 text-white' : 'bg-slate-200 text-slate-600'
-                                    }`}>
-                                    {reviewer.name.charAt(0)}
-                                  </div>
-                                  <div className="flex-1">
-                                    <p className="font-bold text-slate-800">{reviewer.name}</p>
-                                    <p className="text-sm text-slate-500">{reviewer.role}</p>
-                                  </div>
-                                  {isSelected && <CheckCircle2 className="w-6 h-6 text-amber-500" />}
-                                  {isDisabled && (
-                                    <span className="flex items-center gap-1 text-xs text-red-600 bg-red-100 px-2 py-1 rounded">
-                                      <AlertTriangle className="w-3 h-3" />SoD
-                                    </span>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* SoD Warning */}
-                      <div className={`rounded-2xl p-4 border-2 ${formData.testerId && formData.reviewerId && formData.testerId !== formData.reviewerId
-                          ? 'bg-emerald-50 border-emerald-300'
-                          : formData.testerId && formData.reviewerId
-                            ? 'bg-red-50 border-red-300'
-                            : 'bg-slate-50 border-slate-200'
-                        }`}>
-                        <div className="flex items-center gap-3">
-                          {formData.testerId && formData.reviewerId && formData.testerId !== formData.reviewerId ? (
-                            <>
-                              <CheckCircle2 className="w-6 h-6 text-emerald-500" />
-                              <div>
-                                <p className="font-bold text-emerald-800">✓ فصل المهام (SoD) محقق</p>
-                                <p className="text-sm text-emerald-600">المختبر والمراجع مختلفان - يمكن المتابعة</p>
-                              </div>
-                            </>
-                          ) : formData.testerId && formData.reviewerId ? (
-                            <>
-                              <XCircle className="w-6 h-6 text-red-500" />
-                              <div>
-                                <p className="font-bold text-red-800">✗ انتهاك فصل المهام (SoD)</p>
-                                <p className="text-sm text-red-600">لا يمكن أن يكون المختبر هو نفسه المراجع</p>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <Info className="w-6 h-6 text-slate-400" />
-                              <div>
-                                <p className="font-bold text-slate-600">اختر المختبر والمراجع</p>
-                                <p className="text-sm text-slate-500">يجب أن يكونا مختلفين لتحقيق فصل المهام</p>
-                              </div>
-                            </>
-                          )}
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* Step 4: Review & Confirm */}
-                  {executionStep === 4 && (
-                    <div className="space-y-6">
-                      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-6 border border-purple-200">
-                        <h3 className="text-lg font-bold text-purple-800 mb-6 flex items-center gap-2">
-                          <CheckCircle2 className="w-5 h-5" />مراجعة البيانات قبل الإنشاء
+                  {/* ═══════════ Step 9: المراجعة والتأكيد ═══════════ */}
+                  {executionStep === 9 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200">
+                        <h3 className="text-lg font-black text-emerald-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-emerald-500 text-white rounded-lg flex items-center justify-center text-sm">10</span>
+                          <CheckCircle2 className="w-5 h-5" />المراجعة النهائية
                         </h3>
-
-                        <div className="grid grid-cols-2 gap-6">
-                          {/* Basic Info */}
-                          <div className="bg-white rounded-xl p-5 border border-slate-200">
-                            <h4 className="font-bold text-slate-700 mb-3 flex items-center gap-2">
-                              <FileText className="w-4 h-4 text-blue-500" />المعلومات الأساسية
-                            </h4>
-                            <div className="space-y-2 text-sm">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-white rounded-xl p-4 border border-slate-200">
+                            <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><FileText className="w-4 h-4 text-blue-500" />المعلومات الأساسية</h4>
+                            <div className="space-y-1 text-xs">
                               <div className="flex justify-between"><span className="text-slate-500">الكود:</span><span className="font-bold">{formData.code}</span></div>
-                              <div className="flex justify-between"><span className="text-slate-500">العنوان:</span><span className="font-bold text-left max-w-xs truncate">{formData.title || '-'}</span></div>
-                              <div className="flex justify-between"><span className="text-slate-500">الاستحقاق:</span><span className="font-bold">{formData.dueDate || '-'}</span></div>
-                              <div className="flex justify-between"><span className="text-slate-500">الخطة:</span><span className="font-bold">{getPlan(formData.planId)?.code || 'مستقل'}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">العنوان:</span><span className="font-bold truncate max-w-32">{formData.title || '-'}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">الفترة:</span><span className="font-bold">{formData.periodKey || '-'}</span></div>
                             </div>
                           </div>
-
-                          {/* Scope */}
-                          <div className="bg-white rounded-xl p-5 border border-slate-200">
-                            <h4 className="font-bold text-slate-700 mb-3 flex items-center gap-2">
-                              <Link2 className="w-4 h-4 text-emerald-500" />النطاق
-                            </h4>
-                            <div className="space-y-2 text-sm">
-                              <div className="flex justify-between"><span className="text-slate-500">الالتزام:</span><span className="font-bold">{getObligation(formData.obligationId)?.code || '-'}</span></div>
-                              <div className="flex justify-between"><span className="text-slate-500">الضابط:</span><span className="font-bold">{getControl(formData.controlId)?.code || 'بدون'}</span></div>
-                              <div className="flex justify-between"><span className="text-slate-500">حجم العينة:</span><span className="font-bold">{formData.sampleSize}</span></div>
+                          <div className="bg-white rounded-xl p-4 border border-slate-200">
+                            <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><Target className="w-4 h-4 text-amber-500" />النطاق</h4>
+                            <div className="space-y-1 text-xs">
+                              <div className="flex justify-between"><span className="text-slate-500">الجهة:</span><span className="font-bold">{formData.authorityId || 'الكل'}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">الالتزامات:</span><span className="font-bold">{formData.targetObligations?.length || 0}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">الضوابط:</span><span className="font-bold">{formData.targetControls?.length || 0}</span></div>
                             </div>
                           </div>
-
-                          {/* Template */}
-                          <div className="bg-white rounded-xl p-5 border border-slate-200">
-                            <h4 className="font-bold text-slate-700 mb-3 flex items-center gap-2">
-                              <ClipboardList className="w-4 h-4 text-purple-500" />القالب
-                            </h4>
-                            <div className="space-y-2 text-sm">
-                              <div className="flex justify-between"><span className="text-slate-500">القالب:</span><span className="font-bold">{getTemplate(formData.templateId)?.code || '-'}</span></div>
-                              <div className="flex justify-between"><span className="text-slate-500">النوع:</span><span className="font-bold">{getTemplate(formData.templateId)?.testType || '-'}</span></div>
-                              <div className="flex justify-between"><span className="text-slate-500">الخطوات:</span><span className="font-bold">{getTemplate(formData.templateId)?.stepCount || 0}</span></div>
+                          <div className="bg-white rounded-xl p-4 border border-slate-200">
+                            <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><Users className="w-4 h-4 text-purple-500" />الفريق</h4>
+                            <div className="space-y-1 text-xs">
+                              <div className="flex justify-between"><span className="text-slate-500">المدير:</span><span className="font-bold">{getUser(formData.managerId)?.name || '-'}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">الفريق:</span><span className="font-bold">{formData.teamMembers?.length || 0} أعضاء</span></div>
                             </div>
                           </div>
-
-                          {/* Team */}
-                          <div className="bg-white rounded-xl p-5 border border-slate-200">
-                            <h4 className="font-bold text-slate-700 mb-3 flex items-center gap-2">
-                              <Users className="w-4 h-4 text-amber-500" />فريق العمل
-                            </h4>
-                            <div className="space-y-2 text-sm">
-                              <div className="flex justify-between"><span className="text-slate-500">المختبر:</span><span className="font-bold">{getUser(formData.testerId)?.name || '-'}</span></div>
-                              <div className="flex justify-between"><span className="text-slate-500">المراجع:</span><span className="font-bold">{getUser(formData.reviewerId)?.name || '-'}</span></div>
-                              <div className="flex justify-between">
-                                <span className="text-slate-500">SoD:</span>
-                                {formData.testerId !== formData.reviewerId ? (
-                                  <span className="font-bold text-emerald-600 flex items-center gap-1"><CheckCircle2 className="w-4 h-4" />محقق</span>
-                                ) : (
-                                  <span className="font-bold text-red-600 flex items-center gap-1"><XCircle className="w-4 h-4" />غير محقق</span>
-                                )}
-                              </div>
+                          <div className="bg-white rounded-xl p-4 border border-slate-200">
+                            <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><Clock className="w-4 h-4 text-cyan-500" />الجدولة</h4>
+                            <div className="space-y-1 text-xs">
+                              <div className="flex justify-between"><span className="text-slate-500">المدة:</span><span className="font-bold">{formData.estimatedDays || 30} يوم</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">الساعات:</span><span className="font-bold">{formData.estimatedHours || 100} ساعة</span></div>
                             </div>
                           </div>
                         </div>
-
-                        {/* Validation Summary */}
-                        <div className="mt-6 p-4 bg-white rounded-xl border border-slate-200">
-                          <h4 className="font-bold text-slate-700 mb-3">التحقق من البيانات</h4>
-                          <div className="grid grid-cols-2 gap-4">
+                        {/* Validation */}
+                        <div className="mt-4 p-3 bg-white rounded-xl border border-slate-200">
+                          <h4 className="font-bold text-slate-700 mb-2 text-sm">التحقق من البيانات</h4>
+                          <div className="grid grid-cols-3 gap-2">
                             {[
-                              { label: 'العنوان', valid: formData.title?.length >= 3 },
-                              { label: 'الالتزام', valid: !!formData.obligationId },
-                              { label: 'القالب', valid: !!formData.templateId },
-                              { label: 'المختبر', valid: !!formData.testerId },
-                              { label: 'المراجع', valid: !!formData.reviewerId },
-                              { label: 'فصل المهام', valid: formData.testerId !== formData.reviewerId },
+                              { label: 'العنوان', valid: formData.title?.length >= 5 },
+                              { label: 'الفترة', valid: !!formData.periodKey },
+                              { label: 'الجهة', valid: !!formData.authorityId },
+                              { label: 'الالتزامات', valid: formData.targetObligations?.length > 0 },
+                              { label: 'المدير', valid: !!formData.managerId },
+                              { label: 'التواريخ', valid: !!formData.startDate },
                             ].map((check, idx) => (
-                              <div key={idx} className={`flex items-center gap-2 p-2 rounded-lg ${check.valid ? 'bg-emerald-50' : 'bg-red-50'}`}>
-                                {check.valid ? <CheckCircle2 className="w-5 h-5 text-emerald-500" /> : <XCircle className="w-5 h-5 text-red-500" />}
-                                <span className={`text-sm font-medium ${check.valid ? 'text-emerald-700' : 'text-red-700'}`}>{check.label}</span>
+                              <div key={idx} className={`flex items-center gap-1 p-1.5 rounded-lg text-xs ${check.valid ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>
+                                {check.valid ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                                <span className="font-bold">{check.label}</span>
                               </div>
                             ))}
                           </div>
@@ -17106,29 +19556,662 @@ const ComplianceTests = () => {
                 </div>
 
                 {/* Footer with Navigation */}
-                <div className="border-t-2 border-slate-200 px-8 py-5 bg-slate-50 flex items-center justify-between">
+                <div className="border-t-2 border-slate-200 px-6 py-4 bg-slate-50 flex items-center justify-between">
                   <button onClick={() => executionStep > 0 ? setExecutionStep(executionStep - 1) : setShowModal(false)}
-                    className="flex items-center gap-2 px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white transition-all">
-                    <ChevronRight className="w-5 h-5" />
+                    className="flex items-center gap-2 px-5 py-2.5 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white">
+                    <ChevronRight className="w-4 h-4" />
                     {executionStep === 0 ? 'إلغاء' : 'السابق'}
                   </button>
 
-                  <div className="flex items-center gap-2">
-                    {[0, 1, 2, 3, 4].map(step => (
-                      <div key={step} className={`w-3 h-3 rounded-full transition-all ${executionStep === step ? 'bg-purple-500 w-8' : executionStep > step ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                  <div className="flex items-center gap-1">
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(step => (
+                      <div key={step} className={`w-2 h-2 rounded-full transition-all ${executionStep === step ? 'bg-purple-500 w-4' : executionStep > step ? 'bg-emerald-500' : 'bg-slate-300'}`} />
                     ))}
                   </div>
 
-                  {executionStep < 4 ? (
+                  {executionStep < 9 ? (
                     <button onClick={() => setExecutionStep(executionStep + 1)}
-                      className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl font-bold shadow-lg">
-                      التالي<ChevronLeft className="w-5 h-5" />
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl font-bold shadow-lg">
+                      التالي<ChevronLeft className="w-4 h-4" />
+                    </button>
+                  ) : (
+                    <button onClick={handleSave}
+                      disabled={!formData.title || !formData.periodKey}
+                      className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                      <CheckCircle2 className="w-4 h-4" />{modalMode === 'create' ? 'إنشاء خطة الاختبار' : 'حفظ التعديلات'}
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* ═══════════ ULTIMATE 10-STEP Test Case Wizard Modal ═══════════ */}
+            {modalType === 'case' && (
+              <>
+                {/* Header with Enhanced Progress */}
+                <div className="bg-gradient-to-l from-purple-600 via-indigo-600 to-blue-600 px-6 py-5 text-white">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                        <ClipboardCheck className="w-7 h-7" />
+                      </div>
+                      <div>
+                        <h2 className="text-xl font-black">{modalMode === 'create' ? 'معالج إنشاء حالة اختبار' : 'تعديل حالة الاختبار'}</h2>
+                        <p className="text-purple-200 font-mono text-sm">{formData.code}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {/* Progress Circle */}
+                      <div className="relative w-16 h-16">
+                        <svg className="w-16 h-16 transform -rotate-90">
+                          <circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.2)" strokeWidth="4" fill="none" />
+                          <circle cx="32" cy="32" r="28" stroke="white" strokeWidth="4" fill="none"
+                            strokeDasharray={`${(executionStep / 9) * 176} 176`} strokeLinecap="round" />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-lg font-black">{executionStep + 1}/10</span>
+                        </div>
+                      </div>
+                      <button onClick={() => setShowModal(false)} className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl">
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 10-Step Progress Bar with Labels */}
+                  <div className="grid grid-cols-10 gap-1">
+                    {[
+                      { step: 0, label: 'المعلومات الأساسية', icon: FileText },
+                      { step: 1, label: 'الإطار التنظيمي', icon: Building2 },
+                      { step: 2, label: 'الالتزامات', icon: ClipboardCheck },
+                      { step: 3, label: 'الضوابط والمخاطر', icon: Shield },
+                      { step: 4, label: 'قالب الاختبار', icon: ClipboardList },
+                      { step: 5, label: 'خطوات التنفيذ', icon: ListChecks },
+                      { step: 6, label: 'فريق العمل', icon: Users },
+                      { step: 7, label: 'الجدولة', icon: Calendar },
+                      { step: 8, label: 'الأدلة المطلوبة', icon: FileCheck },
+                      { step: 9, label: 'التأكيد النهائي', icon: CheckCircle2 },
+                    ].map((s) => (
+                      <button key={s.step} onClick={() => setExecutionStep(s.step)}
+                        className={`flex flex-col items-center p-2 rounded-xl transition-all ${executionStep === s.step ? 'bg-white text-purple-600' :
+                          executionStep > s.step ? 'bg-emerald-400/40 text-white' : 'bg-white/10 text-white/60 hover:bg-white/20'
+                          }`}>
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-1 ${executionStep === s.step ? 'bg-purple-100' :
+                          executionStep > s.step ? 'bg-emerald-500' : 'bg-white/20'
+                          }`}>
+                          {executionStep > s.step ? <Check className="w-4 h-4" /> : <s.icon className="w-4 h-4" />}
+                        </div>
+                        <span className="text-[9px] font-bold text-center leading-tight">{s.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Content Area */}
+                <div className="p-6 max-h-[50vh] overflow-y-auto">
+
+                  {/* ═══════════ Step 0: المعلومات الأساسية ═══════════ */}
+                  {executionStep === 0 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-5 border-2 border-purple-200">
+                        <h3 className="text-lg font-black text-purple-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-purple-500 text-white rounded-lg flex items-center justify-center text-sm">1</span>
+                          المعلومات الأساسية - Basic Information
+                        </h3>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">عنوان الاختبار *</label>
+                            <input type="text" value={formData.title || ''} onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                              className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl text-lg font-bold focus:border-purple-500 focus:outline-none"
+                              placeholder="مثال: اختبار امتثال تقرير مكافحة غسل الأموال الشهري" />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-bold text-slate-700 mb-2">خطة الاختبار</label>
+                              <select value={formData.planId || ''} onChange={(e) => setFormData({ ...formData, planId: parseInt(e.target.value) || '' })}
+                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-400 focus:outline-none">
+                                <option value="">بدون خطة (اختبار مستقل)</option>
+                                {testPlans.filter(p => p.status === 'Active').map(p => (
+                                  <option key={p.id} value={p.id}>{p.code} - {p.title}</option>
+                                ))}
+                              </select>
+                            </div>
+                            <div>
+                              <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ الاستحقاق *</label>
+                              <input type="date" value={formData.dueDate || ''} onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-400 focus:outline-none" />
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-bold text-slate-700 mb-2">نوع الاختبار</label>
+                              <div className="grid grid-cols-3 gap-2">
+                                {[
+                                  { value: 'Walkthrough', label: 'مراجعة', icon: Eye },
+                                  { value: 'Sample', label: 'عينة', icon: BarChart3 },
+                                  { value: 'Full', label: 'شامل', icon: Target },
+                                ].map(type => (
+                                  <button key={type.value} type="button" onClick={() => setFormData({ ...formData, testType: type.value })}
+                                    className={`p-2 rounded-xl border-2 transition-all ${formData.testType === type.value ? 'border-purple-500 bg-purple-50' : 'border-slate-200 hover:border-slate-300'}`}>
+                                    <type.icon className={`w-4 h-4 mx-auto mb-1 ${formData.testType === type.value ? 'text-purple-600' : 'text-slate-400'}`} />
+                                    <p className="text-xs font-bold">{type.label}</p>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-sm font-bold text-slate-700 mb-2">الأولوية</label>
+                              <div className="flex gap-1">
+                                {[
+                                  { value: 'Critical', label: 'حرج', color: 'red' },
+                                  { value: 'High', label: 'عالي', color: 'orange' },
+                                  { value: 'Medium', label: 'متوسط', color: 'amber' },
+                                  { value: 'Low', label: 'منخفض', color: 'emerald' },
+                                ].map(pri => (
+                                  <button key={pri.value} type="button" onClick={() => setFormData({ ...formData, priority: pri.value })}
+                                    className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all ${formData.priority === pri.value ? `bg-${pri.color}-500 text-white` : `bg-${pri.color}-50 text-${pri.color}-700`}`}>
+                                    {pri.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">وصف الاختبار</label>
+                            <textarea rows={2} value={formData.notes || ''} onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                              className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-purple-400 focus:outline-none resize-none"
+                              placeholder="وصف تفصيلي لهدف الاختبار والنطاق..." />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 1: الإطار التنظيمي ═══════════ */}
+                  {executionStep === 1 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 border-2 border-blue-200">
+                        <h3 className="text-lg font-black text-blue-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center text-sm">2</span>
+                          <Building2 className="w-5 h-5" />الإطار التنظيمي
+                        </h3>
+                        <div className="grid grid-cols-2 gap-5">
+                          {/* الجهات الرقابية */}
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-3">الجهة الرقابية *</label>
+                            <div className="space-y-2 max-h-72 overflow-y-auto">
+                              {[
+                                { id: 'SAMA', code: 'SA', name: 'البنك المركزي السعودي', fullName: 'Saudi Central Bank', color: 'emerald' },
+                                { id: 'CMA', code: 'CM', name: 'هيئة السوق المالية', fullName: 'Capital Market Authority', color: 'blue' },
+                                { id: 'NCA', code: 'NC', name: 'الهيئة الوطنية للأمن السيبراني', fullName: 'National Cybersecurity Authority', color: 'purple' },
+                                { id: 'SDAIA', code: 'SD', name: 'الهيئة السعودية للبيانات والذكاء الاصطناعي', fullName: 'Saudi Data & AI Authority', color: 'indigo' },
+                                { id: 'ZATCA', code: 'ZA', name: 'هيئة الزكاة والضريبة والجمارك', fullName: 'Zakat, Tax and Customs Authority', color: 'amber' },
+                                { id: 'CCHI', code: 'CC', name: 'مجلس الضمان الصحي التعاوني', fullName: 'Council of Cooperative Health Insurance', color: 'teal' },
+                                { id: 'HRSD', code: 'HR', name: 'وزارة الموارد البشرية والتنمية الاجتماعية', fullName: 'Ministry of Human Resources', color: 'rose' },
+                                { id: 'CITC', code: 'CI', name: 'هيئة الاتصالات وتقنية المعلومات', fullName: 'Communications & IT Commission', color: 'cyan' },
+                              ].map(auth => (
+                                <button key={auth.id} type="button" onClick={() => setFormData({ ...formData, authorityId: auth.id })}
+                                  className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-right ${formData.authorityId === auth.id
+                                    ? `border-${auth.color}-500 bg-${auth.color}-100`
+                                    : 'border-slate-200 hover:border-slate-300 bg-white'
+                                    }`}>
+                                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg ${formData.authorityId === auth.id
+                                    ? `bg-${auth.color}-500 text-white`
+                                    : 'bg-slate-100 text-slate-600'
+                                    }`}>
+                                    {auth.code}
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="font-bold text-slate-800">{auth.name}</p>
+                                    <p className="text-xs text-slate-500">{auth.id}</p>
+                                  </div>
+                                  {formData.authorityId === auth.id && <CheckCircle2 className="w-6 h-6 text-emerald-500" />}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* الأطر والمعايير */}
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-3">الإطار / المعيار التنظيمي</label>
+                            <div className="space-y-2 max-h-72 overflow-y-auto">
+                              {[
+                                { id: 'SAMA-AML', name: 'مكافحة غسل الأموال وتمويل الإرهاب', code: 'AML/CFT', authority: 'SAMA', color: 'emerald' },
+                                { id: 'SAMA-BCM', name: 'إدارة استمرارية الأعمال', code: 'BCM', authority: 'SAMA', color: 'emerald' },
+                                { id: 'SAMA-CYBER', name: 'الإطار السيبراني للقطاع المالي', code: 'CSF', authority: 'SAMA', color: 'emerald' },
+                                { id: 'NCA-ECC', name: 'ضوابط الأمن السيبراني الأساسية', code: 'ECC', authority: 'NCA', color: 'purple' },
+                                { id: 'NCA-CCC', name: 'ضوابط الأمن السيبراني للحوسبة السحابية', code: 'CCC', authority: 'NCA', color: 'purple' },
+                                { id: 'NCA-CSCC', name: 'ضوابط الأنظمة الحساسة', code: 'CSCC', authority: 'NCA', color: 'purple' },
+                                { id: 'PDPL', name: 'نظام حماية البيانات الشخصية', code: 'PDPL', authority: 'SDAIA', color: 'indigo' },
+                                { id: 'ISO27001', name: 'نظام إدارة أمن المعلومات', code: 'ISO 27001', authority: 'دولي', color: 'blue' },
+                                { id: 'PCIDSS', name: 'معيار أمان بيانات بطاقات الدفع', code: 'PCI-DSS', authority: 'دولي', color: 'blue' },
+                              ].map(fw => (
+                                <button key={fw.id} type="button" onClick={() => setFormData({ ...formData, framework: fw.id })}
+                                  className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-right ${formData.framework === fw.id
+                                    ? `border-${fw.color}-500 bg-${fw.color}-100`
+                                    : 'border-slate-200 hover:border-slate-300 bg-white'
+                                    }`}>
+                                  <div className={`px-3 py-1.5 rounded-lg font-mono text-xs font-bold ${formData.framework === fw.id
+                                    ? `bg-${fw.color}-500 text-white`
+                                    : 'bg-slate-100 text-slate-600'
+                                    }`}>
+                                    {fw.code}
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="font-bold text-slate-800 text-sm">{fw.name}</p>
+                                    <p className="text-xs text-slate-500">{fw.authority}</p>
+                                  </div>
+                                  {formData.framework === fw.id && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* ملخص الاختيار */}
+                        {(formData.authorityId || formData.framework) && (
+                          <div className="mt-4 p-3 bg-white rounded-xl border border-slate-200">
+                            <p className="text-sm text-slate-600">
+                              <strong>المحدد:</strong>
+                              {formData.authorityId && <span className="mx-1 px-2 py-0.5 bg-blue-100 text-blue-700 rounded">{formData.authorityId}</span>}
+                              {formData.framework && <span className="mx-1 px-2 py-0.5 bg-purple-100 text-purple-700 rounded">{formData.framework}</span>}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 2: الالتزامات ═══════════ */}
+                  {executionStep === 2 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200">
+                        <h3 className="text-lg font-black text-emerald-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-emerald-500 text-white rounded-lg flex items-center justify-center text-sm">3</span>
+                          <ClipboardCheck className="w-5 h-5" />اختيار الالتزامات
+                        </h3>
+                        <div className="relative mb-3">
+                          <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                          <input type="text" placeholder="بحث في الالتزامات..." className="w-full pr-10 pl-4 py-2 border-2 border-slate-200 rounded-xl" />
+                        </div>
+                        <div className="max-h-48 overflow-y-auto space-y-2">
+                          {INITIAL_OBLIGATIONS.map(obl => {
+                            const auth = AUTHORITIES.find(a => a.id === obl.authorityId);
+                            const isSelected = formData.obligationId === obl.id;
+                            return (
+                              <div key={obl.id} onClick={() => setFormData({ ...formData, obligationId: obl.id })}
+                                className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${isSelected ? 'border-emerald-500 bg-emerald-100' : 'border-slate-200 hover:border-emerald-300'}`}>
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-mono text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">{obl.code}</span>
+                                    {auth && <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">{auth.code}</span>}
+                                  </div>
+                                  {isSelected && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
+                                </div>
+                                <p className="font-medium text-slate-800 text-sm mt-1">{obl.title}</p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 3: الضوابط والمخاطر ═══════════ */}
+                  {executionStep === 3 && (
+                    <div className="grid grid-cols-2 gap-5">
+                      <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-5 border-2 border-indigo-200">
+                        <h3 className="text-base font-black text-indigo-800 mb-3 flex items-center gap-2">
+                          <Shield className="w-5 h-5" />الضوابط الرقابية
+                        </h3>
+                        <div className="max-h-40 overflow-y-auto space-y-2">
+                          {CONTROLS.map(ctrl => (
+                            <div key={ctrl.id} onClick={() => setFormData({ ...formData, controlId: ctrl.id })}
+                              className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${formData.controlId === ctrl.id ? 'border-indigo-500 bg-indigo-100' : 'border-slate-200 hover:border-indigo-300'}`}>
+                              <div className="flex items-center justify-between">
+                                <span className="font-mono text-xs font-bold text-indigo-600">{ctrl.code}</span>
+                                {formData.controlId === ctrl.id && <CheckCircle2 className="w-4 h-4 text-indigo-500" />}
+                              </div>
+                              <p className="text-sm text-slate-700 mt-1">{ctrl.title}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-5 border-2 border-red-200">
+                        <h3 className="text-base font-black text-red-800 mb-3 flex items-center gap-2">
+                          <AlertTriangle className="w-5 h-5" />المخاطر المرتبطة
+                        </h3>
+                        <div className="space-y-2">
+                          {[
+                            { id: 'R1', code: 'RISK-001', title: 'مخاطر عدم الامتثال التنظيمي', level: 'High' },
+                            { id: 'R2', code: 'RISK-002', title: 'مخاطر غسل الأموال', level: 'Critical' },
+                            { id: 'R3', code: 'RISK-003', title: 'مخاطر تمويل الإرهاب', level: 'Critical' },
+                          ].map(risk => (
+                            <div key={risk.id} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-red-200">
+                              <input type="checkbox" className="w-4 h-4 rounded text-red-500" />
+                              <div className="flex-1">
+                                <span className="font-mono text-xs text-red-600">{risk.code}</span>
+                                <p className="text-sm text-slate-700">{risk.title}</p>
+                              </div>
+                              <span className={`px-2 py-0.5 rounded text-xs font-bold ${risk.level === 'Critical' ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'}`}>{risk.level}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 4: قالب الاختبار ═══════════ */}
+                  {executionStep === 4 && (
+                    <div className="space-y-5">
+                      <h3 className="text-lg font-black text-slate-800 flex items-center gap-2">
+                        <span className="w-8 h-8 bg-purple-500 text-white rounded-lg flex items-center justify-center text-sm">5</span>
+                        اختر قالب الاختبار - Test Template
+                      </h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        {testTemplates.map(template => {
+                          const isSelected = formData.templateId === template.id;
+                          const typeCfg = TEST_TYPE_CONFIG[template.testType];
+                          const TypeIcon = typeCfg?.icon || FileText;
+                          return (
+                            <div key={template.id} onClick={() => setFormData({ ...formData, templateId: template.id, sampleSize: template.defaultSampleSize })}
+                              className={`rounded-xl border-2 p-4 cursor-pointer transition-all ${isSelected ? 'border-purple-500 bg-purple-50 shadow-lg' : 'border-slate-200 hover:border-purple-300'}`}>
+                              <div className="flex items-start justify-between mb-2">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isSelected ? 'bg-purple-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                                  <TypeIcon className="w-5 h-5" />
+                                </div>
+                                {isSelected && <CheckCircle2 className="w-5 h-5 text-purple-500" />}
+                              </div>
+                              <span className="font-mono text-xs font-bold text-purple-600">{template.code}</span>
+                              <h4 className="font-bold text-slate-800 text-sm mt-1">{template.title}</h4>
+                              <div className="flex items-center gap-2 mt-2 text-xs text-slate-500">
+                                <span className="px-2 py-0.5 bg-slate-100 rounded">{template.stepCount} خطوات</span>
+                                <span>عينة: {template.defaultSampleSize}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 5: خطوات التنفيذ ═══════════ */}
+                  {executionStep === 5 && (
+                    <div className="space-y-5">
+                      <h3 className="text-lg font-black text-slate-800 flex items-center gap-2">
+                        <span className="w-8 h-8 bg-amber-500 text-white rounded-lg flex items-center justify-center text-sm">6</span>
+                        خطوات التنفيذ - Execution Steps
+                      </h3>
+                      {formData.templateId ? (
+                        <div className="space-y-2">
+                          {getTemplate(formData.templateId)?.steps.map((step, idx) => (
+                            <div key={step.id} className="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-slate-200">
+                              <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-sm">{step.stepNo}</div>
+                              <div className="flex-1">
+                                <p className="text-sm font-medium text-slate-800">{step.instruction}</p>
+                                <p className="text-xs text-slate-500 mt-1">الدليل: {step.expectedEvidence}</p>
+                              </div>
+                              {step.isMandatory && <span className="px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded font-bold">إلزامي</span>}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 bg-slate-50 rounded-xl">
+                          <ClipboardList className="w-12 h-12 text-slate-300 mx-auto mb-2" />
+                          <p className="text-slate-500">اختر قالب الاختبار أولاً</p>
+                        </div>
+                      )}
+                      <div className="grid grid-cols-2 gap-4 mt-4">
+                        <div>
+                          <label className="block text-sm font-bold text-slate-700 mb-2">حجم العينة</label>
+                          <input type="number" value={formData.sampleSize || 10} onChange={(e) => setFormData({ ...formData, sampleSize: parseInt(e.target.value) })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-bold text-slate-700 mb-2">مرجع المجتمع</label>
+                          <input type="text" value={formData.populationRef || ''} onChange={(e) => setFormData({ ...formData, populationRef: e.target.value })}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="مثال: معاملات يناير 2025" />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 6: فريق العمل ═══════════ */}
+                  {executionStep === 6 && (
+                    <div className="grid grid-cols-2 gap-5">
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 border-2 border-blue-200">
+                        <h3 className="text-base font-black text-blue-800 mb-3 flex items-center gap-2">
+                          <User className="w-5 h-5" />المختبر - Tester
+                        </h3>
+                        <div className="space-y-2">
+                          {TESTERS.map(tester => {
+                            const isSelected = formData.testerId === tester.id;
+                            const isDisabled = formData.reviewerId === tester.id;
+                            return (
+                              <div key={tester.id} onClick={() => !isDisabled && setFormData({ ...formData, testerId: tester.id })}
+                                className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${isSelected ? 'border-blue-500 bg-blue-100' : 'border-slate-200 hover:border-blue-300'}`}>
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold ${isSelected ? 'bg-blue-500 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                                  {tester.name.charAt(0)}
+                                </div>
+                                <div className="flex-1">
+                                  <p className="font-bold text-slate-800 text-sm">{tester.name}</p>
+                                  <p className="text-xs text-slate-500">{tester.role}</p>
+                                </div>
+                                {isSelected && <CheckCircle2 className="w-5 h-5 text-blue-500" />}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border-2 border-amber-200">
+                        <h3 className="text-base font-black text-amber-800 mb-3 flex items-center gap-2">
+                          <UserCheck className="w-5 h-5" />المراجع (SoD) - Reviewer
+                        </h3>
+                        <div className="space-y-2">
+                          {TESTERS.map(reviewer => {
+                            const isSelected = formData.reviewerId === reviewer.id;
+                            const isDisabled = formData.testerId === reviewer.id;
+                            return (
+                              <div key={reviewer.id} onClick={() => !isDisabled && setFormData({ ...formData, reviewerId: reviewer.id })}
+                                className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${isDisabled ? 'border-red-300 bg-red-50 cursor-not-allowed' : 'cursor-pointer'} ${isSelected ? 'border-amber-500 bg-amber-100' : 'border-slate-200 hover:border-amber-300'}`}>
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold ${isDisabled ? 'bg-red-200 text-red-600' : isSelected ? 'bg-amber-500 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                                  {reviewer.name.charAt(0)}
+                                </div>
+                                <div className="flex-1">
+                                  <p className="font-bold text-slate-800 text-sm">{reviewer.name}</p>
+                                  <p className="text-xs text-slate-500">{reviewer.role}</p>
+                                </div>
+                                {isDisabled && <span className="px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded font-bold">SoD</span>}
+                                {isSelected && <CheckCircle2 className="w-5 h-5 text-amber-500" />}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 7: الجدولة ═══════════ */}
+                  {executionStep === 7 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-5 border-2 border-cyan-200">
+                        <h3 className="text-lg font-black text-cyan-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-cyan-500 text-white rounded-lg flex items-center justify-center text-sm">8</span>
+                          الجدولة والمواعيد - Scheduling
+                        </h3>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ البدء</label>
+                            <input type="date" value={formData.startDate || ''} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl" />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">تاريخ الانتهاء المتوقع</label>
+                            <input type="date" value={formData.expectedEndDate || ''} onChange={(e) => setFormData({ ...formData, expectedEndDate: e.target.value })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl" />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">المدة المقدرة (أيام)</label>
+                            <input type="number" value={formData.estimatedDays || 5} onChange={(e) => setFormData({ ...formData, estimatedDays: parseInt(e.target.value) })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl" />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 mt-4">
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">التكرار</label>
+                            <select value={formData.recurrence || 'none'} onChange={(e) => setFormData({ ...formData, recurrence: e.target.value })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl">
+                              <option value="none">مرة واحدة</option>
+                              <option value="monthly">شهري</option>
+                              <option value="quarterly">ربع سنوي</option>
+                              <option value="annual">سنوي</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-bold text-slate-700 mb-2">تذكير قبل (أيام)</label>
+                            <select value={formData.reminderDays || 3} onChange={(e) => setFormData({ ...formData, reminderDays: parseInt(e.target.value) })}
+                              className="w-full px-4 py-3 border-2 border-cyan-200 rounded-xl">
+                              <option value={1}>يوم واحد</option>
+                              <option value={3}>3 أيام</option>
+                              <option value={7}>أسبوع</option>
+                              <option value={14}>أسبوعين</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 8: الأدلة المطلوبة ═══════════ */}
+                  {executionStep === 8 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-violet-50 to-purple-50 rounded-2xl p-5 border-2 border-violet-200">
+                        <h3 className="text-lg font-black text-violet-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-violet-500 text-white rounded-lg flex items-center justify-center text-sm">9</span>
+                          الأدلة المطلوبة - Required Evidence
+                        </h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          {[
+                            { type: 'Report', label: 'تقرير', icon: FileText, required: true },
+                            { type: 'Screenshot', label: 'لقطة شاشة', icon: Eye, required: true },
+                            { type: 'Log', label: 'سجل', icon: Table, required: false },
+                            { type: 'Certificate', label: 'شهادة', icon: Award, required: false },
+                            { type: 'Attestation', label: 'إقرار', icon: FileCheck, required: false },
+                            { type: 'Config', label: 'إعدادات', icon: Settings, required: false },
+                          ].map(evd => (
+                            <label key={evd.type} className="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-slate-200 cursor-pointer hover:border-violet-300">
+                              <input type="checkbox" defaultChecked={evd.required} className="w-5 h-5 rounded text-violet-500" />
+                              <evd.icon className="w-5 h-5 text-violet-500" />
+                              <span className="font-bold text-slate-700">{evd.label}</span>
+                              {evd.required && <span className="px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded mr-auto">مطلوب</span>}
+                            </label>
+                          ))}
+                        </div>
+                        <div className="mt-4">
+                          <label className="block text-sm font-bold text-slate-700 mb-2">ملاحظات حول الأدلة</label>
+                          <textarea rows={2} className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl resize-none"
+                            placeholder="أي ملاحظات خاصة حول الأدلة المطلوبة..." />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ═══════════ Step 9: التأكيد النهائي ═══════════ */}
+                  {executionStep === 9 && (
+                    <div className="space-y-5">
+                      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200">
+                        <h3 className="text-lg font-black text-emerald-800 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-8 bg-emerald-500 text-white rounded-lg flex items-center justify-center text-sm">10</span>
+                          مراجعة وتأكيد - Review & Confirm
+                        </h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-white rounded-xl p-4 border border-slate-200">
+                            <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><FileText className="w-4 h-4 text-blue-500" />المعلومات الأساسية</h4>
+                            <div className="space-y-1 text-xs">
+                              <div className="flex justify-between"><span className="text-slate-500">الكود:</span><span className="font-bold">{formData.code}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">العنوان:</span><span className="font-bold truncate max-w-32">{formData.title || '-'}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">الاستحقاق:</span><span className="font-bold">{formData.dueDate || '-'}</span></div>
+                            </div>
+                          </div>
+                          <div className="bg-white rounded-xl p-4 border border-slate-200">
+                            <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><Link2 className="w-4 h-4 text-emerald-500" />النطاق</h4>
+                            <div className="space-y-1 text-xs">
+                              <div className="flex justify-between"><span className="text-slate-500">الالتزام:</span><span className="font-bold">{getObligation(formData.obligationId)?.code || '-'}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">الضابط:</span><span className="font-bold">{getControl(formData.controlId)?.code || '-'}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">العينة:</span><span className="font-bold">{formData.sampleSize}</span></div>
+                            </div>
+                          </div>
+                          <div className="bg-white rounded-xl p-4 border border-slate-200">
+                            <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><ClipboardList className="w-4 h-4 text-purple-500" />القالب</h4>
+                            <div className="space-y-1 text-xs">
+                              <div className="flex justify-between"><span className="text-slate-500">القالب:</span><span className="font-bold">{getTemplate(formData.templateId)?.code || '-'}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">الخطوات:</span><span className="font-bold">{getTemplate(formData.templateId)?.stepCount || 0}</span></div>
+                            </div>
+                          </div>
+                          <div className="bg-white rounded-xl p-4 border border-slate-200">
+                            <h4 className="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><Users className="w-4 h-4 text-amber-500" />فريق العمل</h4>
+                            <div className="space-y-1 text-xs">
+                              <div className="flex justify-between"><span className="text-slate-500">المختبر:</span><span className="font-bold">{getUser(formData.testerId)?.name || '-'}</span></div>
+                              <div className="flex justify-between"><span className="text-slate-500">المراجع:</span><span className="font-bold">{getUser(formData.reviewerId)?.name || '-'}</span></div>
+                              <div className="flex justify-between">
+                                <span className="text-slate-500">SoD:</span>
+                                {formData.testerId !== formData.reviewerId ? (
+                                  <span className="font-bold text-emerald-600 flex items-center gap-1"><CheckCircle2 className="w-3 h-3" />✓</span>
+                                ) : (
+                                  <span className="font-bold text-red-600 flex items-center gap-1"><XCircle className="w-3 h-3" />✗</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* Validation */}
+                        <div className="mt-4 p-3 bg-white rounded-xl border border-slate-200">
+                          <h4 className="font-bold text-slate-700 mb-2 text-sm">التحقق من البيانات</h4>
+                          <div className="grid grid-cols-3 gap-2">
+                            {[
+                              { label: 'العنوان', valid: formData.title?.length >= 3 },
+                              { label: 'الالتزام', valid: !!formData.obligationId },
+                              { label: 'القالب', valid: !!formData.templateId },
+                              { label: 'المختبر', valid: !!formData.testerId },
+                              { label: 'المراجع', valid: !!formData.reviewerId },
+                              { label: 'فصل المهام', valid: formData.testerId !== formData.reviewerId },
+                            ].map((check, idx) => (
+                              <div key={idx} className={`flex items-center gap-1 p-1.5 rounded-lg text-xs ${check.valid ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>
+                                {check.valid ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                                <span className="font-bold">{check.label}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer with Navigation */}
+                <div className="border-t-2 border-slate-200 px-6 py-4 bg-slate-50 flex items-center justify-between">
+                  <button onClick={() => executionStep > 0 ? setExecutionStep(executionStep - 1) : setShowModal(false)}
+                    className="flex items-center gap-2 px-5 py-2.5 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-white">
+                    <ChevronRight className="w-4 h-4" />
+                    {executionStep === 0 ? 'إلغاء' : 'السابق'}
+                  </button>
+
+                  <div className="flex items-center gap-1">
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(step => (
+                      <div key={step} className={`w-2 h-2 rounded-full transition-all ${executionStep === step ? 'bg-purple-500 w-4' : executionStep > step ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                    ))}
+                  </div>
+
+                  {executionStep < 9 ? (
+                    <button onClick={() => setExecutionStep(executionStep + 1)}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl font-bold shadow-lg">
+                      التالي<ChevronLeft className="w-4 h-4" />
                     </button>
                   ) : (
                     <button onClick={handleSave}
                       disabled={!formData.title || !formData.obligationId || !formData.templateId || !formData.testerId || !formData.reviewerId || formData.testerId === formData.reviewerId}
-                      className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                      <CheckCircle2 className="w-5 h-5" />إنشاء حالة الاختبار
+                      className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                      <CheckCircle2 className="w-4 h-4" />إنشاء حالة الاختبار
                     </button>
                   )}
                 </div>
@@ -17170,10 +20253,10 @@ const ComplianceTests = () => {
                       <div key={s.step} className="flex items-center">
                         <button onClick={() => setExecutionStep(s.step)}
                           className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all ${executionStep === s.step ? 'bg-white text-orange-600 font-bold shadow-lg' :
-                              executionStep > s.step ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'
+                            executionStep > s.step ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'
                             }`}>
                           <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${executionStep === s.step ? 'bg-orange-100' :
-                              executionStep > s.step ? 'bg-emerald-400 text-white' : 'bg-white/10'
+                            executionStep > s.step ? 'bg-emerald-400 text-white' : 'bg-white/10'
                             }`}>
                             {executionStep > s.step ? <Check className="w-5 h-5" /> : <s.icon className="w-4 h-4" />}
                           </div>
@@ -17233,8 +20316,8 @@ const ComplianceTests = () => {
                           ].map(sev => (
                             <button key={sev.key} onClick={() => setFormData({ ...formData, severity: sev.key })}
                               className={`p-5 rounded-2xl border-2 transition-all text-center ${formData.severity === sev.key
-                                  ? `border-${sev.color}-500 bg-${sev.color}-100 shadow-lg`
-                                  : 'border-slate-200 hover:border-slate-400 bg-white'
+                                ? `border-${sev.color}-500 bg-${sev.color}-100 shadow-lg`
+                                : 'border-slate-200 hover:border-slate-400 bg-white'
                                 }`}>
                               <div className="text-4xl mb-2">{sev.icon}</div>
                               <p className="font-bold text-slate-800">{sev.label}</p>
@@ -17457,10 +20540,10 @@ const ComplianceTests = () => {
                                   {['Urgent', 'High', 'Normal'].map(priority => (
                                     <button key={priority} onClick={() => setFormData({ ...formData, priority })}
                                       className={`flex-1 py-3 rounded-xl border-2 font-bold text-sm transition-all ${formData.priority === priority
-                                          ? priority === 'Urgent' ? 'border-red-500 bg-red-100 text-red-700'
-                                            : priority === 'High' ? 'border-amber-500 bg-amber-100 text-amber-700'
-                                              : 'border-emerald-500 bg-emerald-100 text-emerald-700'
-                                          : 'border-slate-200 bg-white text-slate-600'
+                                        ? priority === 'Urgent' ? 'border-red-500 bg-red-100 text-red-700'
+                                          : priority === 'High' ? 'border-amber-500 bg-amber-100 text-amber-700'
+                                            : 'border-emerald-500 bg-emerald-100 text-emerald-700'
+                                        : 'border-slate-200 bg-white text-slate-600'
                                         }`}>
                                       {priority === 'Urgent' ? 'عاجل' : priority === 'High' ? 'عالي' : 'عادي'}
                                     </button>
@@ -18199,8 +21282,8 @@ const ViolationsManagement = () => {
             <button key={tab.id} onClick={() => !tab.disabled && setActiveTab(tab.id)}
               disabled={tab.disabled}
               className={`flex items-center gap-2 px-5 py-4 font-bold transition-all border-b-2 ${activeTab === tab.id ? 'text-red-600 border-red-500 bg-red-50' :
-                  tab.disabled ? 'text-slate-300 border-transparent cursor-not-allowed' :
-                    'text-slate-500 border-transparent hover:bg-slate-50'
+                tab.disabled ? 'text-slate-300 border-transparent cursor-not-allowed' :
+                  'text-slate-500 border-transparent hover:bg-slate-50'
                 }`}>
               <tab.icon className="w-5 h-5" />
               {tab.label}
@@ -18747,8 +21830,8 @@ const ViolationsManagement = () => {
                           return (
                             <div key={statusKey}
                               className={`p-4 rounded-lg text-center transition-all cursor-pointer ${count > 0
-                                  ? isHot ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-100 hover:bg-slate-200'
-                                  : 'bg-slate-50'
+                                ? isHot ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-100 hover:bg-slate-200'
+                                : 'bg-slate-50'
                                 }`}
                               onClick={() => {
                                 setFilterSeverity(sevKey);
@@ -19226,7 +22309,7 @@ const ViolationsManagement = () => {
                   <div key={s.step} className="flex items-center">
                     <button onClick={() => setWizardStep(s.step)}
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all ${wizardStep === s.step ? 'bg-white text-red-600 font-bold shadow-lg' :
-                          wizardStep > s.step ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'
+                        wizardStep > s.step ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'
                         }`}>
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${wizardStep === s.step ? 'bg-red-100' : wizardStep > s.step ? 'bg-emerald-400 text-white' : 'bg-white/10'
                         }`}>
@@ -20231,8 +23314,8 @@ const RegulatoryChanges = () => {
             <button key={tab.id} onClick={() => !tab.disabled && setActiveTab(tab.id)}
               disabled={tab.disabled}
               className={`flex items-center gap-2 px-5 py-4 font-bold transition-all border-b-2 ${activeTab === tab.id ? 'text-indigo-600 border-indigo-500 bg-indigo-50' :
-                  tab.disabled ? 'text-slate-300 border-transparent cursor-not-allowed' :
-                    'text-slate-500 border-transparent hover:bg-slate-50'
+                tab.disabled ? 'text-slate-300 border-transparent cursor-not-allowed' :
+                  'text-slate-500 border-transparent hover:bg-slate-50'
                 }`}>
               <tab.icon className="w-5 h-5" />
               {tab.label}
@@ -21160,7 +24243,7 @@ const RegulatoryChanges = () => {
                   <div key={s.step} className="flex items-center">
                     <button onClick={() => setWizardStep(s.step)}
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all ${wizardStep === s.step ? 'bg-white text-indigo-600 font-bold shadow-lg' :
-                          wizardStep > s.step ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'
+                        wizardStep > s.step ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'
                         }`}>
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${wizardStep === s.step ? 'bg-indigo-100' : wizardStep > s.step ? 'bg-emerald-400 text-white' : 'bg-white/10'
                         }`}>
@@ -22109,8 +25192,8 @@ const RegulatoryContact = () => {
           {mainTabs.map(tab => (
             <button key={tab.id} onClick={() => !tab.disabled && setActiveTab(tab.id)} disabled={tab.disabled}
               className={`flex items-center gap-2 px-6 py-4 font-bold transition-all border-b-2 ${activeTab === tab.id ? 'text-cyan-600 border-cyan-500 bg-white' :
-                  tab.disabled ? 'text-slate-300 border-transparent cursor-not-allowed' :
-                    'text-slate-500 border-transparent hover:bg-white hover:text-slate-700'
+                tab.disabled ? 'text-slate-300 border-transparent cursor-not-allowed' :
+                  'text-slate-500 border-transparent hover:bg-white hover:text-slate-700'
                 }`}>
               <tab.icon className="w-5 h-5" />
               {tab.label}
@@ -22145,8 +25228,8 @@ const RegulatoryContact = () => {
                     return (
                       <div key={caseItem.id} onClick={() => handleViewCase(caseItem)}
                         className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all hover:shadow-md ${days !== null && days < 0 ? 'bg-red-50 border-2 border-red-200' :
-                            days !== null && days <= 7 ? 'bg-amber-50 border-2 border-amber-200' :
-                              'bg-slate-50 border-2 border-slate-200'
+                          days !== null && days <= 7 ? 'bg-amber-50 border-2 border-amber-200' :
+                            'bg-slate-50 border-2 border-slate-200'
                           }`}>
                         <div className={`w-14 h-14 rounded-xl ${priorityCfg?.bg} flex items-center justify-center text-white font-bold shadow-lg`}>
                           {days !== null && days >= 0 ? (
@@ -22661,8 +25744,8 @@ const RegulatoryContact = () => {
                                   </div>
                                   <p className="font-bold text-slate-800 truncate">{link.title}</p>
                                   <span className={`text-xs px-2 py-0.5 rounded mt-1 inline-block ${link.status === 'Active' || link.status === 'Passed' || link.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' :
-                                      link.status === 'InProgress' || link.status === 'Scheduled' ? 'bg-blue-100 text-blue-700' :
-                                        'bg-slate-100 text-slate-600'
+                                    link.status === 'InProgress' || link.status === 'Scheduled' ? 'bg-blue-100 text-blue-700' :
+                                      'bg-slate-100 text-slate-600'
                                     }`}>{link.status}</span>
                                 </div>
                                 <div className="flex items-center gap-1">
@@ -22694,8 +25777,8 @@ const RegulatoryContact = () => {
                     {selectedCase.responsePack ? (
                       <>
                         <div className={`bg-gradient-to-r ${selectedCase.responsePack.status === 'Sent' ? 'from-emerald-50 to-teal-50 border-emerald-200' :
-                            selectedCase.responsePack.status === 'Approved' ? 'from-blue-50 to-indigo-50 border-blue-200' :
-                              'from-amber-50 to-orange-50 border-amber-200'
+                          selectedCase.responsePack.status === 'Approved' ? 'from-blue-50 to-indigo-50 border-blue-200' :
+                            'from-amber-50 to-orange-50 border-amber-200'
                           } rounded-2xl p-6 border-2`}>
                           <div className="flex items-center justify-between mb-6">
                             <h3 className="text-xl font-bold flex items-center gap-3">
@@ -22703,8 +25786,8 @@ const RegulatoryContact = () => {
                             </h3>
                             <div className="flex items-center gap-2">
                               <span className={`px-4 py-2 rounded-xl text-sm font-bold ${selectedCase.responsePack.status === 'Sent' ? 'bg-emerald-500 text-white' :
-                                  selectedCase.responsePack.status === 'Approved' ? 'bg-blue-500 text-white' :
-                                    'bg-amber-500 text-white'
+                                selectedCase.responsePack.status === 'Approved' ? 'bg-blue-500 text-white' :
+                                  'bg-amber-500 text-white'
                                 }`}>
                                 {selectedCase.responsePack.status === 'Sent' ? '✓ تم الإرسال' :
                                   selectedCase.responsePack.status === 'Approved' ? '✓ معتمد' : '⏳ مسودة'}
@@ -23480,17 +26563,17 @@ const MaturityAssessment = () => {
           {Object.values(MATURITY_LEVELS).map((level, idx) => (
             <div key={level.level} className="flex-1 relative">
               <div className={`p-4 rounded-xl border-2 text-center transition-all hover:shadow-lg hover:scale-[1.02] cursor-pointer ${level.color === 'red' ? 'bg-red-50 border-red-200 hover:border-red-400' :
-                  level.color === 'orange' ? 'bg-orange-50 border-orange-200 hover:border-orange-400' :
-                    level.color === 'amber' ? 'bg-amber-50 border-amber-200 hover:border-amber-400' :
-                      level.color === 'blue' ? 'bg-blue-50 border-blue-200 hover:border-blue-400' :
-                        'bg-emerald-50 border-emerald-200 hover:border-emerald-400'
+                level.color === 'orange' ? 'bg-orange-50 border-orange-200 hover:border-orange-400' :
+                  level.color === 'amber' ? 'bg-amber-50 border-amber-200 hover:border-amber-400' :
+                    level.color === 'blue' ? 'bg-blue-50 border-blue-200 hover:border-blue-400' :
+                      'bg-emerald-50 border-emerald-200 hover:border-emerald-400'
                 }`}>
                 <div className="text-3xl mb-2">{level.icon}</div>
                 <div className={`text-2xl font-black ${level.color === 'red' ? 'text-red-600' :
-                    level.color === 'orange' ? 'text-orange-600' :
-                      level.color === 'amber' ? 'text-amber-600' :
-                        level.color === 'blue' ? 'text-blue-600' :
-                          'text-emerald-600'
+                  level.color === 'orange' ? 'text-orange-600' :
+                    level.color === 'amber' ? 'text-amber-600' :
+                      level.color === 'blue' ? 'text-blue-600' :
+                        'text-emerald-600'
                   }`}>L{level.level}</div>
                 <p className="font-bold text-slate-800 mt-1">{level.name}</p>
                 <p className="text-xs text-slate-500">{level.nameEn}</p>
@@ -23510,8 +26593,8 @@ const MaturityAssessment = () => {
           {tabs.map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-6 py-4 font-bold transition-all whitespace-nowrap border-b-2 ${activeTab === tab.id
-                  ? 'text-purple-600 border-purple-500 bg-white -mb-[2px]'
-                  : 'text-slate-500 border-transparent hover:text-purple-500 hover:bg-white/50'
+                ? 'text-purple-600 border-purple-500 bg-white -mb-[2px]'
+                : 'text-slate-500 border-transparent hover:text-purple-500 hover:bg-white/50'
                 }`}>
               <tab.icon className="w-5 h-5" />{tab.label}
               {tab.count !== null && (
@@ -23539,18 +26622,18 @@ const MaturityAssessment = () => {
                     <div key={assessment.id} onClick={() => { setSelectedAuthority(assessment); setShowDetailModal(true); }}
                       className="bg-white rounded-2xl border-2 border-slate-200 p-5 hover:shadow-xl hover:border-purple-300 cursor-pointer transition-all group relative overflow-hidden">
                       <div className={`absolute top-0 left-0 w-full h-1 ${levelConfig.color === 'red' ? 'bg-red-500' :
-                          levelConfig.color === 'orange' ? 'bg-orange-500' :
-                            levelConfig.color === 'amber' ? 'bg-amber-500' :
-                              levelConfig.color === 'blue' ? 'bg-blue-500' :
-                                'bg-emerald-500'
+                        levelConfig.color === 'orange' ? 'bg-orange-500' :
+                          levelConfig.color === 'amber' ? 'bg-amber-500' :
+                            levelConfig.color === 'blue' ? 'bg-blue-500' :
+                              'bg-emerald-500'
                         }`}></div>
 
                       <div className="flex items-center justify-between mb-4">
                         <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-lg ${assessment.authorityCode === 'SAMA' ? 'bg-gradient-to-br from-emerald-500 to-teal-600' :
-                            assessment.authorityCode === 'NCA' ? 'bg-gradient-to-br from-purple-500 to-violet-600' :
-                              assessment.authorityCode === 'SDAIA' ? 'bg-gradient-to-br from-indigo-500 to-blue-600' :
-                                assessment.authorityCode === 'CMA' ? 'bg-gradient-to-br from-blue-500 to-cyan-600' :
-                                  'bg-gradient-to-br from-amber-500 to-orange-600'
+                          assessment.authorityCode === 'NCA' ? 'bg-gradient-to-br from-purple-500 to-violet-600' :
+                            assessment.authorityCode === 'SDAIA' ? 'bg-gradient-to-br from-indigo-500 to-blue-600' :
+                              assessment.authorityCode === 'CMA' ? 'bg-gradient-to-br from-blue-500 to-cyan-600' :
+                                'bg-gradient-to-br from-amber-500 to-orange-600'
                           }`}>
                           {assessment.authorityCode.substring(0, 2)}
                         </div>
@@ -23562,10 +26645,10 @@ const MaturityAssessment = () => {
 
                       <div className="flex items-center gap-2 mb-3">
                         <span className={`text-3xl font-black ${levelConfig.color === 'red' ? 'text-red-600' :
-                            levelConfig.color === 'orange' ? 'text-orange-600' :
-                              levelConfig.color === 'amber' ? 'text-amber-600' :
-                                levelConfig.color === 'blue' ? 'text-blue-600' :
-                                  'text-emerald-600'
+                          levelConfig.color === 'orange' ? 'text-orange-600' :
+                            levelConfig.color === 'amber' ? 'text-amber-600' :
+                              levelConfig.color === 'blue' ? 'text-blue-600' :
+                                'text-emerald-600'
                           }`}>L{assessment.currentLevel}</span>
                         <ChevronRight className="w-4 h-4 text-slate-300" />
                         <span className="text-lg text-slate-400">L{assessment.targetLevel}</span>
@@ -23578,9 +26661,9 @@ const MaturityAssessment = () => {
                         </div>
                         <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                           <div className={`h-full rounded-full transition-all ${assessment.score >= 80 ? 'bg-emerald-500' :
-                              assessment.score >= 60 ? 'bg-blue-500' :
-                                assessment.score >= 40 ? 'bg-amber-500' :
-                                  'bg-red-500'
+                            assessment.score >= 60 ? 'bg-blue-500' :
+                              assessment.score >= 40 ? 'bg-amber-500' :
+                                'bg-red-500'
                             }`} style={{ width: `${assessment.score}%` }}></div>
                         </div>
                       </div>
@@ -23618,10 +26701,10 @@ const MaturityAssessment = () => {
                     return (
                       <div key={level} className="text-center">
                         <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black mx-auto mb-2 ${config.color === 'red' ? 'bg-red-100 text-red-600' :
-                            config.color === 'orange' ? 'bg-orange-100 text-orange-600' :
-                              config.color === 'amber' ? 'bg-amber-100 text-amber-600' :
-                                config.color === 'blue' ? 'bg-blue-100 text-blue-600' :
-                                  'bg-emerald-100 text-emerald-600'
+                          config.color === 'orange' ? 'bg-orange-100 text-orange-600' :
+                            config.color === 'amber' ? 'bg-amber-100 text-amber-600' :
+                              config.color === 'blue' ? 'bg-blue-100 text-blue-600' :
+                                'bg-emerald-100 text-emerald-600'
                           }`}>{count}</div>
                         <p className="text-xs font-bold text-slate-600">L{level}</p>
                         <p className="text-[10px] text-slate-400">{config.name}</p>
@@ -23643,8 +26726,8 @@ const MaturityAssessment = () => {
                         <span className="w-16 font-bold text-slate-700">{a.authorityCode}</span>
                         <div className="flex-1 h-3 bg-slate-100 rounded-full overflow-hidden">
                           <div className={`h-full rounded-full ${a.score >= 80 ? 'bg-emerald-500' :
-                              a.score >= 60 ? 'bg-blue-500' :
-                                a.score >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                            a.score >= 60 ? 'bg-blue-500' :
+                              a.score >= 40 ? 'bg-amber-500' : 'bg-red-500'
                             }`} style={{ width: `${a.score}%` }}></div>
                         </div>
                         <span className="w-12 text-sm font-bold text-slate-700">{a.score}%</span>
@@ -23727,9 +26810,9 @@ const MaturityAssessment = () => {
                           <td className="px-4 py-4">
                             <div className="flex items-center gap-3">
                               <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm ${assessment.authorityCode === 'SAMA' ? 'bg-emerald-500' :
-                                  assessment.authorityCode === 'NCA' ? 'bg-purple-500' :
-                                    assessment.authorityCode === 'SDAIA' ? 'bg-indigo-500' :
-                                      assessment.authorityCode === 'CMA' ? 'bg-blue-500' : 'bg-amber-500'
+                                assessment.authorityCode === 'NCA' ? 'bg-purple-500' :
+                                  assessment.authorityCode === 'SDAIA' ? 'bg-indigo-500' :
+                                    assessment.authorityCode === 'CMA' ? 'bg-blue-500' : 'bg-amber-500'
                                 }`}>{assessment.authorityCode.substring(0, 2)}</div>
                               <div>
                                 <p className="font-bold text-slate-800">{assessment.authorityCode}</p>
@@ -23741,9 +26824,9 @@ const MaturityAssessment = () => {
                             <div className="inline-flex items-center gap-2">
                               <span className="text-2xl">{levelConfig.icon}</span>
                               <span className={`text-xl font-black ${levelConfig.color === 'emerald' ? 'text-emerald-600' :
-                                  levelConfig.color === 'blue' ? 'text-blue-600' :
-                                    levelConfig.color === 'amber' ? 'text-amber-600' :
-                                      levelConfig.color === 'orange' ? 'text-orange-600' : 'text-red-600'
+                                levelConfig.color === 'blue' ? 'text-blue-600' :
+                                  levelConfig.color === 'amber' ? 'text-amber-600' :
+                                    levelConfig.color === 'orange' ? 'text-orange-600' : 'text-red-600'
                                 }`}>L{assessment.currentLevel}</span>
                             </div>
                           </td>
@@ -23805,17 +26888,17 @@ const MaturityAssessment = () => {
                     <div key={assessment.id} className="bg-white rounded-2xl border-2 border-slate-200 overflow-hidden hover:shadow-xl hover:border-purple-300 transition-all cursor-pointer group"
                       onClick={() => { setSelectedAuthority(assessment); setShowDetailModal(true); }}>
                       <div className={`h-2 ${levelConfig.color === 'emerald' ? 'bg-emerald-500' :
-                          levelConfig.color === 'blue' ? 'bg-blue-500' :
-                            levelConfig.color === 'amber' ? 'bg-amber-500' :
-                              levelConfig.color === 'orange' ? 'bg-orange-500' : 'bg-red-500'
+                        levelConfig.color === 'blue' ? 'bg-blue-500' :
+                          levelConfig.color === 'amber' ? 'bg-amber-500' :
+                            levelConfig.color === 'orange' ? 'bg-orange-500' : 'bg-red-500'
                         }`}></div>
                       <div className="p-5">
                         <div className="flex items-start justify-between mb-4">
                           <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-white font-bold text-xl ${assessment.authorityCode === 'SAMA' ? 'bg-gradient-to-br from-emerald-500 to-teal-600' :
-                              assessment.authorityCode === 'NCA' ? 'bg-gradient-to-br from-purple-500 to-violet-600' :
-                                assessment.authorityCode === 'SDAIA' ? 'bg-gradient-to-br from-indigo-500 to-blue-600' :
-                                  assessment.authorityCode === 'CMA' ? 'bg-gradient-to-br from-blue-500 to-cyan-600' :
-                                    'bg-gradient-to-br from-amber-500 to-orange-600'
+                            assessment.authorityCode === 'NCA' ? 'bg-gradient-to-br from-purple-500 to-violet-600' :
+                              assessment.authorityCode === 'SDAIA' ? 'bg-gradient-to-br from-indigo-500 to-blue-600' :
+                                assessment.authorityCode === 'CMA' ? 'bg-gradient-to-br from-blue-500 to-cyan-600' :
+                                  'bg-gradient-to-br from-amber-500 to-orange-600'
                             } shadow-lg`}>{assessment.authorityCode.substring(0, 2)}</div>
                           <span className={`px-3 py-1.5 rounded-xl text-xs font-bold ${assessment.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
                             }`}>{assessment.status === 'Completed' ? 'مكتمل' : 'جاري'}</span>
@@ -23828,9 +26911,9 @@ const MaturityAssessment = () => {
                           <div className="flex-1 text-center p-3 bg-slate-50 rounded-xl">
                             <div className="text-3xl mb-1">{levelConfig.icon}</div>
                             <p className={`text-2xl font-black ${levelConfig.color === 'emerald' ? 'text-emerald-600' :
-                                levelConfig.color === 'blue' ? 'text-blue-600' :
-                                  levelConfig.color === 'amber' ? 'text-amber-600' :
-                                    levelConfig.color === 'orange' ? 'text-orange-600' : 'text-red-600'
+                              levelConfig.color === 'blue' ? 'text-blue-600' :
+                                levelConfig.color === 'amber' ? 'text-amber-600' :
+                                  levelConfig.color === 'orange' ? 'text-orange-600' : 'text-red-600'
                               }`}>L{assessment.currentLevel}</p>
                             <p className="text-xs text-slate-500">الحالي</p>
                           </div>
@@ -23849,9 +26932,9 @@ const MaturityAssessment = () => {
                           </div>
                           <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
                             <div className={`h-full rounded-full transition-all ${assessment.score >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' :
-                                assessment.score >= 60 ? 'bg-gradient-to-r from-blue-400 to-blue-500' :
-                                  assessment.score >= 40 ? 'bg-gradient-to-r from-amber-400 to-amber-500' :
-                                    'bg-gradient-to-r from-red-400 to-red-500'
+                              assessment.score >= 60 ? 'bg-gradient-to-r from-blue-400 to-blue-500' :
+                                assessment.score >= 40 ? 'bg-gradient-to-r from-amber-400 to-amber-500' :
+                                  'bg-gradient-to-r from-red-400 to-red-500'
                               }`} style={{ width: `${assessment.score}%` }}></div>
                           </div>
                         </div>
@@ -23883,10 +26966,10 @@ const MaturityAssessment = () => {
             {assessments.map(assessment => (
               <div key={assessment.id} className="bg-white rounded-2xl border-2 border-slate-200 overflow-hidden">
                 <div className={`p-4 flex items-center justify-between ${assessment.authorityCode === 'SAMA' ? 'bg-gradient-to-r from-emerald-500 to-teal-600' :
-                    assessment.authorityCode === 'NCA' ? 'bg-gradient-to-r from-purple-500 to-violet-600' :
-                      assessment.authorityCode === 'SDAIA' ? 'bg-gradient-to-r from-indigo-500 to-blue-600' :
-                        assessment.authorityCode === 'CMA' ? 'bg-gradient-to-r from-blue-500 to-cyan-600' :
-                          'bg-gradient-to-r from-amber-500 to-orange-600'
+                  assessment.authorityCode === 'NCA' ? 'bg-gradient-to-r from-purple-500 to-violet-600' :
+                    assessment.authorityCode === 'SDAIA' ? 'bg-gradient-to-r from-indigo-500 to-blue-600' :
+                      assessment.authorityCode === 'CMA' ? 'bg-gradient-to-r from-blue-500 to-cyan-600' :
+                        'bg-gradient-to-r from-amber-500 to-orange-600'
                   } text-white`}>
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center font-bold text-lg">{assessment.authorityCode.substring(0, 2)}</div>
@@ -23918,14 +27001,14 @@ const MaturityAssessment = () => {
                           <p className="text-[10px] text-slate-400 mb-3">{domain.nameEn}</p>
                           <div className="mb-2">
                             <p className={`text-2xl font-black ${domain.score >= 80 ? 'text-emerald-600' :
-                                domain.score >= 60 ? 'text-blue-600' :
-                                  domain.score >= 40 ? 'text-amber-600' : 'text-red-600'
+                              domain.score >= 60 ? 'text-blue-600' :
+                                domain.score >= 40 ? 'text-amber-600' : 'text-red-600'
                               }`}>{domain.score}%</p>
                           </div>
                           <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                             <div className={`h-full rounded-full ${domain.score >= 80 ? 'bg-emerald-500' :
-                                domain.score >= 60 ? 'bg-blue-500' :
-                                  domain.score >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                              domain.score >= 60 ? 'bg-blue-500' :
+                                domain.score >= 40 ? 'bg-amber-500' : 'bg-red-500'
                               }`} style={{ width: `${domain.score}%` }}></div>
                           </div>
                           <p className="text-xs text-slate-500 mt-2">المستوى: L{domain.level}</p>
@@ -23984,16 +27067,16 @@ const MaturityAssessment = () => {
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-4">
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold ${imp.priority === 'Critical' ? 'bg-red-500' :
-                            imp.priority === 'High' ? 'bg-orange-500' :
-                              imp.priority === 'Medium' ? 'bg-amber-500' : 'bg-blue-500'
+                          imp.priority === 'High' ? 'bg-orange-500' :
+                            imp.priority === 'Medium' ? 'bg-amber-500' : 'bg-blue-500'
                           }`}>
                           {imp.priority === 'Critical' ? '!!' : imp.priority === 'High' ? '!' : '•'}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <span className={`px-2 py-1 rounded text-xs font-bold ${imp.priority === 'Critical' ? 'bg-red-100 text-red-700' :
-                                imp.priority === 'High' ? 'bg-orange-100 text-orange-700' :
-                                  imp.priority === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
+                              imp.priority === 'High' ? 'bg-orange-100 text-orange-700' :
+                                imp.priority === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
                               }`}>{imp.priority === 'Critical' ? 'حرج' : imp.priority === 'High' ? 'عالي' : imp.priority === 'Medium' ? 'متوسط' : 'منخفض'}</span>
                             <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-bold">{assessment?.authorityCode}</span>
                             <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">{imp.domain}</span>
@@ -24005,14 +27088,14 @@ const MaturityAssessment = () => {
                       <div className="text-left w-40">
                         <div className="flex items-center justify-between text-sm mb-2">
                           <span className={`font-bold ${imp.status === 'Completed' ? 'text-emerald-600' :
-                              imp.status === 'InProgress' ? 'text-blue-600' : 'text-slate-500'
+                            imp.status === 'InProgress' ? 'text-blue-600' : 'text-slate-500'
                             }`}>{imp.status === 'Completed' ? 'مكتمل' : imp.status === 'InProgress' ? 'جاري' : 'مخطط'}</span>
                           <span className="font-bold text-slate-800">{imp.progress}%</span>
                         </div>
                         <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
                           <div className={`h-full rounded-full transition-all ${imp.progress >= 80 ? 'bg-emerald-500' :
-                              imp.progress >= 50 ? 'bg-blue-500' :
-                                imp.progress >= 25 ? 'bg-amber-500' : 'bg-slate-300'
+                            imp.progress >= 50 ? 'bg-blue-500' :
+                              imp.progress >= 25 ? 'bg-amber-500' : 'bg-slate-300'
                             }`} style={{ width: `${imp.progress}%` }}></div>
                         </div>
                       </div>
@@ -24039,9 +27122,9 @@ const MaturityAssessment = () => {
                   {['SAMA', 'NCA', 'SDAIA', 'CMA', 'ZATCA'].map((code, idx) => (
                     <div key={code} className="flex items-center gap-2">
                       <div className={`w-3 h-3 rounded-full ${idx === 0 ? 'bg-emerald-500' :
-                          idx === 1 ? 'bg-purple-500' :
-                            idx === 2 ? 'bg-indigo-500' :
-                              idx === 3 ? 'bg-blue-500' : 'bg-amber-500'
+                        idx === 1 ? 'bg-purple-500' :
+                          idx === 2 ? 'bg-indigo-500' :
+                            idx === 3 ? 'bg-blue-500' : 'bg-amber-500'
                         }`}></div>
                       <span className="text-sm text-slate-600">{code}</span>
                     </div>
@@ -24226,10 +27309,10 @@ const MaturityAssessment = () => {
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
             <div className={`px-6 py-5 text-white ${selectedAuthority.authorityCode === 'SAMA' ? 'bg-gradient-to-r from-emerald-500 to-teal-600' :
-                selectedAuthority.authorityCode === 'NCA' ? 'bg-gradient-to-r from-purple-500 to-violet-600' :
-                  selectedAuthority.authorityCode === 'SDAIA' ? 'bg-gradient-to-r from-indigo-500 to-blue-600' :
-                    selectedAuthority.authorityCode === 'CMA' ? 'bg-gradient-to-r from-blue-500 to-cyan-600' :
-                      'bg-gradient-to-r from-amber-500 to-orange-600'
+              selectedAuthority.authorityCode === 'NCA' ? 'bg-gradient-to-r from-purple-500 to-violet-600' :
+                selectedAuthority.authorityCode === 'SDAIA' ? 'bg-gradient-to-r from-indigo-500 to-blue-600' :
+                  selectedAuthority.authorityCode === 'CMA' ? 'bg-gradient-to-r from-blue-500 to-cyan-600' :
+                    'bg-gradient-to-r from-amber-500 to-orange-600'
               }`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -24289,8 +27372,8 @@ const MaturityAssessment = () => {
                       </div>
                       <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
                         <div className={`h-full rounded-full ${domain.score >= 80 ? 'bg-emerald-500' :
-                            domain.score >= 60 ? 'bg-blue-500' :
-                              domain.score >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                          domain.score >= 60 ? 'bg-blue-500' :
+                            domain.score >= 40 ? 'bg-amber-500' : 'bg-red-500'
                           }`} style={{ width: `${domain.score}%` }}></div>
                       </div>
                     </div>
@@ -25661,8 +28744,8 @@ const SaudiRegulatoryPack = () => {
                           </td>
                           <td className="px-4 py-3 text-center">
                             <span className={`px-2 py-1 rounded text-xs font-bold ${prog.type === 'Mandatory' ? 'bg-red-100 text-red-700' :
-                                prog.type === 'Conditional' ? 'bg-amber-100 text-amber-700' :
-                                  'bg-blue-100 text-blue-700'
+                              prog.type === 'Conditional' ? 'bg-amber-100 text-amber-700' :
+                                'bg-blue-100 text-blue-700'
                               }`}>{prog.type === 'Mandatory' ? 'إلزامي' : prog.type === 'Conditional' ? 'مشروط' : 'اختياري'}</span>
                           </td>
                           <td className="px-4 py-3 text-center">
@@ -25864,7 +28947,7 @@ const SaudiRegulatoryPack = () => {
                         </td>
                         <td className="px-4 py-3 text-center">
                           <span className={`px-2 py-1 rounded text-xs font-bold ${obl.severity === 'Critical' ? 'bg-red-100 text-red-700' :
-                              obl.severity === 'High' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
+                            obl.severity === 'High' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
                             }`}>{obl.severity === 'Critical' ? 'حرج' : obl.severity === 'High' ? 'عالي' : 'متوسط'}</span>
                         </td>
                         <td className="px-4 py-3 text-center text-sm text-slate-600">{obl.recurrence}</td>
@@ -26134,8 +29217,8 @@ const SaudiRegulatoryPack = () => {
                   <div className="grid grid-cols-4 gap-2 p-4 border-2 border-slate-200 rounded-xl max-h-72 overflow-y-auto bg-slate-50">
                     {sectors.map(sector => (
                       <label key={sector} className={`flex items-center gap-2 p-3 rounded-xl cursor-pointer transition-all border-2 ${programForm.sectorAr?.includes(sector)
-                          ? 'bg-emerald-100 border-emerald-500 text-emerald-700'
-                          : 'bg-white border-slate-200 hover:border-emerald-300 text-slate-700'
+                        ? 'bg-emerald-100 border-emerald-500 text-emerald-700'
+                        : 'bg-white border-slate-200 hover:border-emerald-300 text-slate-700'
                         }`}>
                         <input type="checkbox" checked={programForm.sectorAr?.includes(sector)} onChange={(e) => {
                           if (e.target.checked) {
@@ -26505,9 +29588,9 @@ const SaudiRegulatoryPack = () => {
                           <div key={idx} className="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-200 hover:border-blue-300 transition-all">
                             <div className="flex items-center gap-3">
                               <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${resource.type === 'PDF' ? 'bg-red-100 text-red-600' :
-                                  resource.type === 'Video' ? 'bg-purple-100 text-purple-600' :
-                                    resource.type === 'Template' ? 'bg-amber-100 text-amber-600' :
-                                      'bg-blue-100 text-blue-600'
+                                resource.type === 'Video' ? 'bg-purple-100 text-purple-600' :
+                                  resource.type === 'Template' ? 'bg-amber-100 text-amber-600' :
+                                    'bg-blue-100 text-blue-600'
                                 }`}>
                                 <FileText className="w-5 h-5" />
                               </div>
@@ -26550,13 +29633,13 @@ const SaudiRegulatoryPack = () => {
                           onChange={(e) => setProgramForm(p => ({ ...p, complianceRate: parseInt(e.target.value) }))}
                           className="flex-1 h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500" />
                         <div className={`w-16 h-16 rounded-2xl flex items-center justify-center font-black text-white text-xl shadow-lg ${(programForm.complianceRate || 0) >= 80 ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' :
-                            (programForm.complianceRate || 0) >= 60 ? 'bg-gradient-to-br from-amber-400 to-amber-600' :
-                              'bg-gradient-to-br from-red-400 to-red-600'
+                          (programForm.complianceRate || 0) >= 60 ? 'bg-gradient-to-br from-amber-400 to-amber-600' :
+                            'bg-gradient-to-br from-red-400 to-red-600'
                           }`}>{programForm.complianceRate || 0}%</div>
                       </div>
                       <div className="h-4 bg-slate-200 rounded-full mt-4 overflow-hidden">
                         <div className={`h-full rounded-full transition-all duration-300 ${(programForm.complianceRate || 0) >= 80 ? 'bg-emerald-500' :
-                            (programForm.complianceRate || 0) >= 60 ? 'bg-amber-500' : 'bg-red-500'
+                          (programForm.complianceRate || 0) >= 60 ? 'bg-amber-500' : 'bg-red-500'
                           }`} style={{ width: `${programForm.complianceRate || 0}%` }}></div>
                       </div>
                       <p className="text-xs text-slate-500 mt-2 text-center">
@@ -26593,8 +29676,8 @@ const SaudiRegulatoryPack = () => {
                         className="flex-1 h-3 bg-gradient-to-r from-green-200 via-amber-200 to-red-200 rounded-lg appearance-none cursor-pointer" />
                       <span className="text-red-600 font-bold">عالي</span>
                       <div className={`w-14 h-14 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-lg ${(programForm.riskScore || 5) >= 8 ? 'bg-gradient-to-br from-red-400 to-red-600' :
-                          (programForm.riskScore || 5) >= 5 ? 'bg-gradient-to-br from-amber-400 to-amber-600' :
-                            'bg-gradient-to-br from-green-400 to-green-600'
+                        (programForm.riskScore || 5) >= 5 ? 'bg-gradient-to-br from-amber-400 to-amber-600' :
+                          'bg-gradient-to-br from-green-400 to-green-600'
                         }`}>{programForm.riskScore || 5}</div>
                     </div>
                   </div>
@@ -26617,7 +29700,7 @@ const SaudiRegulatoryPack = () => {
                       </div>
                       <div className="bg-white rounded-xl p-4 text-center shadow-sm">
                         <p className={`text-3xl font-black ${(programForm.riskScore || 5) >= 8 ? 'text-red-600' :
-                            (programForm.riskScore || 5) >= 5 ? 'text-amber-600' : 'text-green-600'
+                          (programForm.riskScore || 5) >= 5 ? 'text-amber-600' : 'text-green-600'
                           }`}>{programForm.riskScore || 5}/10</p>
                         <p className="text-xs text-slate-600 mt-1">درجة المخاطر</p>
                       </div>
@@ -26725,8 +29808,8 @@ const SaudiRegulatoryPack = () => {
               ].map((tab, idx) => (
                 <button key={tab.id} onClick={() => setObligationForm(o => ({ ...o, wizardTab: idx }))}
                   className={`flex items-center gap-1 px-3 py-2.5 text-xs font-bold whitespace-nowrap border-b-2 transition-all ${(obligationForm.wizardTab || 0) === idx ? 'text-blue-600 border-blue-500 bg-white -mb-[1px]' :
-                      idx < (obligationForm.wizardTab || 0) ? 'text-blue-500 border-transparent' :
-                        'text-slate-500 border-transparent hover:text-blue-500'
+                    idx < (obligationForm.wizardTab || 0) ? 'text-blue-500 border-transparent' :
+                      'text-slate-500 border-transparent hover:text-blue-500'
                     }`}>
                   <tab.icon className="w-3 h-3" />
                   <span className="hidden xl:inline">{tab.label}</span>
@@ -27476,17 +30559,17 @@ const SaudiRegulatoryPack = () => {
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
             <div className={`px-6 py-5 text-white shrink-0 bg-gradient-to-r ${selectedProgram.color === 'red' ? 'from-red-500 to-rose-600' :
-                selectedProgram.color === 'emerald' ? 'from-emerald-500 to-teal-600' :
-                  selectedProgram.color === 'purple' ? 'from-purple-500 to-violet-600' :
-                    selectedProgram.color === 'indigo' ? 'from-indigo-500 to-blue-600' :
-                      selectedProgram.color === 'amber' ? 'from-amber-500 to-orange-600' :
-                        selectedProgram.color === 'blue' ? 'from-blue-500 to-indigo-600' :
-                          selectedProgram.color === 'teal' ? 'from-teal-500 to-cyan-600' :
-                            selectedProgram.color === 'pink' ? 'from-pink-500 to-rose-600' :
-                              selectedProgram.color === 'orange' ? 'from-orange-500 to-amber-600' :
-                                selectedProgram.color === 'cyan' ? 'from-cyan-500 to-teal-600' :
-                                  selectedProgram.color === 'violet' ? 'from-violet-500 to-purple-600' :
-                                    'from-slate-500 to-gray-600'
+              selectedProgram.color === 'emerald' ? 'from-emerald-500 to-teal-600' :
+                selectedProgram.color === 'purple' ? 'from-purple-500 to-violet-600' :
+                  selectedProgram.color === 'indigo' ? 'from-indigo-500 to-blue-600' :
+                    selectedProgram.color === 'amber' ? 'from-amber-500 to-orange-600' :
+                      selectedProgram.color === 'blue' ? 'from-blue-500 to-indigo-600' :
+                        selectedProgram.color === 'teal' ? 'from-teal-500 to-cyan-600' :
+                          selectedProgram.color === 'pink' ? 'from-pink-500 to-rose-600' :
+                            selectedProgram.color === 'orange' ? 'from-orange-500 to-amber-600' :
+                              selectedProgram.color === 'cyan' ? 'from-cyan-500 to-teal-600' :
+                                selectedProgram.color === 'violet' ? 'from-violet-500 to-purple-600' :
+                                  'from-slate-500 to-gray-600'
               }`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -27784,8 +30867,8 @@ const CompliancePlatform = () => {
                   key={item.id}
                   onClick={() => setActiveScreen(item.id)}
                   className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all text-sm ${activeScreen === item.id
-                      ? 'bg-emerald-500 text-white'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    ? 'bg-emerald-500 text-white'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
                     }`}
                 >
                   <item.icon className="w-4 h-4 flex-shrink-0" />
