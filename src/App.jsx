@@ -45354,3 +45354,4 @@ const CompliancePlatform = () => (
 );
 
 export default CompliancePlatform;
+
